@@ -1,0 +1,26 @@
+#editor-wrapper {
+  height: 100%;
+  padding-left: 60px;
+  padding-top: 65px;
+}
+
+#canvas-container {
+  float: left;
+  height: 100%;
+  width: calc(100% - 200px);
+  overflow: auto;
+}
+
+svg text {
+  text-anchor: middle;
+  stroke: none;
+  fill: #000000;
+}
+
+svg .tree-node {
+  stroke-width: 2px;
+}
+
+svg.simulation .tree-node.enabled {
+  stroke: teal;
+}

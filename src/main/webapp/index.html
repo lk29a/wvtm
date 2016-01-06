@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="WVTM">
+
+<head>
+  <!-- <base href="/WVTM/"> -->
+  <base href="/">
+  <title>Web based visual Task Modelling</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="shortcut icon" href="img/favicon.png" type="image/png"> -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="css/bootstrap-theme.css"> -->
+  <!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="css/wvtm.css">
+</head>
+
+<body>
+  <div ng-view autoscroll="true" style="height: 100%;"></div>
+
+    <script src="lib/jquery-2.1.4.min.js"></script>
+    <script src="lib/snap-svg.min.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular/angular-route.min.js"></script>
+    <script src="lib/angular/angular-animate.min.js"></script>
+    <script src="lib/angular/angular-resource.min.js"></script>
+
+
+    <script src="app/wvtm.js"></script>
+    <script src="app/common/config.js"></script>
+    <script src="app/common/tree/tree.js"></script>
+    <script src="app/common/tree/tree-node.js"></script>
+    <script src="app/common/queue.js"></script>
+    <script src="app/common/ng-snap.svg.js"></script>
+
+    <script src="app/components/taskmodel/taskmodel.module.js"></script>
+    <script src="app/components/taskmodel/taskmodel.js"></script>
+    <script src="app/components/taskmodel/taskmodel.simulator.js"></script>
+
+    <script src="app/components/editor/editor.module.js"></script>
+    <script src="app/components/editor/editor.service.js"></script>
+    <script src="app/components/editor/editor.controller.js"></script>
+    <script src="app/components/editor/directives/actionbar.js"></script>
+    <script src="app/components/editor/directives/toolbar.js"></script>
+    <script src="app/components/editor/directives/editor.js"></script>
+    <script src="app/components/editor/directives/canvas.js"></script>
+    <script src="app/components/editor/directives/infobar.js"></script>
+    <!-- <script src="app/components/editor/minimap.js"></script> -->
+
+    <script src="app/components/renderer/renderer.module.js"></script>
+    <script src="app/components/renderer/renderer.service.js"></script>
+    <script src="app/components/renderer/tree-layout.js"></script>
+
+
+    <!-- <script src="app/components/editor/directives/statusbar.js"></script> -->
+
+    <!-- <script src="app/components/taskmodel/taskmodel.render.js"></script> -->
+
+</body>
+
+</html>

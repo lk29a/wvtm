@@ -1,0 +1,18 @@
+<div id="header-wrapper">
+  <div id="header">
+    <div id="action-bar">
+      <ul class="list-inline">
+        <li class="menu-item">
+          <button type="button" class="action-btn" action="validate">validate</button>
+        </li>
+        <li class="menu-item">
+          <button type="button" class="action-btn" action="simulate">{{(evm.curState.simulating  === true) ? 'Stop Simulation' : 'Start Simulation'}}</button>
+        </li>
+        <li class="menu-item"></li>
+        <li class="menu-item"></li>
+      </ul>
+
+      {{evm.curState}}
+    </div>
+  </div>
+</div>

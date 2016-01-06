@@ -1,0 +1,10 @@
+#header-wrapper {
+  position: fixed;
+  height: 65px;
+  width: 100%;
+  z-index: 1030;
+  left: 0;
+  top: 0;
+  box-shadow: 0 0 2px rgba(53, 68, 88, .5);
+  background-color: #455A64;	
+}

@@ -1,0 +1,25 @@
+#info-bar {
+	width: 200px;
+	height: 100%;
+	float: left;
+	overflow-y: auto;
+	border-left: 1px solid #9E9E9E;
+}
+
+.info-head {
+	height: 30px;
+	background-color: #EEEEEE;
+	border-bottom: 1px solid #CACACA;
+	text-align: center;
+	line-height: 30px;
+	font-weight: 400;
+}
+
+.info-body {
+    padding: 5px;
+}
+
+.info-control {
+    height: 25px;
+    border-radius: 0px;
+}
