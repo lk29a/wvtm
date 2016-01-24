@@ -22,7 +22,8 @@
       tasksExecuted = [];
 
     var api = {
-      start: start
+      start: start,
+      performTask: performTask
     };
 
     return api;
@@ -37,7 +38,6 @@
      * 2. Remove event handlers (hover, click and others if exists)
      * 3. ...
      *
-     * 
      * @param  {[type]} taskModel [description]
      * @return {[type]}           [description]
      */
@@ -47,19 +47,21 @@
       ets = [];
 
 
-      //first validate structure of the model
+      // first validate structure of the model
       // var valid = taskModel.validateStructure();
       // if(!valid) {
       // 	console.log('Model has errors please fix them first.');
       // 	return;
       // }
-      
+
       // start with the root
       enableTask(taskModel.root);
 
       // for (var i = 0; i < ets.length; i++) {
       //   console.log(ets[i].data);
       // }
+      // 
+      console.log(ets);
 
       return ets;
     }
@@ -73,23 +75,27 @@
      * 
      * @param  {[type]} aTask [description]
      */
-    function enableTask(curTask) {
+    function enableTask(aTask) {
+      var curTask = aTask,
+        lPath = [];
 
       //find left modt child of this task
+      lPath.push(curTask);
       while (curTask.children.length) {
         curTask = curTask.children[0];
+        lPath.push(curTask);
       }
 
       //for each task check its relation
-      while (curTask.parent) {
+      while (lPath.length > 0) {
+        curTask = lPath.pop();
         if (curTask.isLeaf()) {
           ets.push(curTask);
         }
 
         //if relation is 
-        var rSibling = checkRelation(curTask);
-        if (rSibling !== null) {
-          enableTask(rSibling);
+        if (checkRelation(curTask)) {
+          enableTask(curTask.getRightSibling());
         }
 
         curTask = curTask.parent;
@@ -109,10 +115,10 @@
         aTask.relation === TaskRelation.CHOICE ||
         aTask.relation === TaskRelation.RANDOM
       ) {
-        return aTask.getRightSibling();
+        return true;
       }
 
-      return null;
+      return false;
     }
 
     /**
@@ -125,7 +131,48 @@
      * @return {[type]} [description]
      */
     function performTask(aTask) {
-    	
+      console.log(ets);
+      var idx = ets.indexOf(aTask);
+      if (idx < 0) {
+        console.log('Task not enabled');
+        return;
+      } else {
+        //remove task from enabled set
+        ets.splice(idx, 1);
+
+        //check if left task also needs to be performed in case of choice, unrestricted, etc
+        var lSibling = aTask.getLeftSibling();
+        if (lSibling && checkRelation(lSibling)) {
+          performTask(lSibling);
+        }
+
+        var rSibling = aTask.getRightSibling();
+        if (rSibling) {
+          //some *relation* with right sibling
+          if (checkRelation(aTask)) {
+            performTask(rSibling);
+          } else {
+            enableTask(rSibling);
+          }
+        }
+      }
+      return ets;
+    }
+
+    function performRelation() {
+      var relations = {
+        '|||': {},
+        '[]': {},
+        '|[]|': {},
+        '|=|': {},
+        '[>': {},
+        '>>': {},
+        '[]>>': {},
+        '|>': {},
+        'T*': {},
+        '[T]': {},
+        '<->': {}
+      };
     }
 
   }

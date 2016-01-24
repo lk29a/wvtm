@@ -9,6 +9,7 @@
 	angular.module('WVTM.editor', [
 			'WVTM.TaskModel',
 			'WVTM.renderer',
+			'WVTM.modal'
 		])
 	.config(routeConfig);
 

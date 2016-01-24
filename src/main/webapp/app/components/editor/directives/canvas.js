@@ -29,16 +29,18 @@
     	//render the initial model svg 
     	var svgElm = document.querySelector('editor-canvas');
     	if(svgElm) {
-    		tmr.init('editor-canvas');
-	      tmr.render(ctrl.taskModel);
+    		// tmr.init('editor-canvas');
+	      ctrl.init();
     	} else {
     		console.log('SVG element not found...');
     	}
     }
 
     function postLink(scope, element, attrs, ctrl) {
+      var paper = Renderer.getPaper(),
+          modelGroup = paper.select('#model-group');
 
-      //for model update
+      //for model updateSimulation
       scope.$on('wvtm:model:update', function(event, data) {
         console.log('updating model');
         tmr.update(data.type, data.taskId, ctrl.taskModel);
@@ -46,8 +48,6 @@
 
       //for simulation
       scope.$on('wvtm:simulation', function(event, data) {
-        
-
         if(data.type === 'start') {
           tmr.startSimulation(data.ets);
         } 
@@ -58,44 +58,36 @@
 
         if(data.type === 'update') {
           //maybe pass delta only
-          tmr.updateSimulation(ets);
+          tmr.updateSimulation(data.ets);
         } 
       });
 
-
-
-
-      var paper = tmr.getPaper();
-      
-      var modelGroup = paper.select('#model-group');
-
-      var prevSelection = null;
-
       //single click for selection
       modelGroup.click(function(evt) {
-        if(evt.target.classList.contains('tree-node')) {
-          ctrl.selectedTaskId = evt.target.id;
-          var selectedTask = modelGroup.select("#" + evt.target.id);
-          // if(prevSelection !== selectedTask && prevSelection) {
-          //   tmr.selectEffect(prevSelection);
-          // }
-          tmr.selectEffect(selectedTask);
-          prevSelection = selectedTask;
-          scope.$apply(function() {
-            ctrl.currentTask = selectedTask.data('origNode');
-            console.log(ctrl.currentTask);
-          });
-        } else {
-          ctrl.selectedTask = null;
-          ctrl.currentTask = null;
+        if(evt.target.classList.contains('task-node')) {
+          // ctrl.selectedTaskId = evt.target.id;
+          ctrl.selectTask(evt.target.id);
+
+
+          // var selectedTask = modelGroup.select("#" + evt.target.id);
+          // // if(prevSelection !== selectedTask && prevSelection) {
+          // //   tmr.selectEffect(prevSelection);
+          // // }
+          // tmr.selectEffect(selectedTask);
+          // prevSelection = selectedTask;
+          // scope.$apply(function() {
+          //   ctrl.currentTask = selectedTask.data('origNode');
+          //   console.log(ctrl.currentTask);
+          // });
         }
       });
 
       //double click for data edit
       modelGroup.dblclick(function(evt) {
-        if(evt.target.classList.contains('tree-node')) {
+        if(evt.target.classList.contains('task-node')) {
           console.log("will edit task");
-          var selectedTask = modelGroup.select("#" + evt.target.id);
+          ctrl.dbClickTask(evt.target.id);
+          // var selectedTask = modelGroup.select("#" + evt.target.id);
           //@lk edit data popup or slide from right
           // ctrl.addTask(selectedTask.data('origNode'), );
         }
@@ -103,18 +95,18 @@
 
       //hover for nodes
       modelGroup.hover(function(evt) {
-        if(evt.target.classList.contains('tree-node')) {
-          var hovered = modelGroup.select("#" + evt.target.id);
-          tmr.hoverEffect(hovered);
+        if(evt.target.classList.contains('task-node')) {
+          ctrl.hoverTask(evt.target.id);
+          // var hovered = modelGroup.select("#" + evt.target.id);
+          // tmr.hoverEffect(hovered);
         }
       }, function(evt) {
-        if(evt.target.classList.contains('tree-node')) {
-          var hovered = modelGroup.select("#" + evt.target.id);
-          tmr.hoverEffect(hovered);
+        if(evt.target.classList.contains('task-node')) {
+          ctrl.hoverTask(evt.target.id);
+          // var hovered = modelGroup.select("#" + evt.target.id);
+          // tmr.hoverEffect(hovered);
         }
       });
-
-
     }
   }
 })();

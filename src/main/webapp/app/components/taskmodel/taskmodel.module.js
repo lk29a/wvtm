@@ -13,7 +13,7 @@
 	.constant('TaskType', {
 		'ABSTRACT': 0,
 		'USER': 1,
-		'INTERCACTION': 2,
+		'INTERACTION': 2,
 		'SYSTEM': 3,
 	})
 	.constant('TaskRelation', {

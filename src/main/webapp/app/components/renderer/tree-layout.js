@@ -168,8 +168,6 @@
 
     function centreLayout(root, centre) {
       var shift = 0;
-      console.log(bounds);
-
       if(Math.abs(bounds.x2 - bounds.x1)/2 > centre) {
         centre = (bounds.x2 - bounds.x1)/2;
       }
