@@ -61,8 +61,6 @@
       //   console.log(ets[i].data);
       // }
       // 
-      console.log(ets);
-
       return ets;
     }
 
@@ -113,7 +111,8 @@
       if (
         aTask.relation === TaskRelation.UNRESTRICTED ||
         aTask.relation === TaskRelation.CHOICE ||
-        aTask.relation === TaskRelation.RANDOM
+        aTask.relation === TaskRelation.RANDOM ||
+        aTask.relation === TaskRelation.CONCURRENTINFO
       ) {
         return true;
       }
@@ -161,17 +160,22 @@
 
     function performRelation() {
       var relations = {
+        //Independent Concurrency
         '|||': {},
+        //choice
         '[]': {},
+        //Concurrency with information exchange
         '|[]|': {},
+        //Order Independence
         '|=|': {},
+        //Deactivating
         '[>': {},
+        //Enabling
         '>>': {},
+        //Enabling with information passing
         '[]>>': {},
+        //Suspend - resume
         '|>': {},
-        'T*': {},
-        '[T]': {},
-        '<->': {}
       };
     }
 

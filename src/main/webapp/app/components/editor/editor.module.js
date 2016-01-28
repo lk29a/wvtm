@@ -17,7 +17,7 @@
 	function routeConfig($routeProvider) {
 		$routeProvider.when('/editor', {
 			controller: 'EditorController',
-			controllerAs: 'evm',
+			controllerAs: 'vm',
       templateUrl: 'app/components/editor/editor.html',
       reloadOnSearch: false,
 		});

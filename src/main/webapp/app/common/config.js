@@ -6,7 +6,7 @@
 	.constant('wvtmConfig', {
     apiUrl: window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/WVTM/api/',
 	});
-
+  
   appConfig.$inject = ['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider'];
   function appConfig($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
     //disable debug info

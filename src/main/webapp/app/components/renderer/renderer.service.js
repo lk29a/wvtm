@@ -32,7 +32,8 @@
       updateSimulation: updateSimulation,
       stopSimulation: stopSimulation,
       // update: update,
-      selectEffect: selectEffect,
+      selectTask: selectTask,
+      deSelectTask: deSelectTask,
       highlightTask: highlightTask,
       // getTreeSets: getTreeSets,
     };
@@ -102,7 +103,8 @@
     function renderTaskTree(root) {
       (function traverseBF(currentNode) {
 	      var aTaskGroup = paper.g().attr({
-	        class: 'task'
+	        class: 'task',
+          id: currentNode.data.id,
 	      });
 
         renderTaskNode(currentNode.coord.x, currentNode.coord.y, currentNode, aTaskGroup);
@@ -112,7 +114,7 @@
           renderTaskLink(currentNode.coord.x, currentNode.coord.y + 20, child.coord.x, child.coord.y - 20, aTaskGroup);
           traverseBF(child);
         }
-        currentNode.layout.el = aTaskGroup;
+        // currentNode.layout.el = aTaskGroup;
         modelGroup.add(aTaskGroup);
       })(root);
     }
@@ -145,7 +147,7 @@
       var node = paper.use('def-' + defTaskNodes[origNode.data.type]).attr({
           x: cx-20,
           y: cy-20,
-          id: origNode.data.id,
+          // id: origNode.data.id,
           class: 'task-node'
         }).data('origNode', origNode),
 
@@ -180,8 +182,8 @@
     }
 
     function renderTaskRelation(cx, cy, origNode, group) {
-      var rightSibling = origNode.getRightSibling();
-      if (rightSibling && origNode.relation) {
+      if (origNode.data.relation) {
+        var rightSibling = origNode.getRightSibling();
 
       	//check if relation already exists if yes then update it
       	var relationText = group.select('.rel-text'),
@@ -191,7 +193,7 @@
       	if(relationText) {
       		relationLink = group.select('.rel-link');
       		relationText.attr({
-      			text: origNode.relation
+      			text: origNode.data.relation
       		});
 
           textBox = relationText.getBBox();
@@ -204,7 +206,8 @@
             ]});
 
       	} else {
-        	relationText = paper.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.relation);
+          console.log('adding relation');
+        	relationText = paper.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.data.relation);
           textBox = relationText.getBBox();
           relationLink = paper.path([
               ['M', cx + RendererDefaults.radius, cy],
@@ -220,22 +223,25 @@
       }
     }
 
-    function update(type, taskId, model) {
-    	if(!taskId || !model) {
-    		console.log('renderer: no task provided to update');
+    function getTaskNodeById(taskId) {
+      return modelGroup.select("#" + taskId + ' .task-node');
+    }
+
+    function update(type, taskId, taskModel) {
+    	if(!taskId || !taskModel) {
+        throw new Error('renderer: no task provided to update');
     	}
 
-			var node = model.searchNode(taskId),
-					taskGroup = node.layout.el;
-
-			// console.log(node.layout.el);
-			// console.log(taskGroup);
+			var updatedTask = taskModel.searchNode(taskId),
+					taskGroup = modelGroup.select('#' + taskId);
       
 			if(type === 'task') {
-				render(model);
-			}
-			if(type === 'relation') {
-				renderTaskRelation(node.coord.x, node.coord.y, node, taskGroup);
+				render(taskModel);
+        //@lk just for now until atomic updates is complete 
+        selectTask(taskId);
+        //
+			} else if(type === 'relation') {
+				renderTaskRelation(updatedTask.coord.x, updatedTask.coord.y, updatedTask, taskGroup);
 			}
     }
 
@@ -292,48 +298,49 @@
       paper.removeClass('simulation');
     }
 
-    function selectEffect(snapElm) {
-      if (snapElm.hasClass('selected')) {
-        snapElm.removeClass('selected');
+    function selectTask(taskId) {
+      var curTask = getTaskNodeById(taskId);
+
+      if (curTask.hasClass('selected')) {
+        curTask.removeClass('selected');
         currentState.selected = null;
       } else {
         if(currentState.selected) {
           currentState.selected.removeClass('selected');
         } 
-        snapElm.addClass('selected');
-        currentState.selected = snapElm;
+        curTask.addClass('selected');
+        currentState.selected = curTask;
       }
-
-
     }
 
-    function highlightTask(snapElm) {
-      // if (snapElm.hasClass('selected')) {
-      //   currentState.hovered = null;
-      //   return;
-      // }
+    function deSelectTask() {
+      if (currentState.selected) {
+        currentState.selected.removeClass('selected');
+      }
+    }
 
+    function highlightTask(taskId) {
+      var curTask = getTaskNodeById(taskId);
 
-
-      if (currentState.hovered !== null && currentState.hovered.hasClass('hover') && (currentState.hovered !== snapElm)) {
-        currentState.hovered = currentState.hovered || snapElm;
+      if (currentState.hovered !== null && currentState.hovered.hasClass('hover') && (currentState.hovered !== curTask)) {
+        currentState.hovered = currentState.hovered || curTask;
         currentState.hovered.attr({
           filter: ''
         });
-        snapElm.removeClass('hover');
+        curTask.removeClass('hover');
       }
 
-      if (snapElm.hasClass('hover')) {
-        snapElm.attr({
+      if (curTask.hasClass('hover')) {
+        curTask.attr({
           filter: ''
         });
-        snapElm.removeClass('hover');
+        curTask.removeClass('hover');
       } else {
-        snapElm.attr({
+        curTask.attr({
           filter: filters.hover
         });
-        snapElm.addClass('hover');
-        currentState.hovered = snapElm;
+        curTask.addClass('hover');
+        currentState.hovered = curTask;
       }
 
     }

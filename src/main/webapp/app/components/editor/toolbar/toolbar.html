@@ -1,55 +1,18 @@
-<div id="toolbar-wrapper">
-	<div id="toolbar">
-		<ul class="list-unstyled tasks">
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="task" task="abstract">A</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="task" task="user">U</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="task" task="interaction">I</button>				
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="task" task="System">
-					<img src="images/abstract_icn.png">
-				</button>				
-			</li>
-		</ul>
-		<ul class="list-unstyled relations">
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="unrestricted">|||</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="choice">[]</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="concurrentinfo">|[]|</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="random">|=|</button>
-			</li>
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="deact">[&gt;</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="enable">&gt;&gt;</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="choiceinfo">[]&gt;&gt;</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="resume">|&gt;</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="iteration">T*</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="optional">[T]</button>
-			</li>			
-			<li class="tool-item">
-				<button type="button" class="tool-btn" action="relation" relation="same"><-></button>
-			</li>			
-		</ul>
-	</div>
+<div id="toolbar">
+  <div class="toolbar-items">
+    <div class="task-types menu-group">
+      <div class="toolbar-btn" ng-repeat="(task, val) in ::vm.TaskTypes" action="task" task="{{task.toLowerCase()}}">
+        <div class="toolbar-icon {{task.toLowerCase()}}"></div>
+      </div>
+      <div class="toolbar-btn" action="library">
+        <div class="toolbar-icon library"></div>
+      </div>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="task-relations menu-group">
+      <div class="toolbar-btn" ng-repeat="(relation, sym) in ::vm.TaskRelations" action="relation" relation="{{relation.toLowerCase()}}">
+        <div class="toolbar-icon">{{sym}}</div>
+      </div>
+    </div>
+  </div>
 </div>

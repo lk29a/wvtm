@@ -11,10 +11,10 @@
 		])
 
 	.constant('TaskType', {
-		'ABSTRACT': 0,
-		'USER': 1,
-		'INTERACTION': 2,
-		'SYSTEM': 3,
+		'ABSTRACT': '0',
+		'USER': '1',
+		'INTERACTION': '2',
+		'SYSTEM': '3',
 	})
 	.constant('TaskRelation', {
 		'UNRESTRICTED': '|||',
@@ -27,6 +27,6 @@
 		'RESUME': '|>',
 		'ITERATION': 'T*',
 		'OPTIONAL': '[T]',
-		'SAME': '<->',
+		// 'SAME': '<->',
 	});
 })();

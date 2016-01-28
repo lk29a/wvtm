@@ -45,7 +45,7 @@
         x2: 0,
       };
       firstWalk(root);
-      secondWalk(root, -root.layout.x, 1);
+      secondWalk(root, -root.layout.x, 0.3);
 
       centreLayout(root, centre);
     }

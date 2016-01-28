@@ -1,6 +1,14 @@
 @import url("common.css");
-@import url("header.css");
-@import url("editor/toolbar.css");
+@import url("../app/components/editor/editor.css");
+@import url("../app/components/editor/menu/menu.css");
+@import url("../app/components/editor/toolbar/toolbar.css");
+@import url("../app/components/editor/canvas/canvas.css");
+@import url("../app/components/editor/infobar/infobar.css");
+
+
+
+
+/*@import url("editor/toolbar.css");
 @import url("editor/canvas.css");
 @import url("editor/infobar.css");
-@import url("editor/modal.css");
+@import url("editor/modal.css");*/

@@ -12,6 +12,8 @@
 		* data must contain:
 		*	type(int) = type of node(Tasktype)
 		*	id(string) = unique identifier for a node
+		*	relation = relation of the node with right sibling if any
+		*	special = repeat or optional or something else
 		*	any other data specific to this node
 		*/
 		this.data = data;
@@ -81,7 +83,7 @@
 
 	TreeNode.prototype.addRelation = function(rel) {
 		if(rel && (this.parent.getLastChild() !== this)) {
-			this.relation = rel;
+			this.data.relation = rel;
 		} else {
 			console.log('Cannot add/edit relation no right sibling');
 		}

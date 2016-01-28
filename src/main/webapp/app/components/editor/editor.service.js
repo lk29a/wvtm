@@ -4,26 +4,37 @@
   angular.module('WVTM.editor')
     .factory('EditorService', EditorService);
 
-  EditorService.$inject = ['TaskModel', 'TaskModelSimulator'];
+  EditorService.$inject = ['$rootScope', 'TaskModel', 'TaskModelSimulator', 'Renderer'];
 
-  function EditorService(TaskModel, TaskModelSimulator) {
-    var curModel = null;
+  function EditorService($rootScope, TaskModel, TaskModelSimulator, Renderer) {
+    var currentTaskModel = null;
     var library = {};
+
     var editorState = {
+      mode: 'editor',
+      selectedTaskId: '',
+      selectedTaskNode: null,
       actions: {
         prev: [],
         next: []
-      }
+      },
+      validationObj: {}
     };
 
     var api = {
-      newInstance: newInstance,
-      getTaskModel: getTaskModel,
-      getEditorState: getEditorState,
+      init: init,
+      highlightTask: highlightTask,
+      selectTask: selectTask,
+      deSelectTask: deSelectTask,
       addTask: addTask,
-      addRelation: addRelation,
+      addUpdateTaskRelation: addUpdateTaskRelation,
+      updateTaskType: updateTaskType,
+      getTaskModel: getTaskModel,
+      getSelectedTask: getSelectedTask,
+      getEditorMode: getEditorMode,
       validateStructure: validateStructure,
-      simulateModel: simulateModel,
+      getValidationObj: getValidationObj,
+      simulate: simulateModel,
       performTask: performTask,
       addToLibrary: addToLibrary,
       test123: test123
@@ -33,39 +44,115 @@
 
     /***********************************/
 
-    function newInstance() {
-    	//reset all variables
-      curModel = new TaskModel();
-      return curModel;
+    function init() {
+      if(!currentTaskModel) {
+        currentTaskModel = new TaskModel();
+      }
+      test123();
+      Renderer.init('editor-canvas');
+      render();
+
     }
 
+    function selectTask(taskId) {
+      if (editorState.mode === 'simulation') {
+        angular.noop();
+      } else {
+        editorState.selectedTaskId = taskId;
+        $rootScope.$emit('wvtm:info:task');
+        Renderer.selectTask(taskId);
+      }
+    }
+
+    function getSelectedTask() {
+      if(currentTaskModel) {
+        editorState.selectedTaskNode = currentTaskModel.searchNode(editorState.selectedTaskId);
+        return editorState.selectedTaskNode;
+      } else {
+        return null;
+      }
+    }
+
+    function deSelectTask() {
+      Renderer.deSelectTask();
+      editorState.selectedTaskId = null;
+      $rootScope.$emit('wvtm:info:task');
+    }
+
+    function highlightTask(taskId) {
+      Renderer.highlightTask(taskId);
+    }
+
+    function render() {
+      Renderer.render(currentTaskModel);
+    }
 
     function getTaskModel() {
-      return curModel;
+      return currentTaskModel;
     }
 
-    function getEditorState() {
-      return editorState;
+    function getEditorMode() {
+      return editorState.mode;
     }
 
-    function addTask(options) {
-      curModel.addTask(options);
-      return curModel;
+    function addTask(type) {
+      if (!editorState.selectedTaskId) {
+        throw new Error('Cannot add new task, select a task first');
+      }
+      var options = {
+        parentTaskId: editorState.selectedTaskId,
+        taskType: type
+      };
+
+      currentTaskModel.addTask(options);
+      Renderer.update('task', editorState.selectedTaskId, currentTaskModel);
+
+      // $rootScope.$emit('wvtm:model:update');
     }
 
-    function addRelation(node, relation) {
-      curModel.addRelation(node, relation);
-      return curModel;
+    function addUpdateTaskRelation(relation) {
+      if (!editorState.selectedTaskId) {
+        throw new Error('Cannot add/update relation, select a task first');
+      }
+      currentTaskModel.addUpdateRelation(editorState.selectedTaskId, relation);
+
+      Renderer.update('relation', editorState.selectedTaskId, currentTaskModel);
+      // $rootScope.$emit('wvtm:model:update');
     }
 
+    function updateTaskType(taskType) {
+      if(!editorState.selectedTaskId) {
+        throw new Error('No task selected');
+      }
+      currentTaskModel.changeTaskType(editorState.selectedTaskId, taskType);
+      Renderer.update('task', editorState.selectedTaskId, currentTaskModel);
+    }
+
+    //is it a good idea to call this from info component or 
+    //save the validation result and use events to get this info to info component??    
     function validateStructure() {
-      curModel.validateStructure();
+      console.log('validating model');
+      deSelectTask();
+      editorState.validationObj = currentTaskModel.validateStructure();
+      $rootScope.$emit("wvtm:info:validation");
+    }
+
+    function getValidationObj() {
+      return editorState.validationObj;
     }
 
     function simulateModel() {
-      //get enabled tasks set
-      return TaskModelSimulator.start(curModel);
 
+      if (editorState.mode === 'editor') {
+        //unselect previous selected task if any
+        deSelectTask();
+        var ets = TaskModelSimulator.start(currentTaskModel);
+        Renderer.startSimulation(ets);
+        editorState.mode = 'simulation';
+      } else {
+        Renderer.stopSimulation();
+        editorState.mode = 'editor';
+      }
     }
 
     function performTask(aTask) {
@@ -95,25 +182,25 @@
     }
 
     function test123() {
-      curModel.addTask({parentTaskId:'TASK_0', taskType:'USER', name:'b'});
-      curModel.addTask({parentTaskId:'TASK_0', taskType:'INTERCACTION', name:'some name big'});
-      curModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'d'});
-      // curModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'USER', name:'b'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'INTERCACTION', name:'some name big'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'d'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
 
-      curModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zz'});
-      curModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zzz'});
+      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zz'});
+      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zzz'});
 
 
-      curModel.addTask({parentTaskId:'TASK_2', taskType:'SYSTEM', name:'f'});
-      curModel.addTask({parentTaskId:'TASK_2', taskType:'USER', name:'g'});
-      // curModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'h'});
+      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'SYSTEM', name:'f'});
+      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'USER', name:'g'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'h'});
 
-      // curModel.addTask({parentTaskId:'TASK_3', taskType:'USER', name:'i'});
-      // curModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'j'});
-      // curModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'k'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'USER', name:'i'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'j'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'k'});
 
-      // curModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'l'});
-      // curModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'m'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'l'});
+      // currentTaskModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'m'});
     }
   }
 

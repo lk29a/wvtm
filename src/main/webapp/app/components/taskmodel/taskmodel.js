@@ -43,29 +43,48 @@
 			var data = {
 				type: TaskType[options.taskType.toUpperCase()] || TaskType.ABSTRACT,
 				id: 'TASK_' + (this.taskCounter++), //@lk comeup with some naming convention
-				name: options.name || '',
-				description: options.name || '',
+				name: options.name || (options.taskType + '_' +  this.taskCounter),
+				description: '',
 				relation: options.action || '',
 			};
 			this.addNode(parentNode, data);
 		};
 
-		TaskModel.prototype.addRelation = function(parentTaskId, relation) {
-			if(angular.isUndefined(parentTaskId) || parentTaskId === null) {
-				throw new Error('`parentId` must be provided');
+		TaskModel.prototype.addUpdateRelation = function(taskId, relation) {
+			if(angular.isUndefined(taskId) || taskId === null) {
+				throw new Error('`taskId` must be provided');
 			}
 			if(!TaskRelation[relation.toUpperCase()]) {
 				throw new Error('Please provide a valid relation');
 			}
 
-      if (parentTaskId instanceof TreeNode) {
-				parentTaskId.addRelation(TaskRelation[relation.toUpperCase()]);
+      if (taskId instanceof TreeNode) {
+				taskId.addRelation(TaskRelation[relation.toUpperCase()]);
       } else {
-				parentTaskId = this.searchNode(parentTaskId);
-				parentTaskId.addRelation(TaskRelation[relation.toUpperCase()]);
+				taskId = this.searchNode(taskId);
+				taskId.addRelation(TaskRelation[relation.toUpperCase()]);
       }
 		};
 
+
+		TaskModel.prototype.changeTaskType = function(taskId, taskType) {
+			if(angular.isUndefined(taskId) || taskId === null) {
+				throw new Error('`taskId` must be provided');
+			}
+
+			if(angular.isUndefined(taskType) || taskType === null) {
+				throw new Error('`taskType` of task must be provided');
+			}
+
+			console.log(taskId, taskType);
+
+      if (!(taskId instanceof TreeNode)) {
+				taskId = this.searchNode(taskId);
+				// taskId.addRelation(TaskRelation[relation.toUpperCase()]);
+      } 
+
+			taskId.data.type = taskType;
+		};		
 
 		/**
 		 * Check correctness of the model
@@ -73,23 +92,30 @@
 		 * 2. Every sibling pair should have a relation
 		 */
 		TaskModel.prototype.validateStructure = function() {
-			var valid = true;
+			var validationObj = {
+				messages:	[],
+				valid: true,
+				warnCount: 0,
+				errorCount: 0
+			};
 			function validateTask(task) {
-				if(task.isLeaf()) {
-					if(task.data.type === TaskType.ABSTRACT) {
-						console.log('Warning: "' + task.data.name + '" is abstract type. Task should have subtasks.');
-					}
+				if(task.isLeaf() && (task.data.type === TaskType.ABSTRACT)) {
+					// console.log('Warning: "' + task.data.name + '" is abstract type. Task should have subtasks.');
+					validationObj.messages.push('Warning: Task "' + task.data.name + '" is abstract type. Task should have subtasks.');
+					validationObj.warnCount++;
 				}
 
-				if(!task.relation) {
-					if(task.parent && (task.parent.getLastChild() !== task)) {
-						valid = false;
-						console.log('Error: "' + task.data.name + '" must have a relation with its right sibling.');
-					}
+				if(!task.data.relation && (task.getRightSibling() !== null)) {
+					// if(task.parent && (task.parent.getLastChild() !== task)) {
+						validationObj.valid = false;
+						// console.log('Error: "' + task.data.name + '" must have a relation with its right sibling.');
+						validationObj.messages.push('Error: Task "' + task.data.name + '" must have a relation with its right sibling.');
+						validationObj.errorCount++;
+					// }
 				}
 			}
 			this.traverseDF(validateTask);
-			return valid;
+			return validationObj;
 		};
 
 		/**

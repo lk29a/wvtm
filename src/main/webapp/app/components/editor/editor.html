@@ -1,14 +1,20 @@
 <div id="wrapper">
-  <taskmodel-editor>
-    <editor-actionbar></editor-actionbar>
-    <editor-minimap></editor-minimap>
-    <!-- <ng-include src="'app/partials/header.html'"></ng-include> -->
-
-    <editor-toolbar></editor-toolbar>
+  <div id="header-wrapper" class="clearfix">
+    <div class="pull-left" id="branding">
+      <div class="logo">
+        <img src="images/logo.png" title="Web-based Visual Task Modelling">
+      </div>
+    </div>
+    <div id="header">
+      <editor-menu></editor-menu>
+      <editor-toolbar></editor-toolbar>
+    </div>
+  </div>
+  <div id="canvas-wrapper" class="main-view pull-left">
     <editor-canvas></editor-canvas>
-    
-    <!-- <editor-statusbar></editor-statusbar> -->
-
-    <div lk-modal class="modal-bg"></div>
-  </taskmodel-editor>
+  </div>
+  <div id="info-wrapper" class="main-view pull-left">
+    <editor-infobar></editor-infobar>
+  </div>
+  <!-- <div lk-modal class="modal-bg"></div> -->
 </div>
