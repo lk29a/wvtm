@@ -62,12 +62,23 @@
       });      
 
       //handle hover on task node
-      element.on('mouseenter', '.task-node', selectTask);
-      element.on('mouseleave', '.task-node', selectTask);
+      element.on('mouseenter', '.task-node', highlightTask);
+      element.on('mouseleave', '.task-node', highlightTask);
 
-      function selectTask(event) {
+      function highlightTask(event) {
         EditorService.highlightTask(event.target.parentNode.id);
       }
+
+      element.on('dblclick', '.task-node', dbClickTask);
+
+      function dbClickTask(event) {
+        if(EditorService.getEditorMode() === 'simulation') {
+          console.log(event.target.parentNode.id);
+          // EditorService.simPerformTask();
+        }
+      }
+
+
 
     }
   }

@@ -53,8 +53,8 @@
       paper = Snap('#' + canvasElm);
 
       paper.attr({
-        height: '100%',
-        width: '100%'
+        height: '1100px',
+        width: '1100px'
       });
       //create a group of entire model 
       modelGroup = paper.g();
@@ -136,8 +136,8 @@
     function renderTaskNode(cx, cy, origNode, group) {
       var taskName = origNode.data.name;
 
-      if(taskName.length > 10) {
-        taskName = taskName.substr(0, 10);
+      if(taskName.length > 12) {
+        taskName = taskName.substr(0, 12);
         if(taskName.substr(-1) === " ") {
           taskName = taskName.substring(0, taskName.length-1);
         }

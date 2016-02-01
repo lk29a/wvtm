@@ -15,7 +15,7 @@
   function TreeLayout() {
 
     var CONST = {
-      nodeDistance: 70,
+      nodeDistance: 90,
       levelDistance: 100,
       nodeRadius: 20
     },

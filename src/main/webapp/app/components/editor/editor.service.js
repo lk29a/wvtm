@@ -182,25 +182,27 @@
     }
 
     function test123() {
-      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'USER', name:'b'});
-      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'INTERCACTION', name:'some name big'});
-      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'d'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'Enable access', relation: '>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'Access', relation: '[>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'INTERCACTION', name:'Close access'});
       // currentTaskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
 
-      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zz'});
-      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'Abstract', name:'zzz'});
+      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'INTERCACTION', name:'Insert card', relation: '>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'System', name:'Require password', relation: '>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_1', taskType:'INTERCACTION', name:'Insert Password'});
 
 
-      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'SYSTEM', name:'f'});
-      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'USER', name:'g'});
-      // currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'h'});
+      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'Withdraw cash', relation: '[]'});
+      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'Deposit cash', relation: '[]'});
+      currentTaskModel.addTask({parentTaskId:'TASK_2', taskType:'Abstract', name:'Get information'});
 
-      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'USER', name:'i'});
-      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'j'});
-      // currentTaskModel.addTask({parentTaskId:'TASK_3', taskType:'system', name:'k'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'INTERCACTION', name:'Select withdraw', relation: '>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'System', name:'Show possible amounts', relation: '[]>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'User', name:'Decide amount', relation: '[]>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'INTERCACTION', name:'Select account', relation: '[]>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'System', name:'Provice cash', relation: '[]>>'});
+      currentTaskModel.addTask({parentTaskId:'TASK_7', taskType:'INTERCACTION', name:'Check cash'});
 
-      // currentTaskModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'l'});
-      // currentTaskModel.addTask({parentTaskId:'TASK_4', taskType:'system', name:'m'});
     }
   }
 

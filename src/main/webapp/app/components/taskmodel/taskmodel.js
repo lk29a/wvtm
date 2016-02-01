@@ -45,7 +45,7 @@
 				id: 'TASK_' + (this.taskCounter++), //@lk comeup with some naming convention
 				name: options.name || (options.taskType + '_' +  this.taskCounter),
 				description: '',
-				relation: options.action || '',
+				relation: options.relation || '',
 			};
 			this.addNode(parentNode, data);
 		};

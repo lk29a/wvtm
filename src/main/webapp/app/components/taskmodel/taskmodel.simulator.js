@@ -77,14 +77,13 @@
       var curTask = aTask,
         lPath = [];
 
-      //find left modt child of this task
+      //find left most decendent of this task
       lPath.push(curTask);
       while (curTask.children.length) {
         curTask = curTask.children[0];
         lPath.push(curTask);
       }
 
-      //for each task check its relation
       while (lPath.length > 0) {
         curTask = lPath.pop();
         if (curTask.isLeaf()) {

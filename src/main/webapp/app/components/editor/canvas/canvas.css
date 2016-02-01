@@ -18,7 +18,7 @@ svg text {
   text-anchor: middle;
   stroke: none;
   fill: #000000;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 svg .tree-node {
@@ -38,6 +38,8 @@ svg .task-node {
 svg .task-name {
   /* writing-mode: tb; */
   glyph-orientation-vertical: 0;
+  font-size: 11px;
+  font-weight: bold;
 }
 
 svg .task-node .node-area {
