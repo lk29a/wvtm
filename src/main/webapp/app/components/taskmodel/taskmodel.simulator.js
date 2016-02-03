@@ -50,17 +50,17 @@
       // first validate structure of the model
       // var valid = taskModel.validateStructure();
       // if(!valid) {
-      // 	console.log('Model has errors please fix them first.');
-      // 	return;
+      //  console.log('Model has errors please fix them first.');
+      //  return;
       // }
 
       // start with the root
       enableTask(taskModel.root);
 
-      // for (var i = 0; i < ets.length; i++) {
-      //   console.log(ets[i].data);
-      // }
-      // 
+      for (var i = 0; i < ets.length; i++) {
+        console.log(ets[i].data);
+      }
+
       return ets;
     }
 
@@ -125,11 +125,13 @@
      * Eg. if left sibling had choice relation then left sibling(it must be enabled) should be disabled.
      *
      * //@lk IF ALL CHILD TASKS ARE PERFORMED THEN PARENT TASK IS PERFORMED AS WELL??//
-     * 
+     * @param  {[type]} aTask [description]
+     * @param  {[type]} silent ??
      * @return {[type]} [description]
      */
-    function performTask(aTask) {
+    function performTask(aTask, silent) {
       console.log(ets);
+      silent = silent || false;
       var idx = ets.indexOf(aTask);
       if (idx < 0) {
         console.log('Task not enabled');
@@ -138,44 +140,69 @@
         //remove task from enabled set
         ets.splice(idx, 1);
 
-        //check if left task also needs to be performed in case of choice, unrestricted, etc
-        var lSibling = aTask.getLeftSibling();
-        if (lSibling && checkRelation(lSibling)) {
-          performTask(lSibling);
-        }
+        // if (!silent) {
+          //check if left task also needs to be performed in case of choice, unrestricted, etc
+          // var lSibling = aTask.getLeftSibling();
+          // if (lSibling && checkRelation(lSibling)) {
+          //   performTask(lSibling);
+          // }
 
-        var rSibling = aTask.getRightSibling();
-        if (rSibling) {
-          //some *relation* with right sibling
-          if (checkRelation(aTask)) {
-            performTask(rSibling);
-          } else {
-            enableTask(rSibling);
+          var rSibling = aTask.getRightSibling();
+          if (rSibling) {
+            //some *relation* with right sibling
+            if (simulateRelation(aTask)) {
+              performTask(rSibling);
+            } else {
+              enableTask(rSibling);
+            }
           }
-        }
+        // }
       }
       return ets;
     }
 
-    function performRelation() {
+    /**
+     * [performRelation description]
+     * @param  {[type]} realtion [description]
+     * @return {[type]}          [description]
+     */
+    function simulateRelation(task) {
       var relations = {
         //Independent Concurrency
-        '|||': {},
+        '|||': function() {
+          return true;
+        },
         //choice
-        '[]': {},
+        '[]': function() {
+          return true;
+        },
         //Concurrency with information exchange
-        '|[]|': {},
+        '|[]|': function() {
+          return true;
+        },
         //Order Independence
-        '|=|': {},
+        '|=|': function() {
+          return true;
+        },
         //Deactivating
-        '[>': {},
+        '[>': function() {
+          return true;
+        },
         //Enabling
-        '>>': {},
+        '>>': function() {
+          return true;
+        },
         //Enabling with information passing
-        '[]>>': {},
+        '[]>>': function() {
+          return true;
+        },
         //Suspend - resume
-        '|>': {},
+        '|>': function() {
+          return true;
+        },
       };
+
+      return relations[task.relation]();
     }
 
   }

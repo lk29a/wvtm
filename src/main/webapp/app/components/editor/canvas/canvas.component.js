@@ -73,8 +73,8 @@
 
       function dbClickTask(event) {
         if(EditorService.getEditorMode() === 'simulation') {
-          console.log(event.target.parentNode.id);
-          // EditorService.simPerformTask();
+          // console.log(event.target.parentNode.id);
+          EditorService.simPerformTask(event.target.parentNode.id);
         }
       }
 

@@ -206,7 +206,6 @@
             ]});
 
       	} else {
-          console.log('adding relation');
         	relationText = paper.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.data.relation);
           textBox = relationText.getBBox();
           relationLink = paper.path([
