@@ -160,7 +160,8 @@
     }
 
     function simPerformTask(taskId) {
-      return TaskModelSimulator.performTask(getTaskById(taskId));
+      var ets = TaskModelSimulator.executeTask(getTaskById(taskId));
+      Renderer.updateSimulation(ets);
     }
 
     /**

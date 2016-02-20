@@ -23,7 +23,7 @@
 
     var api = {
       start: start,
-      performTask: performTask
+      executeTask: executeTask
     };
 
     return api;
@@ -74,6 +74,7 @@
      * @param  {[type]} aTask [description]
      */
     function enableTask(aTask) {
+      console.log('enabling: ' + aTask.data.name);
       var curTask = aTask,
         lPath = [];
 
@@ -90,7 +91,7 @@
           ets.push(curTask);
         }
 
-        //if relation is 
+        //if relation is non blocking
         if (checkRelation(curTask)) {
           enableTask(curTask.getRightSibling());
         }
@@ -108,10 +109,10 @@
     function checkRelation(aTask) {
       //can add more relations to check here
       if (
-        aTask.relation === TaskRelation.UNRESTRICTED ||
-        aTask.relation === TaskRelation.CHOICE ||
-        aTask.relation === TaskRelation.RANDOM ||
-        aTask.relation === TaskRelation.CONCURRENTINFO
+        aTask.data.relation === TaskRelation.UNRESTRICTED ||
+        aTask.data.relation === TaskRelation.CHOICE ||
+        aTask.data.relation === TaskRelation.RANDOM ||
+        aTask.data.relation === TaskRelation.CONCURRENTINFO
       ) {
         return true;
       }
@@ -129,8 +130,7 @@
      * @param  {[type]} silent ??
      * @return {[type]} [description]
      */
-    function performTask(aTask, silent) {
-      console.log(ets);
+    function executeTask(aTask, silent) {
       silent = silent || false;
       var idx = ets.indexOf(aTask);
       if (idx < 0) {
@@ -144,21 +144,62 @@
           //check if left task also needs to be performed in case of choice, unrestricted, etc
           // var lSibling = aTask.getLeftSibling();
           // if (lSibling && checkRelation(lSibling)) {
-          //   performTask(lSibling);
+          //   executeTask(lSibling);
           // }
 
           var rSibling = aTask.getRightSibling();
           if (rSibling) {
             //some *relation* with right sibling
-            if (simulateRelation(aTask)) {
-              performTask(rSibling);
-            } else {
-              enableTask(rSibling);
+            var action = simulateRelation(aTask, rSibling);
+            switch(action) {
+              case 'enable':
+                enableTask(rSibling);
+                break;
+
+              case 'perform':
+                executeTask(rSibling);
+                break;
             }
+          }
+
+          //check if parent is still active else execute parent task
+          if(!isTaskActive(aTask.parent)) {
+            ets.push(aTask.parent);
+            executeTask(aTask.parent);
           }
         // }
       }
+      console.log(ets);
       return ets;
+    }
+
+    /**
+     * returns true if any task including aTask is enabled in the subtree rooted at aTask
+     * 
+     * @param  {[type]}  aTask [description]
+     * @return {Boolean}       [description]
+     */
+    function isTaskActive(aTask) {
+      var enabled = false;
+
+      //a task is enabled is any of its children is enabled
+      enabled = (function isTaskEnabled(parent) {
+        if(ets.indexOf(parent) > -1) {
+          return true;
+        } else {
+          var tmp = false;
+          for (var i = 0; i < parent.children.length; i++) {
+            tmp = isTaskEnabled(parent.children[i]);
+            if(tmp === true) {
+              return tmp;
+            }
+          }
+          return tmp;
+        }
+      })(aTask);
+
+      return enabled;
+
     }
 
     /**
@@ -166,15 +207,15 @@
      * @param  {[type]} realtion [description]
      * @return {[type]}          [description]
      */
-    function simulateRelation(task) {
+    function simulateRelation(task, rSibling) {
       var relations = {
         //Independent Concurrency
         '|||': function() {
-          return true;
+          return 'noop';
         },
         //choice
         '[]': function() {
-          return true;
+          return 'execute';
         },
         //Concurrency with information exchange
         '|[]|': function() {
@@ -190,11 +231,17 @@
         },
         //Enabling
         '>>': function() {
-          return true;
+          return 'enable';
         },
-        //Enabling with information passing
+        /**
+         * Enabling with information passing
+         * Will pass provided data to right sibling
+         * 
+         * @return {[type]} [description]
+         */
         '[]>>': function() {
-          return true;
+
+          return 'enable';
         },
         //Suspend - resume
         '|>': function() {
@@ -202,7 +249,7 @@
         },
       };
 
-      return relations[task.relation]();
+      return relations[task.data.relation]();
     }
 
   }

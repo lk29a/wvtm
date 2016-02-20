@@ -5,8 +5,8 @@
     .controller('InfobarController', InfobarController)
     .directive('editorInfobar', editorInfobar);
 
-    InfobarController.$inject = ['TaskType', 'TaskRelation', 'EditorService'];
-    function InfobarController(TaskTypes, TaskRelations, EditorService) {
+    InfobarController.$inject = ['TaskType', 'TaskRelation', 'EditorService', 'ModalService'];
+    function InfobarController(TaskTypes, TaskRelations, EditorService, ModalService) {
       var _this = this;
     	this.TaskTypes = TaskTypes;
     	this.TaskRelations = TaskRelations;
@@ -62,6 +62,19 @@
         _this.infoType = 'simulation';
         _this.title = 'Simulation info';
 
+      };
+
+      this.addToLibrary = function() {
+        ModalService.open({
+          templateUrl: 'app/partials/librarymodal.html',
+          params: {
+            msg: '_this.selectedTask',
+            task: _this.selectedTask
+          },
+          pipe: false
+        });
+
+        // EditorService.addToLibrary();
       };
 
     }

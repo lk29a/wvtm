@@ -51,6 +51,7 @@
 		};
 
 		TaskModel.prototype.addUpdateRelation = function(taskId, relation) {
+
 			if(angular.isUndefined(taskId) || taskId === null) {
 				throw new Error('`taskId` must be provided');
 			}
@@ -117,15 +118,6 @@
 			this.traverseDF(validateTask);
 			return validationObj;
 		};
-
-		/**
-		 * Simulate the model 
-		 * @return {[type]} [description]
-		 */
-		TaskModel.prototype.simulate = function() {
-		};
-
-
 
 		return TaskModel;
 	}
