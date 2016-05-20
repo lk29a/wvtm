@@ -1,0 +1,45 @@
+<div id="info-bar">
+  <div class="info-head"><span class="title">Information</span></div>
+  <div class="info-body">
+    <div ng-switch="vm.infoType">
+      <div ng-switch-when="task">
+        <div class="form-group">
+          <label>Name: </label>
+          <input class="form-control info-control" [(ngModel)]="currentTask.data.name">
+        </div>
+        <div class="form-group">
+          <label>Description: </label>
+          <textarea class="form-control info-control" [(ngModel)]="currentTask.data.description" ng-model-options="{ updateOn: 'blur'}"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Type: </label>
+          <select class="form-control info-control" [disabled]="infoModel.isRoot" ngChange="updateTaskType()" [(ngModel)]="infoModel.type">
+            <option *ngFor="let type of taskTypes" value="{{val}}">{{type}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Relation: </label>
+          <select class="form-control info-control" [disabled]="infoModel.isLast" ngChange="updateTaskRelation()" [(ngModel)]="infoModel.relation">
+            <option *ngFor="let relation of relations" value="{{relation}}">{{relation}} ({{taskRelations[relation]}})</option>
+          </select>
+        </div>
+        <button (click)="addToLibrary()">Add to library</button>
+      </div>
+<!--       <div ng-switch-when="validation">
+        <div class="validation-info">
+          <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
+          <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
+          <div class="messages">
+            <div class="msg" *ngFor="let msg of vInfo.messages">{{msg}}</div>
+          </div>
+        </div>
+      </div>
+      <div ng-switch-when="simulation">
+        
+      </div>
+      <div ng-switch-default>
+        <h4>Select a Task to see details.</h4>
+      </div> -->
+    </div>
+  </div>
+</div>

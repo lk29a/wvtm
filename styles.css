@@ -1,0 +1,53 @@
+html, body {
+	height: 100%;
+}
+
+#wrapper {
+  height: 100%;
+  font-size: 13px;
+  background-color: #f9f9f9;	
+}
+
+svg {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+svg text {
+  text-anchor: middle;
+  stroke: none;
+  fill: #000000;
+  /* font-weight: bold; */
+}
+
+svg .tree-node {
+  stroke-width: 2px;
+}
+
+svg.simulation .tree-node.enabled {
+  stroke: teal;
+}
+
+svg .task-node {
+  fill: #616161;
+  stroke: #424242;
+  stroke-width: 2px;
+}
+
+svg .task-name {
+  /* writing-mode: tb; */
+  glyph-orientation-vertical: 0;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+svg .task-node .node-area {
+  fill: red;
+}
+
+svg .task-node.selected {
+  fill: #5C6BC0;
+  stroke: #283593;
+}

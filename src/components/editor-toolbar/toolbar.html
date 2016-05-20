@@ -1,0 +1,18 @@
+<div id="toolbar">
+  <div class="toolbar-items">
+    <div class="task-types menu-group">
+      <div class="toolbar-btn" *ngFor="let type of taskTypes" action="task" [attr.task]="type">
+        <div class="toolbar-icon" [ngClass]="type.toLowerCase()"></div>
+      </div>
+      <div class="toolbar-btn" action="library">
+        <div class="toolbar-icon library"></div>
+      </div>
+    </div>
+    <div class="menu-separator"></div>
+    <div class="task-relations menu-group">
+      <div class="toolbar-btn" *ngFor="let relation of relations" action="relation" [attr.relation]="relation">
+        <div class="toolbar-icon">{{taskRelations[relation]}}</div>
+      </div>
+    </div>
+  </div>
+</div>
