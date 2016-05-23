@@ -24,7 +24,8 @@ export var TaskRelation = {
 interface TaskBase {
 	parentTaskId: string,
 	taskType: string,
-	name?: string
+	name?: string,
+	relation?: string
 }
 
 export class TaskModel extends GenericTree {
@@ -66,7 +67,7 @@ export class TaskModel extends GenericTree {
 			type: parseInt(TaskType[options.taskType]) || TaskType.Abstract,
 			name: (options.name) || (options.taskType + '_' + this.taskCounter),
 			id: newTaskId,
-			relation: '',
+			relation: options.relation || '',
 			description: '',
 		};
 		this.addNode(parentNode, new Task(data));

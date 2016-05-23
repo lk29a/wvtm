@@ -25,7 +25,7 @@ var EditorService = (function () {
         this.modelUpdated$ = this.modelUpdatedSource.asObservable();
         this.taskSelected$ = this.taskSelectedSource.asObservable();
         this.userAction$ = this.userActionSource.asObservable();
-        this.createNew();
+        // this.createNew();
     }
     EditorService.prototype.createNew = function () {
         this.taskModel = new taskmodel_1.TaskModel();

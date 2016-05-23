@@ -17,6 +17,8 @@ interface TaskData {
 }
 
 export class Task extends TreeNode {
+	children: Task[];
+	
 	constructor(public data: TaskData) {
 		super();
 	}

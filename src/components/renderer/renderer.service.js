@@ -65,7 +65,7 @@ var Renderer = (function () {
         //for each enabled task in the set create a circular mask that wil highlight the node
         ets.forEach(function (task) {
             mask.add(this.svgCanvas.rect(task.coord.x - 22, task.coord.y - 22, 44, 44).data({ 'fortask': task.data.id }).attr({ fill: '#fff', stroke: '#000', class: 'maskrect' }));
-            modelGroup.select('#' + task.data.id).addClass('enabled');
+            this.modelGroup.select('#' + task.data.id).addClass('enabled');
         });
     };
     Renderer.prototype.selectTask = function (taskId) {

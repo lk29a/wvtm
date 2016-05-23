@@ -27,7 +27,7 @@ export class EditorService {
   userAction$ = this.userActionSource.asObservable();
 
   constructor(@Inject(LoggerService) private logger: LoggerService) {
-    this.createNew();
+    // this.createNew();
   }
 
   createNew() {

@@ -52,7 +52,7 @@ var TaskModel = (function (_super) {
             type: parseInt(exports.TaskType[options.taskType]) || exports.TaskType.Abstract,
             name: (options.name) || (options.taskType + '_' + this.taskCounter),
             id: newTaskId,
-            relation: '',
+            relation: options.relation || '',
             description: '',
         };
         this.addNode(parentNode, new task_1.Task(data));
