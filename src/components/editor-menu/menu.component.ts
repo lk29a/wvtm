@@ -36,7 +36,6 @@ export class EditorMenu {
 
   onClick(event) {
     var elm = event.target;
-    console.log(elm);
     if (elm.classList.contains('menu-btn') || elm.parentNode.classList.contains('menu-btn')) {
       var action: string = elm.getAttribute('action') || elm.parentNode.getAttribute('action');
 

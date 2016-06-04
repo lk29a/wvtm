@@ -1,5 +1,5 @@
 import {Injectable, Inject} from '@angular/core';
-import { Subject }    from 'rxjs/Subject'; 
+import { Subject }    from 'rxjs/Subject';
 import {TaskModel, TaskType, TaskRelation} from '../../lib/taskmodel/taskmodel';
 import {Task} from '../../lib/taskmodel/task';
 import {EDITOR_MODES} from '../common/constants'
@@ -10,23 +10,28 @@ interface ModelUpdateInfo {
   type: string,
   taskId: string
 }
+interface UserAction {
+  type: string,
+  action: string,
+  data: any
+}
 
 @Injectable()
 export class EditorService {
   private taskModel: TaskModel;
   private selectedTaskId: string;
-  private SelectedTaskNode: Task;
+  private selectedTaskNode: Task;
   private editorMode: EDITOR_MODES;
   private validataionInfo: any;
 
   private modelUpdatedSource = new Subject<ModelUpdateInfo>();
   private taskSelectedSource = new Subject<string>();
-  private userActionSource = new Subject<string>();
+  private userActionSource = new Subject<UserAction>();
   modelUpdated$ = this.modelUpdatedSource.asObservable();
   taskSelected$ = this.taskSelectedSource.asObservable();
   userAction$ = this.userActionSource.asObservable();
 
-  constructor(@Inject(LoggerService) private logger: LoggerService) {
+  constructor( @Inject(LoggerService) private logger: LoggerService) {
     // this.createNew();
   }
 
@@ -34,6 +39,7 @@ export class EditorService {
     this.taskModel = new TaskModel();
     this.selectedTaskId = this.taskModel.root.data.id;
     this.editorMode = EDITOR_MODES.DRAWING;
+    this.taskSelectedSource.next(this.selectedTaskId);
   }
 
   getEditorMode() {
@@ -50,7 +56,13 @@ export class EditorService {
 
   selectTask(taskId: string) {
     this.selectedTaskId = taskId;
-  }  
+    this.userActionSource.next({ type: 'task', action: 'select', data: { taskId: taskId } });
+  }
+
+  unSelectTask() {
+    this.selectedTaskId = this.selectedTaskNode = null;
+    this.userActionSource.next({ type: 'task', action: 'unselect', data: null});
+  }
 
   validateModel() {
     this.validataionInfo = this.taskModel.validateStructure();
@@ -58,13 +70,25 @@ export class EditorService {
   }
 
   simulateModel() {
-    if(this.editorMode === EDITOR_MODES.DRAWING) {
-      this.userActionSource.next('simulation:start');
+    if (this.editorMode === EDITOR_MODES.DRAWING) {
+      this.userActionSource.next({ type: 'simulation', action: 'start', data: null });
       this.editorMode = EDITOR_MODES.SIMULATION;
     } else {
       this.editorMode = EDITOR_MODES.DRAWING;
     }
+  }
 
+  getTaskNode(taskId: string) {
+    this.selectedTaskNode = this.taskModel.searchNode(taskId);
+    return this.selectedTaskNode;
+  }
+
+  getTaskData(taskId: string) {
+    if (this.selectedTaskNode.data.id != taskId) {
+      this.getTaskNode(taskId);
+    }
+
+    return this.selectedTaskNode.data;
   }
 
   addUpdateTaskRelation(relation: string) {

@@ -10,7 +10,7 @@ import {EDITOR_MODES} from '../common/constants'
 @Component({
   selector: 'editor-canvas',
   templateUrl: 'src/components/editor-canvas/canvas.html',
-	styleUrls: ['src/components/editor-canvas/canvas.css'],
+  styleUrls: ['src/components/editor-canvas/canvas.css'],
   providers: [Simulator],
   host: {
     '(click)': 'onClick($event)',
@@ -26,10 +26,10 @@ export class EditorCanvas implements AfterViewInit {
   canvasDim: any;
 
   constructor(private el: ElementRef,
-              private editorService: EditorService,
-              private renderer: Renderer,
-              private simulator: Simulator,
-              private logger: LoggerService) {
+    private editorService: EditorService,
+    private renderer: Renderer,
+    private simulator: Simulator,
+    private logger: LoggerService) {
 
     this.editorService.modelUpdated$.subscribe(
       updateInfo => {
@@ -38,29 +38,32 @@ export class EditorCanvas implements AfterViewInit {
     );
 
     this.editorService.userAction$.subscribe(
-      action => {
-        let parts = action.split(':');
-        if(parts[0] == 'simulation') {
-          if (action == 'start') {
+      userAction => {
+        if (userAction.type == 'simulation') {
+          if (userAction.action == 'start')
             this.startSimulation();
-          } else {
-          }
+          else
+            this.stopSimulation();
         }
       }
     );
-
   }
 
   modelUpdated(updateInfo) {
     console.log(this.editorService.getTaskModel());
     this.logger.debug("model updated");
     // if(updateInfo.action) {
-      this.renderer.update(this.editorService.getTaskModel(), updateInfo.type, updateInfo.taskId)
+    this.renderer.update(this.editorService.getTaskModel(), updateInfo.type, updateInfo.taskId)
     // }
   }
 
   startSimulation() {
     let ets = this.simulator.start(this.editorService.getTaskModel());
+    this.logger.debug('enabled tasks set', ets);
+  }
+  
+  stopSimulation() {
+    
   }
 
   ngAfterViewInit() {
@@ -75,22 +78,21 @@ export class EditorCanvas implements AfterViewInit {
   }
 
   getTaskElementById(taskId: string) {
-    if(!taskId) {
+    if (!taskId) {
       throw new Error("'taskId' must be valid.");
     }
     return this.svgElm.querySelector('#' + taskId);
   }
 
   onClick(event) {
-    if(this.editorService.getEditorMode() == EDITOR_MODES.SIMULATION) {
+    if (this.editorService.getEditorMode() == EDITOR_MODES.SIMULATION) {
 
       return;
     }
     //check if any task was clicked(icon or text)
-    if(event.target.classList.contains('task-node')) {
+    if (event.target.classList.contains('task-node')) {
       var taskId = event.target.parentNode.id;
       this.editorService.selectTask(taskId);
-      
       this.renderer.selectTask(taskId);
     }
   }
@@ -105,7 +107,7 @@ export class EditorCanvas implements AfterViewInit {
       this.logger.debug('highlight task node');
     }
 
-  } 
+  }
 
   onMouseLeave(event) {
     console.log(event);

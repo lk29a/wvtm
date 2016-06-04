@@ -31,6 +31,7 @@ var EditorService = (function () {
         this.taskModel = new taskmodel_1.TaskModel();
         this.selectedTaskId = this.taskModel.root.data.id;
         this.editorMode = constants_1.EDITOR_MODES.DRAWING;
+        this.taskSelectedSource.next(this.selectedTaskId);
     };
     EditorService.prototype.getEditorMode = function () {
         return this.editorMode;
@@ -43,6 +44,7 @@ var EditorService = (function () {
     };
     EditorService.prototype.selectTask = function (taskId) {
         this.selectedTaskId = taskId;
+        this.taskSelectedSource.next(this.selectedTaskId);
     };
     EditorService.prototype.validateModel = function () {
         this.validataionInfo = this.taskModel.validateStructure();

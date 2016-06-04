@@ -1,8 +1,8 @@
 <div id="info-bar">
   <div class="info-head"><span class="title">Information</span></div>
   <div class="info-body">
-    <div ng-switch="vm.infoType">
-      <div ng-switch-when="task">
+    <div [ngSwitch]="infoType">
+      <div *ngSwitchWhen="'task'">
         <div class="form-group">
           <label>Name: </label>
           <input class="form-control info-control" [(ngModel)]="currentTask.data.name">
@@ -25,7 +25,7 @@
         </div>
         <button (click)="addToLibrary()">Add to library</button>
       </div>
-<!--       <div ng-switch-when="validation">
+      <div *ngSwitchWhen="'validation'">
         <div class="validation-info">
           <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
           <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
@@ -34,12 +34,11 @@
           </div>
         </div>
       </div>
-      <div ng-switch-when="simulation">
-        
+      <div *ngSwitchWhen="'simulation'">
       </div>
-      <div ng-switch-default>
+      <div ngSwitchDefault>
         <h4>Select a Task to see details.</h4>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>

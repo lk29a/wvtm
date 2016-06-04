@@ -31,7 +31,6 @@ var EditorMenu = (function () {
     };
     EditorMenu.prototype.onClick = function (event) {
         var elm = event.target;
-        console.log(elm);
         if (elm.classList.contains('menu-btn') || elm.parentNode.classList.contains('menu-btn')) {
             var action = elm.getAttribute('action') || elm.parentNode.getAttribute('action');
             switch (action) {

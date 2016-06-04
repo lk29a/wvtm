@@ -56,11 +56,15 @@ var LoggerService = (function () {
         var nowStr = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
         console.log("%s %cERROR" + "%c %s %s - %o", nowStr, "color:#F44336;font-weight:bold", "", caller.func, caller.fileInfo, message);
     };
-    LoggerService.prototype.debug = function (message) {
+    LoggerService.prototype.debug = function () {
+        var messages = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            messages[_i - 0] = arguments[_i];
+        }
         var caller = this.getCaller();
         var now = new Date();
         var nowStr = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-        console.log("%s %cDEBUG" + "%c %s %s - %o", nowStr, "color:#424242;font-weight:bold", "", caller.func, caller.fileInfo, message);
+        console.log("%s %cDEBUG" + "%c %s %s - %o", nowStr, "color:#424242;font-weight:bold", "", caller.func, caller.fileInfo, messages);
     };
     LoggerService.prototype.trace = function (message) {
         var caller = this.getCaller();

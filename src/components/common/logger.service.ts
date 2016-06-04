@@ -54,11 +54,12 @@ export class LoggerService {
     let nowStr = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
     console.log("%s %cERROR" + "%c %s %s - %o", nowStr, "color:#F44336;font-weight:bold", "", caller.func, caller.fileInfo, message);
   }
-  debug(message: any) {
+  debug(...messages: any[]) {
+
     let caller = this.getCaller();
     let now = new Date();
     let nowStr = "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-    console.log("%s %cDEBUG" + "%c %s %s - %o", nowStr, "color:#424242;font-weight:bold", "", caller.func, caller.fileInfo, message);
+    console.log("%s %cDEBUG" + "%c %s %s - %o", nowStr, "color:#424242;font-weight:bold", "", caller.func, caller.fileInfo, messages);
   }
   trace(message: any): void {
     let caller = this.getCaller();

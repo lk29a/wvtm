@@ -1,13 +1,11 @@
 {
   "name": "WVTM",
   "version": "1.0.0",
+  description: "Web Based Visual Task Modelling",
   "scripts": {
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
     "postinstall": "typings install",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "typings"
   },
 "dependencies": {
     "@angular/common":  "2.0.0-rc.1",
@@ -29,8 +27,14 @@
   },
   "devDependencies": {
     "concurrently": "^2.0.0",
-    "lite-server": "^2.2.0",
     "typescript": "^1.8.10",
-    "typings":"^0.8.1"
+    "typings":"^0.8.1",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^4.3.3",
+    "gulp-typescript": "^2.12.0",
+    "lite-server": "^2.2.0",
+    "tslint": "^3.5.0",    
   }
 }

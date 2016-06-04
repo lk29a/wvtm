@@ -26,9 +26,10 @@ var EditorCanvas = (function () {
             _this.modelUpdated(updateInfo);
         });
         this.editorService.userAction$.subscribe(function (action) {
+            console.log(action);
             var parts = action.split(':');
             if (parts[0] == 'simulation') {
-                if (action == 'start') {
+                if (parts[1] == 'start') {
                     _this.startSimulation();
                 }
                 else {
@@ -45,6 +46,7 @@ var EditorCanvas = (function () {
     };
     EditorCanvas.prototype.startSimulation = function () {
         var ets = this.simulator.start(this.editorService.getTaskModel());
+        this.logger.debug('enabled tasks set', ets);
     };
     EditorCanvas.prototype.ngAfterViewInit = function () {
         var dim = {

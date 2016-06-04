@@ -34,7 +34,7 @@ export class GenericTree {
 
   }
 
-  searchNode(searchId) {
+  searchNode(searchId: String) {
     var foundNode = (function recursiveDF(currentNode) {
       if (currentNode.data.id === searchId) {
         return currentNode;

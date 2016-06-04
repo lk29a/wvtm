@@ -7,10 +7,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 var task_1 = require('./task');
 var generic_tree_1 = require('../generic-tree/generic-tree');
 exports.TaskType = {
-    Abstract: 0,
-    User: 1,
-    Interaction: 2,
-    System: 3,
+    ABSTRACT: 0,
+    USER: 1,
+    INTERACTION: 2,
+    SYSTEM: 3,
 };
 exports.TaskRelation = {
     'UNRESTRICTED': '|||',
@@ -28,7 +28,7 @@ var TaskModel = (function (_super) {
     __extends(TaskModel, _super);
     function TaskModel() {
         var data = {
-            type: exports.TaskType.Abstract,
+            type: exports.TaskType.ABSTRACT,
             name: 'Default',
             id: 'TASK_0',
             relation: null,
@@ -49,7 +49,7 @@ var TaskModel = (function (_super) {
         var parentNode = this.searchNode(options.parentTaskId);
         var newTaskId = 'TASK_' + (this.taskCounter++); //@lk comeup with some naming convention
         var data = {
-            type: parseInt(exports.TaskType[options.taskType]) || exports.TaskType.Abstract,
+            type: parseInt(exports.TaskType[options.taskType.toUpperCase()]) || exports.TaskType.ABSTRACT,
             name: (options.name) || (options.taskType + '_' + this.taskCounter),
             id: newTaskId,
             relation: options.relation || '',
@@ -101,7 +101,7 @@ var TaskModel = (function (_super) {
             errorCount: 0
         };
         function validateTask(task) {
-            if (task.isLeaf() && (task.data.type === exports.TaskType.Abstract)) {
+            if (task.isLeaf() && (task.data.type === exports.TaskType.ABSTRACT)) {
                 // console.log('Warning: "' + task.data.name + '" is abstract type. Task should have subtasks.');
                 validationObj.messages.push('Warning: Task "' + task.data.name + '" is abstract type. Task should have subtasks.');
                 validationObj.warnCount++;
@@ -118,6 +118,19 @@ var TaskModel = (function (_super) {
         return validationObj;
     };
     ;
+    /*
+     * Calculates relation precedence of children
+     *
+     * returns ???
+     */
+    TaskModel.prototype.calculateRelationPrecedence = function (aTask) {
+        var tasks = aTask.children;
+        if (tasks.length < 3) {
+            return;
+        }
+        else {
+        }
+    };
     return TaskModel;
 }(generic_tree_1.GenericTree));
 exports.TaskModel = TaskModel;

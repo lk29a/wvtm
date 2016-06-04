@@ -13,6 +13,7 @@ var core_1 = require('@angular/core');
 var editor_service_1 = require('../editor/editor.service');
 var EditorInfobar = (function () {
     function EditorInfobar(editorService) {
+        var _this = this;
         this.editorService = editorService;
         this.currentTask = {
             data: {}
@@ -21,7 +22,12 @@ var EditorInfobar = (function () {
         this.taskTypes = editorService.getTaskTypes();
         this.taskRelations = editorService.getTaskRelations();
         this.relations = Object.keys(this.taskRelations);
+        this.editorService.taskSelected$.subscribe(function (taskId) {
+            _this.updateInfo(taskId);
+        });
     }
+    EditorInfobar.prototype.updateInfo = function (taskId) {
+    };
     EditorInfobar.prototype.getRelationSym = function (relation) {
         return this.taskRelations[relation];
     };

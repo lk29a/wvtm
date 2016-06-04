@@ -2,10 +2,10 @@ import {Task} from './task';
 import {GenericTree} from '../generic-tree/generic-tree';
 
 export var TaskType = {
-	Abstract: 0,
-	User: 1,
-	Interaction: 2,
-	System: 3,
+	ABSTRACT: 0,
+	USER: 1,
+	INTERACTION: 2,
+	SYSTEM: 3,
 }
 
 export var TaskRelation = {
@@ -39,7 +39,7 @@ export class TaskModel extends GenericTree {
 
 	constructor() {
 		var data = {
-			type: TaskType.Abstract,
+      type: TaskType.ABSTRACT,
 			name: 'Default',
 			id: 'TASK_0',
 			relation: null,
@@ -59,12 +59,12 @@ export class TaskModel extends GenericTree {
 		if (!options.taskType) {
 			throw new Error('`type` of task must be provided');
 		}
-
+		
 		var parentNode = this.searchNode(options.parentTaskId);
 		var newTaskId = 'TASK_' + (this.taskCounter++); //@lk comeup with some naming convention
 
 		var data = {
-			type: parseInt(TaskType[options.taskType]) || TaskType.Abstract,
+      type: parseInt(TaskType[options.taskType.toUpperCase()]) || TaskType.ABSTRACT,
 			name: (options.name) || (options.taskType + '_' + this.taskCounter),
 			id: newTaskId,
 			relation: options.relation || '',
@@ -124,7 +124,7 @@ export class TaskModel extends GenericTree {
 			errorCount: 0
 		};
 		function validateTask(task) {
-			if (task.isLeaf() && (task.data.type === TaskType.Abstract)) {
+			if (task.isLeaf() && (task.data.type === TaskType.ABSTRACT)) {
 				// console.log('Warning: "' + task.data.name + '" is abstract type. Task should have subtasks.');
 				validationObj.messages.push('Warning: Task "' + task.data.name + '" is abstract type. Task should have subtasks.');
 				validationObj.warnCount++;
@@ -142,5 +142,20 @@ export class TaskModel extends GenericTree {
 		this.traverseDF(validateTask);
 		return validationObj;
 	};
+
+	/*
+	 * Calculates relation precedence of children
+	 *
+	 * returns ???
+	 */
+	calculateRelationPrecedence(aTask: Task) {
+    var tasks = aTask.children;
+    if(tasks.length < 3) {
+      return;
+    } else {
+    	
+    }
+	}
+
 
 }

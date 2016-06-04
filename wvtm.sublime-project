@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+      "name": "Web based Visual Task Modelling",
+      "folder_exclude_patterns": [".vscode", "node_modules", "typings"]
+		},
+	],
+  "build_systems":
+  [
+    {
+      "name": "Angular Gulp v1",
+      "shell_cmd": ["ls"],
+      "working_dir": "${project_path}",
+    }
+  ]
+}
