@@ -70,7 +70,14 @@ gulp.task('watch', function () {
 });
 
 /**
- * Build the project.
+ * Build-dev project only necessary files.
+ */
+gulp.task("builddev", ['compile', 'resources'], function () {
+    console.log("Building the project ...");
+});
+
+/**
+ * Build project complete.
  */
 gulp.task("build", ['compile', 'resources', 'libs'], function () {
     console.log("Building the project ...");

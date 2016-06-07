@@ -4,7 +4,7 @@
   "description": "Web Based Visual Task Modelling",
   "scripts": {
     "clean": "gulp clean",
-    "compile": "gulp compile",
+    "devbuild": "gulp builddev",
     "build": "gulp build",
     "start": "concurrent --kill-others \"gulp watch\" \"lite-server\"",
     "lite": "lite-server",
