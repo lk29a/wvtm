@@ -11,8 +11,9 @@
   [
     {
       "name": "Angular Gulp v1",
-      "shell_cmd": ["ls"],
-      "working_dir": "${project_path}",
+      "cmd": ["npm run compile"], //, "run", "build"],
+      "shell": true,
+      "working_dir": "${project_path:${folder}}"
     }
   ]
 }
