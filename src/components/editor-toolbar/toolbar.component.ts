@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
 import {EditorService} from '../editor/editor.service';
-import {TaskType, TaskRelation} from '../../lib/taskmodel/taskmodel'
+import {TaskType, TaskRelation} from '../taskmodel/task'
 import {LoggerService} from '../common/logger.service'
 
 @Component({
   selector: 'editor-toolbar',
-  templateUrl: 'src/components/editor-toolbar/toolbar.html',
-  styleUrls: ['src/components/editor-toolbar/toolbar.css'],
+  templateUrl: 'components/editor-toolbar/toolbar.html',
+  styleUrls: ['components/editor-toolbar/toolbar.css'],
   host: {
     '(click)': 'onClick($event)'
   }
@@ -31,7 +31,7 @@ export class EditorToolbar {
         this.editorService.addTask(type);
       }
       if (action.toLowerCase() == 'relation') {
-        this.editorService.addUpdateTaskRelation(type);
+        this.editorService.updateTask('relation', type);
       }
     }
     

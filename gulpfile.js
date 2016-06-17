@@ -73,7 +73,7 @@ gulp.task('watch', function () {
  * Build-dev project only necessary files.
  */
 gulp.task("builddev", ['compile', 'resources'], function () {
-    console.log("Building the project ...");
+    console.log("Building source files ...");
 });
 
 /**

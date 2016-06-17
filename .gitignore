@@ -2,4 +2,6 @@ build
 target
 .DS_Store
 node_modules
+typings
 *.sublime-workspace
+*.log

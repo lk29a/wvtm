@@ -1,5 +1,5 @@
 import {Component, ElementRef, AfterViewInit} from '@angular/core';
-import {Simulator} from '../simulator/simulator';
+// import {Simulator} from '../simulator/simulator';
 import {EditorService} from '../editor/editor.service';
 import {Renderer} from '../renderer/renderer.service';
 import {TreeLayout} from '../renderer/treelayout';
@@ -9,11 +9,12 @@ import {EDITOR_MODES} from '../common/constants'
 
 @Component({
   selector: 'editor-canvas',
-  templateUrl: 'src/components/editor-canvas/canvas.html',
-  styleUrls: ['src/components/editor-canvas/canvas.css'],
-  providers: [Simulator],
+  templateUrl: 'components/editor-canvas/canvas.html',
+  styleUrls: ['components/editor-canvas/canvas.css'],
+  // providers: [Simulator],
   host: {
     '(click)': 'onClick($event)',
+    '(dblclick)': 'onDbClick($event)'
     // '(mouseenter)': 'onMouseEnter($event)',
     // '(mouseleave)': 'onMouseLeave($event)'    
   }
@@ -28,7 +29,7 @@ export class EditorCanvas implements AfterViewInit {
   constructor(private el: ElementRef,
     private editorService: EditorService,
     private renderer: Renderer,
-    private simulator: Simulator,
+    // private simulator: Simulator,
     private logger: LoggerService) {
 
     this.editorService.modelUpdated$.subscribe(
@@ -39,12 +40,8 @@ export class EditorCanvas implements AfterViewInit {
 
     this.editorService.userAction$.subscribe(
       userAction => {
-        if (userAction.type == 'simulation') {
-          if (userAction.action == 'start')
-            this.startSimulation();
-          else
-            this.stopSimulation();
-        }
+        if (userAction.type == 'simulation')
+          this.simulationAction(userAction.action, userAction.data);
       }
     );
   }
@@ -57,13 +54,37 @@ export class EditorCanvas implements AfterViewInit {
     // }
   }
 
-  startSimulation() {
-    let ets = this.simulator.start(this.editorService.getTaskModel());
-    this.logger.debug('enabled tasks set', ets);
+  simulationAction(action: string, data: any) {
+    switch (action) {
+      case "start":
+        this.startSimulationMode(data);
+        break;
+
+      case "update":
+        this.updateSimulation(data);
+        break;
+
+      case "stop":
+        this.stopSimulationMode(data);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  startSimulationMode(data: any) {
+    this.renderer.startSimulation();
+    this.updateSimulation(data);
+  }
+
+  updateSimulation(data: any) {
+    console.log(data);
+    this.renderer.updateSimulation(data);
   }
   
-  stopSimulation() {
-    
+  stopSimulationMode(data: any) {
+    this.renderer.stopSimulation();
   }
 
   ngAfterViewInit() {
@@ -85,16 +106,21 @@ export class EditorCanvas implements AfterViewInit {
   }
 
   onClick(event) {
-    if (this.editorService.getEditorMode() == EDITOR_MODES.SIMULATION) {
-
-      return;
-    }
+    if (this.editorService.getEditorMode() == EDITOR_MODES.SIMULATION)
+      return;    
+    
     //check if any task was clicked(icon or text)
     if (event.target.classList.contains('task-node')) {
       var taskId = event.target.parentNode.id;
       this.editorService.selectTask(taskId);
       this.renderer.selectTask(taskId);
     }
+  }
+
+  onDbClick(event) {
+    if (this.editorService.getEditorMode() == EDITOR_MODES.SIMULATION)
+      if (event.target.classList.contains('task-node'))
+        this.editorService.simPerformTask(event.target.parentNode.id);
   }
 
   onMouseEnter(event) {

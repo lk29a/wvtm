@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { TaskModel } from '../../lib/taskmodel/taskmodel';
+import { Task } from '../taskmodel/task';
+import { TaskModel } from '../taskmodel/taskmodel';
 import {TreeLayout} from './treelayout'
 import { LoggerService } from '../common/logger.service';
 import { RENDERER_DEFAULTS } from '../common/constants'
@@ -18,8 +19,8 @@ interface BBox {
 export class Renderer {
   svgCanvas: any;
   modelGroup: any;
+  simulationMask: any;
   filters: any;
-  defTaskNodes = ['abstract', 'user', 'interaction', 'system'];
   currentState: any;
 
   constructor(private treeLayout: TreeLayout, private logger: LoggerService) {
@@ -44,7 +45,7 @@ export class Renderer {
   }
 
   render(model: TaskModel) {
-    if(!this.svgCanvas) {
+    if (!this.svgCanvas) {
       throw new Error('Renderer not initialized');
     }
 
@@ -59,38 +60,65 @@ export class Renderer {
       throw new Error('renderer: no task provided to update');
     }
 
-    var updatedTask = model.searchNode(taskId),
+    var updatedTask = model.searchTask(taskId),
       taskGroup = this.modelGroup.select('#' + taskId);
 
-      if(type === 'task') {
-        this.render(model);
-        //@lk just for now until atomic updates is complete 
-        // selectTask(taskId);
-        //
-      } else if(type === 'relation') {
-        this.renderTaskRelation(updatedTask.coord.x, updatedTask.coord.y, updatedTask, taskGroup);
-      }
+    if (type === 'task') {
+      this.render(model);
+      //@lk just for now until atomic updates is complete 
+      // selectTask(taskId);
+      //
+    } else if (type === 'relation') {
+      this.renderTaskRelation(updatedTask.coord.x, updatedTask.coord.y, updatedTask, taskGroup);
+    }
   }
 
   startSimulation() {
     this.deSelectTask();
-    var mask = this.svgCanvas.mask().attr({ class: 'simmask' });
+    this.simulationMask = this.svgCanvas.mask().attr({ class: 'simmask' });
     //create a base mask that will fade out everyting
-    mask.add(
+    this.simulationMask.add(
       this.svgCanvas.rect(0, 0, this.svgCanvas.node.width.baseVal.value, this.svgCanvas.node.height.baseVal.value)
         .attr({ fill: '#333', stroke: '#000' })
     );
+    this.modelGroup.attr({ mask: this.simulationMask });
+    this.svgCanvas.addClass('simulation');
 
   }
 
-  enableSimTasks(mask, ets) {
+  updateSimulation(ets) {
+    var simDone = this.simulationMask.selectAll('rect.maskrect');
+    simDone.forEach(
+      aMask => {
+        var taskId = aMask.data('fortask');
+        this.modelGroup.select('#' + taskId).removeClass('enabled');
+        aMask.remove();
+      }
+    );
+    this.enableSimTasks(ets);
+  }
+
+  enableSimTasks(ets: Task[]) {
     //for each enabled task in the set create a circular mask that wil highlight the node
-    ets.forEach(function(task) {
-      mask.add(this.svgCanvas.rect(task.coord.x - 22, task.coord.y - 22, 44, 44).data({ 'fortask': task.data.id }).attr({ fill: '#fff', stroke: '#000', class: 'maskrect' }));
-      this.modelGroup.select('#' + task.data.id).addClass('enabled');
-    });
+    ets.forEach(
+      task => {
+        this.simulationMask.add(this.svgCanvas.rect(task.coord.x - 22, task.coord.y - 22, 44, 44).data({ 'fortask': task.id }).attr({ fill: '#fff', stroke: '#000', class: 'maskrect' }));
+        this.modelGroup.select('#' + task.id).addClass('enabled');
+      }
+    );
   }
 
+  /**
+   * remove mask from model
+   * delete mask node ??
+   * 
+   * @return {[type]} [description]
+   */
+  stopSimulation() {
+    this.modelGroup.attr({ mask: null });
+    this.svgCanvas.select('.simmask').remove();
+    this.svgCanvas.removeClass('simulation');
+}
 
   selectTask(taskId) {
     var curTask = this.getTaskNodeById(taskId);
@@ -103,7 +131,7 @@ export class Renderer {
       }
       curTask.addClass('selected');
       this.currentState.selected = curTask;
-    }    
+    }
   }
 
   deSelectTask() {
@@ -139,12 +167,12 @@ export class Renderer {
 
 
 
-  private renderTaskTree(root) {
+  private renderTaskTree(root: Task) {
     var _this = this;
-    (function traverseBF(currentNode) {
+    (function traverseBF(currentNode: Task) {
       var aTaskGroup = _this.svgCanvas.g().attr({
         class: 'task',
-        id: currentNode.data.id,
+        id: currentNode.id,
       });
 
       _this.renderTaskNode(currentNode.coord.x, currentNode.coord.y, currentNode, aTaskGroup);
@@ -173,8 +201,8 @@ export class Renderer {
    * @param  {[TreeNode]} origNode
    * @return {[group]} group  a group containing task specific elements
    */
-  private renderTaskNode(cx, cy, origNode, group) {
-    var taskName = origNode.data.name;
+  private renderTaskNode(cx, cy, origNode: Task, group) {
+    var taskName = origNode.name;
 
     if (taskName.length > 12) {
       taskName = taskName.substr(0, 12);
@@ -183,8 +211,7 @@ export class Renderer {
       }
       taskName = taskName + "...";
     }
-
-    var node = this.svgCanvas.use('def-' + this.defTaskNodes[origNode.data.type]).attr({
+    var node = this.svgCanvas.use('def-' + origNode.type.toLowerCase()).attr({
       x: cx - 20,
       y: cy - 20,
       // id: origNode.data.id,
@@ -221,8 +248,8 @@ export class Renderer {
     return link;
   }
 
-  private renderTaskRelation(cx, cy, origNode, group) {
-    if (origNode.data.relation) {
+  private renderTaskRelation(cx, cy, origNode: Task, group) {
+    if (origNode.relation) {
       var rightSibling = origNode.getRightSibling();
 
       //check if relation already exists if yes then update it
@@ -233,7 +260,7 @@ export class Renderer {
       if (relationText) {
         relationLink = group.select('.rel-link');
         relationText.attr({
-          text: origNode.data.relation
+          text: origNode.relation
         });
 
         textBox = relationText.getBBox();
@@ -248,7 +275,7 @@ export class Renderer {
         });
 
       } else {
-        relationText = this.svgCanvas.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.data.relation);
+        relationText = this.svgCanvas.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.relation);
         textBox = relationText.getBBox();
         relationLink = this.svgCanvas.path([
           ['M', cx + RENDERER_DEFAULTS.radius, cy],

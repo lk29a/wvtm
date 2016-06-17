@@ -1,31 +1,31 @@
 <div id="info-bar">
-  <div class="info-head"><span class="title">Information</span></div>
+  <div class="info-head"><span class="title">{{infobar.title}}</span></div>
   <div class="info-body">
-    <div [ngSwitch]="infoType">
-      <div *ngSwitchWhen="'task'">
+    <div [ngSwitch]="infobar.type">
+      <div *ngSwitchWhen="infoType.Task">
         <div class="form-group">
           <label>Name: </label>
-          <input class="form-control info-control" [(ngModel)]="currentTask.data.name">
+          <input class="form-control info-control" [(ngModel)]="currentTask.name" (ngModelChange)="updateTask('name', $event)">
         </div>
         <div class="form-group">
           <label>Description: </label>
-          <textarea class="form-control info-control" [(ngModel)]="currentTask.data.description" ng-model-options="{ updateOn: 'blur'}"></textarea>
+          <textarea class="form-control info-control" [(ngModel)]="currentTask.description" (ngModelChange)="updateTask('desscription', $event)"></textarea>
         </div>
         <div class="form-group">
           <label>Type: </label>
-          <select class="form-control info-control" [disabled]="infoModel.isRoot" ngChange="updateTaskType()" [(ngModel)]="infoModel.type">
-            <option *ngFor="let type of taskTypes" value="{{val}}">{{type}}</option>
+          <select class="form-control info-control" [disabled]="currentTask.isRoot" [ngModel]="currentTask.type" (ngModelChange)="updateTask('type', $event)">
+            <option *ngFor="let type of types" [value]="taskTypes[type]">{{type}}</option>
           </select>
         </div>
         <div class="form-group">
           <label>Relation: </label>
-          <select class="form-control info-control" [disabled]="infoModel.isLast" ngChange="updateTaskRelation()" [(ngModel)]="infoModel.relation">
-            <option *ngFor="let relation of relations" value="{{relation}}">{{relation}} ({{taskRelations[relation]}})</option>
+          <select class="form-control info-control" [disabled]="currentTask.isLast" [ngModel]="currentTask.relation" (ngModelChange)="updateTask('relation', $event)">
+            <option *ngFor="let relation of relations" [value]="relation">{{relation}} ({{taskRelations[relation]}})</option>
           </select>
         </div>
         <button (click)="addToLibrary()">Add to library</button>
       </div>
-      <div *ngSwitchWhen="'validation'">
+      <div *ngSwitchWhen="infoType.Validation">
         <div class="validation-info">
           <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
           <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
@@ -34,9 +34,9 @@
           </div>
         </div>
       </div>
-      <div *ngSwitchWhen="'simulation'">
+      <div *ngSwitchWhen="infoType.Simulation">
       </div>
-      <div ngSwitchDefault>
+      <div *ngSwitchDefault>
         <h4>Select a Task to see details.</h4>
       </div>
     </div>

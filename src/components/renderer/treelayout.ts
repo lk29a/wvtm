@@ -5,7 +5,7 @@
  * 
  */
 import { Injectable } from '@angular/core';
-import {Task} from '../../lib/taskModel/task';
+import {Task} from '../taskModel/task';
 import {TREE_LAYOUT_DEFAULTS} from '../common/constants'
 
 @Injectable() 

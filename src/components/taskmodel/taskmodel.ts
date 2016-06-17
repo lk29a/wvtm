@@ -1,25 +1,5 @@
-import {Task} from './task';
+import {Task, TaskType, TaskRelation} from './task';
 import {GenericTree} from '../generic-tree/generic-tree';
-
-export var TaskType = {
-	ABSTRACT: 0,
-	USER: 1,
-	INTERACTION: 2,
-	SYSTEM: 3,
-}
-
-export var TaskRelation = {
-	'UNRESTRICTED': '|||',
-	'CHOICE': '[]',
-	'CONCURRENTINFO': '|[]|',
-	'RANDOM': '|=|',
-	'DEACT': '[>',
-	'ENABLE': '>>',
-	'CHOICEINFO': '[]>>',
-	'RESUME': '|>',
-	'ITERATION': 'T*',
-	'OPTIONAL': '[T]',	
-}
 
 interface TaskBase {
 	parentTaskId: string,
@@ -34,7 +14,7 @@ export class TaskModel extends GenericTree {
 	name: string;
 	description: string;
 	taskTree: any;
-	simlation: any;
+	simulation: any;
 	root: Task;
 
 	constructor() {
@@ -60,11 +40,11 @@ export class TaskModel extends GenericTree {
 			throw new Error('`type` of task must be provided');
 		}
 		
-		var parentNode = this.searchNode(options.parentTaskId);
+		var parentNode = this.searchTask(options.parentTaskId);
 		var newTaskId = 'TASK_' + (this.taskCounter++); //@lk comeup with some naming convention
 
 		var data = {
-      type: parseInt(TaskType[options.taskType.toUpperCase()]) || TaskType.ABSTRACT,
+      type: TaskType[options.taskType.toUpperCase()] || TaskType.ABSTRACT,
 			name: (options.name) || (options.taskType + '_' + this.taskCounter),
 			id: newTaskId,
 			relation: options.relation || '',
@@ -75,41 +55,87 @@ export class TaskModel extends GenericTree {
 		return newTaskId;
 	}
 
-	addUpdateRelation(taskId, relation) {
+	updateTask(taskId, type, value) {
+    console.log(type, value);
 		if (!taskId) {
 			throw new Error('`taskId` must be provided');
 		}
+    let task = this.searchTask(taskId);
+
+    switch (type) {
+      case "relation":
+        this.updateTaskRelation(task, value);
+        break;
+
+      case "taskType":
+        this.updateTaskType(task, value);
+        break;
+
+      case "name":
+        this.updateTaskName(task, value);
+        break;
+
+      case "description":
+        this.updateTaskDescription(task, value);
+        break;
+
+      default:
+        throw new Error('Cannot update specified property.');
+    }
+
+    //update successfull
+    return true;
+	}
+
+  searchTask(taskId: String) {
+    var foundNode = (function recursiveDF(currentNode: Task) {
+      if (currentNode.id === taskId) {
+        return currentNode;
+      } else {
+        var tmp = null;
+        for (var i = 0; i < currentNode.children.length; i++) {
+          tmp = recursiveDF(currentNode.children[i]);
+          if (tmp !== null) {
+            return tmp;
+          }
+        }
+        return null;
+      }
+    })(this.root);
+
+    return foundNode;
+  };
+
+
+	updateTaskRelation(task: Task, relation) {
 		if (!TaskRelation[relation.toUpperCase()]) {
 			throw new Error('Please provide a valid relation');
 		}
-
-		if (taskId instanceof Task) {
-			taskId.addRelation(TaskRelation[relation.toUpperCase()]);
-		} else {
-			taskId = this.searchNode(taskId);
-			taskId.addRelation(TaskRelation[relation.toUpperCase()]);
-		}
+		task.relation = TaskRelation[relation.toUpperCase()];
 	};
 
 
-	changeTaskType(taskId, taskType) {
+	updateTaskType(task: Task, taskType) {
+		if (!taskType) {
+			throw new Error('`taskType` of task must be provided');
+		}
+		task.type = taskType;
+	};
+
+	updateTaskName(taskId, name) {
+    if (!name) {
+      throw new Error('`name` of task must be provided');
+    }
+
+
+	}
+
+  updateTaskDescription(taskId, description) {
 		if (!taskId) {
 			throw new Error('`taskId` must be provided');
 		}
 
-		if (!taskType) {
-			throw new Error('`taskType` of task must be provided');
-		}
-
-		console.log(taskId, taskType);
-
-		if (!(taskId instanceof Task)) {
-			taskId = this.searchNode(taskId);
-			// taskId.addRelation(TaskRelation[relation.toUpperCase()]);
-		}
-
-		taskId.data.type = taskType;
-	};
+  }
 
 	/**
 	 * Check correctness of the model
@@ -124,17 +150,17 @@ export class TaskModel extends GenericTree {
 			errorCount: 0
 		};
 		function validateTask(task) {
-			if (task.isLeaf() && (task.data.type === TaskType.ABSTRACT)) {
+			if (task.isLeaf() && (task.type === TaskType.ABSTRACT)) {
 				// console.log('Warning: "' + task.data.name + '" is abstract type. Task should have subtasks.');
-				validationObj.messages.push('Warning: Task "' + task.data.name + '" is abstract type. Task should have subtasks.');
+				validationObj.messages.push('Warning: Task "' + task.name + '" is abstract type. Task should have subtasks.');
 				validationObj.warnCount++;
 			}
 
-			if (!task.data.relation && (task.getRightSibling() !== null)) {
+			if (!task.relation && (task.getRightSibling() !== null)) {
 				// if(task.parent && (task.parent.getLastChild() !== task)) {
 				validationObj.valid = false;
 				// console.log('Error: "' + task.data.name + '" must have a relation with its right sibling.');
-				validationObj.messages.push('Error: Task "' + task.data.name + '" must have a relation with its right sibling.');
+				validationObj.messages.push('Error: Task "' + task.name + '" must have a relation with its right sibling.');
 				validationObj.errorCount++;
 				// }
 			}

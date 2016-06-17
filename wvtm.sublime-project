@@ -4,17 +4,17 @@
 		{
 			"path": ".",
       "name": "Web based Visual Task Modelling",
-      "folder_exclude_patterns": [".vscode", "node_modules", "typings"]
+      "folder_exclude_patterns": [".vscode", "node_modules", "typings", "build"]
 		},
 	],
   "build_systems":
   [
     {
       "name": "Angular Gulp v1",
-      "cmd": ["npm run compile"],
-      "shell": true,
-      "working_dir": "${project_path:${folder}}",
-      "path": "/usr/local/bin"
+      "working_dir": "${project_path}",
+      "path": "/usr/local/bin",
+      "cmd": ["gulp builddev"],
+      "shell": true
     }
   ]
 }

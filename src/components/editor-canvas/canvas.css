@@ -3,7 +3,7 @@
 	height: 100%;
 	background-color: #ffffff;
 	border: 1px solid #ccc;
-	background-image: url(src/assets/canvas-bg.png);
+	background-image: url(assets/canvas-bg.png);
 	overflow: auto;
 }
 

@@ -34,26 +34,6 @@ export class GenericTree {
 
   }
 
-  searchNode(searchId: String) {
-    var foundNode = (function recursiveDF(currentNode) {
-      if (currentNode.data.id === searchId) {
-        return currentNode;
-      } else {
-        var tmp = null;
-        for (var i = 0; i < currentNode.children.length; i++) {
-          tmp = recursiveDF(currentNode.children[i]);
-          if (tmp !== null) {
-            return tmp;
-          }
-        }
-        return null;
-      }
-    })(this.root);
-
-    return foundNode;
-  };
-
-
   traverseBF(callback) {
     var queue = new Queue(),
       currentNode;

@@ -1,7 +1,8 @@
 import {Injectable, Inject} from '@angular/core';
 import { Subject }    from 'rxjs/Subject';
-import {TaskModel, TaskType, TaskRelation} from '../../lib/taskmodel/taskmodel';
-import {Task} from '../../lib/taskmodel/task';
+import {TaskModel} from '../taskmodel/taskmodel';
+import {Task, TaskType, TaskRelation} from '../taskmodel/task';
+import {Simulator} from '../simulator/simulator';
 import {EDITOR_MODES} from '../common/constants'
 import {LoggerService} from '../common/logger.service'
 
@@ -31,13 +32,14 @@ export class EditorService {
   taskSelected$ = this.taskSelectedSource.asObservable();
   userAction$ = this.userActionSource.asObservable();
 
-  constructor( @Inject(LoggerService) private logger: LoggerService) {
+  constructor( @Inject(LoggerService) private logger: LoggerService,
+    @Inject(Simulator) private simulator: Simulator) {
     // this.createNew();
   }
 
   createNew() {
     this.taskModel = new TaskModel();
-    this.selectedTaskId = this.taskModel.root.data.id;
+    this.selectedTaskId = this.taskModel.root.id;
     this.editorMode = EDITOR_MODES.DRAWING;
     this.taskSelectedSource.next(this.selectedTaskId);
   }
@@ -59,6 +61,13 @@ export class EditorService {
     this.userActionSource.next({ type: 'task', action: 'select', data: { taskId: taskId } });
   }
 
+  getSelectedTask() {
+    if (!this.selectedTaskId)
+      return null;
+
+    return this.getTaskNode(this.selectedTaskId);
+  }
+
   unSelectTask() {
     this.selectedTaskId = this.selectedTaskNode = null;
     this.userActionSource.next({ type: 'task', action: 'unselect', data: null});
@@ -69,40 +78,25 @@ export class EditorService {
     console.log(this.validataionInfo);
   }
 
-  simulateModel() {
+  startSimulation() {
     if (this.editorMode === EDITOR_MODES.DRAWING) {
-      this.userActionSource.next({ type: 'simulation', action: 'start', data: null });
+      let ets = this.simulator.start(this.taskModel);
+      this.userActionSource.next({ type: 'simulation', action: 'start', data: ets });
       this.editorMode = EDITOR_MODES.SIMULATION;
     } else {
+      this.userActionSource.next({ type: 'simulation', action: 'stop', data: null });
       this.editorMode = EDITOR_MODES.DRAWING;
     }
   }
 
+  simPerformTask(taskId: string) {
+    let ets = this.simulator.executeTask(this.getTaskNode(taskId));
+    this.userActionSource.next({ type: 'simulation', action: 'update', data: ets });
+  }
+
   getTaskNode(taskId: string) {
-    this.selectedTaskNode = this.taskModel.searchNode(taskId);
+    this.selectedTaskNode = this.taskModel.searchTask(taskId);
     return this.selectedTaskNode;
-  }
-
-  getTaskData(taskId: string) {
-    if (this.selectedTaskNode.data.id != taskId) {
-      this.getTaskNode(taskId);
-    }
-
-    return this.selectedTaskNode.data;
-  }
-
-  addUpdateTaskRelation(relation: string) {
-    if (!this.selectedTaskId) {
-      this.logger.error('Cannot add/update relation, select a task first');
-      return;
-    }
-    this.taskModel.addUpdateRelation(this.selectedTaskId, relation);
-    var updateInfo = {
-      action: 'update',
-      type: 'relation',
-      taskId: this.selectedTaskId
-    };
-    this.modelUpdatedSource.next(updateInfo);
   }
 
   addTask(type: string) {
@@ -120,8 +114,30 @@ export class EditorService {
     this.modelUpdatedSource.next(updateInfo);
   }
 
+  // if taskId is not provided operate on selected task??
+  updateTask(type, value, taskId?) {
+
+    taskId = taskId || this.selectedTaskId;
+    if (!type || !taskId) {
+      this.logger.error('Cannot update task - Invalid input');
+      return;
+    }
+
+    var result = this.taskModel.updateTask(taskId, type, value);
+    if(result) {
+      var updateInfo = {
+        action: 'update',
+        type: type,
+        taskId: taskId
+      };
+      this.modelUpdatedSource.next(updateInfo);
+    }
+
+    return result;
+  }
+
   getTaskTypes() {
-    return Object.keys(TaskType);
+    return TaskType;
   }
 
   getTaskRelations() {

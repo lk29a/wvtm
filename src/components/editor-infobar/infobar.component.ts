@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-// import {TaskType, TaskRelation} from '../../lib/taskmodel/taskmodel'
 import {EditorService} from '../editor/editor.service'
 
 enum InfoTypes {
@@ -10,26 +9,28 @@ enum InfoTypes {
 
 @Component({
 	selector: 'editor-infobar',
-	templateUrl: 'src/components/editor-infobar/infobar.html',
-	styleUrls: ['src/components/editor-infobar/infobar.css'],
+	templateUrl: 'components/editor-infobar/infobar.html',
+	styleUrls: ['components/editor-infobar/infobar.css'],
 })
 export class EditorInfobar {
-	currentTask = {
-    data: {}
-  };
-  infoType: InfoTypes;
-  infoModel = {};
+	currentTask: any;
+  infobar: any;
   taskTypes;
   taskRelations;
   relations;
-  _types;
+  types;
+  infoType;
 
   constructor(private editorService: EditorService) {
     this.taskTypes = editorService.getTaskTypes();
+    this.types = Object.keys(this.taskTypes);
     this.taskRelations = editorService.getTaskRelations();
     this.relations = Object.keys(this.taskRelations);
-
-    this._types = InfoTypes;
+    this.infobar = {
+      type: InfoTypes,
+      title: "Information"
+    };
+    this.infoType = InfoTypes;
     this.editorService.userAction$.subscribe(
       userAction => {
         let reset = false;
@@ -43,14 +44,14 @@ export class EditorInfobar {
 
           case "simulation":
             if (userAction.action == 'start')
-              this.showTaskInfo(userAction.data.taskId);
+              this.showSimulationInfo();
             else
               reset = true;
             break;
 
           case "validation":
             if (userAction.action == 'start')
-              this.showTaskInfo(userAction.data.taskId);
+              this.showValidationInfo();
             else
               reset = true;
             break;
@@ -68,9 +69,20 @@ export class EditorInfobar {
   }
 
   showTaskInfo(taskId) {
-    this.infoType = InfoTypes.Task;
-    this.currentTask.data = this.editorService.getTaskData(taskId);
+    this.infobar.type = InfoTypes.Task;
+    // this.currentTask.data = this.editorService.getTaskData(taskId);
+    let task = this.editorService.getSelectedTask();
 
+    this.currentTask = {
+      id: task.id,
+      type: task.type,
+      relation: task.relation,
+      name: task.name,
+      description: task.description,
+      isRoot: task.parent ? false : true,
+      isLast: task.getRightSibling() ? false : true,
+    };
+    this.infobar.title = "Task: " + this.currentTask.name;
   }
 
   resetInfoBar() {
@@ -78,11 +90,19 @@ export class EditorInfobar {
   }
 
   showSimulationInfo() {
-    this.infoType = InfoTypes.Simulation;
+    this.infobar.type = InfoTypes.Simulation;
   }
 
   showValidationInfo() {
-    this.infoType = InfoTypes.Validation;
+    this.infobar.type = InfoTypes.Validation;
+  }
+
+  updateTask(type, value) {
+    if (type && value) {
+      if (this.editorService.updateTask(type, value, this.currentTask.id)) {
+        this.currentTask[type] = value;
+      }
+    }
   }
 
   getRelationSym(relation) {

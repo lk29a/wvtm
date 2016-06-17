@@ -50,23 +50,23 @@
 }
 
 .toolbar-icon.abstract {
-  background-image: url("src/assets/abstract.png");
+  background-image: url("assets/abstract.png");
 }
 
 .toolbar-icon.user {
-  background-image: url("src/assets/user.png");
+  background-image: url("assets/user.png");
 }
 
 .toolbar-icon.interaction {
-  background-image: url("src/assets/interaction.png");
+  background-image: url("assets/interaction.png");
 }
 
 .toolbar-icon.system {
-  background-image: url("src/assets/system.png");
+  background-image: url("assets/system.png");
 }
 
 .toolbar-icon.library {
-  background-image: url("src/assets/library.png");
+  background-image: url("assets/library.png");
 }
 
 .task-relations {

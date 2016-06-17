@@ -5,17 +5,18 @@ import {EditorToolbar} from "../editor-toolbar/toolbar.component";
 import {EditorCanvas} from "../editor-canvas/canvas.component";
 import {EditorInfobar} from "../editor-infobar/infobar.component";
 import {EditorService} from './editor.service';
-import {TaskModel} from '../../lib/taskmodel/taskmodel';
+import {TaskModel} from '../taskmodel/taskmodel';
 import {Renderer} from '../renderer/renderer.service';
 import {TreeLayout} from '../renderer/treelayout';
+import {Simulator} from '../simulator/simulator';
 import { LoggerService } from '../common/logger.service';
 
 
 @Component({
 	selector: 'wvtm-editor',
-	templateUrl: 'src/components/editor/editor.html',
-	styleUrls: ['src/components/editor/editor.css'],
-  providers: [EditorService, Renderer, TreeLayout],
+	templateUrl: 'components/editor/editor.html',
+	styleUrls: ['components/editor/editor.css'],
+  providers: [EditorService, Renderer, TreeLayout, Simulator],
 	directives: [EditorMenu, EditorToolbar, EditorCanvas, EditorInfobar],
 })
 export class WVTMEditor {

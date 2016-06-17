@@ -1,6 +1,6 @@
 import {Injectable, Inject} from '@angular/core';
-import { Task } from '../../lib/taskmodel/task';
-import { TaskModel, TaskType, TaskRelation } from '../../lib/taskmodel/taskmodel';
+import { Task, TaskType, TaskRelation } from '../taskmodel/task';
+import { TaskModel } from '../taskmodel/taskmodel';
 
 @Injectable()
 export class Simulator {
@@ -18,10 +18,6 @@ export class Simulator {
 
     this.enableTask(model.root);
 
-    for (var i = 0; i < this.ets.length; i++) {
-      console.log(this.ets[i].data);
-    }
-
     return this.ets;    
 
   }
@@ -35,7 +31,7 @@ export class Simulator {
   * @param  {[type]} aTask [description]
   */
   enableTask(aTask) {
-    console.log('enabling: ' + aTask.data.name);
+    console.log('enabling: ' + aTask.name);
     var curTask = aTask,
       lPath = [];
 
@@ -71,10 +67,10 @@ export class Simulator {
   checkRelation(aTask) {
     //can add more relations to check here
     if (
-      aTask.data.relation === TaskRelation.UNRESTRICTED ||
-      aTask.data.relation === TaskRelation.CHOICE ||
-      aTask.data.relation === TaskRelation.RANDOM ||
-      aTask.data.relation === TaskRelation.CONCURRENTINFO
+      aTask.relation === TaskRelation.UNRESTRICTED ||
+      aTask.relation === TaskRelation.CHOICE ||
+      aTask.relation === TaskRelation.RANDOM ||
+      aTask.relation === TaskRelation.CONCURRENTINFO
     ) {
       return true;
     }
@@ -144,9 +140,10 @@ export class Simulator {
   isTaskActive(aTask) {
     var enabled = false;
 
+    var _this = this;
     //a task is enabled is any of its children is enabled
     enabled = (function isTaskEnabled(parent) {
-      if (this.ets.indexOf(parent) > -1) {
+      if (_this.ets.indexOf(parent) > -1) {
         return true;
       } else {
         var tmp = false;
@@ -210,7 +207,7 @@ export class Simulator {
       },
     };
 
-    return relations[task.data.relation]();
+    return relations[task.relation]();
   }
 
 }

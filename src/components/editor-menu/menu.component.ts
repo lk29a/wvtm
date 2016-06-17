@@ -4,8 +4,8 @@ import {LoggerService} from '../common/logger.service'
 
 @Component({
   selector: 'editor-menu',
-  templateUrl: 'src/components/editor-menu/menu.html',
-	styleUrls: ['src/components/editor-menu/menu.css'],
+  templateUrl: 'components/editor-menu/menu.html',
+	styleUrls: ['components/editor-menu/menu.css'],
   host: {
     '(click)': 'onClick($event)'
   }
@@ -27,7 +27,7 @@ export class EditorMenu {
   }
 
   simulate() {
-    this.editorService.simulateModel();
+    this.editorService.startSimulation();
   }
 
   zoom(action: string) {
