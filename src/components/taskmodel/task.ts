@@ -8,17 +8,20 @@ export var TaskType = {
 };
 
 export var TaskRelation = {
-  'UNRESTRICTED': '|||',
-  'CHOICE': '[]',
-  'CONCURRENTINFO': '|[]|',
-  'RANDOM': '|=|',
-  'DEACT': '[>',
-  'ENABLE': '>>',
-  'CHOICEINFO': '[]>>',
-  'RESUME': '|>',
-  'ITERATION': 'T*',
-  'OPTIONAL': '[T]',
+  'UNRESTRICTED': '|||', // Independent Concurrency
+  'CHOICE': '[]', // Choice
+  'CONCURRENTINFO': '|[]|', // Concurrency with information exchange
+  'RANDOM': '|=|', // Order Independence
+  'DEACT': '[>', // Deactivation
+  'ENABLE': '>>', // Enabling
+  'CHOICEINFO': '[]>>', // Enabling with information passing
+  'RESUME': '|>', // Suspend resume
 };
+
+export var TaskProperty = {
+  'ITERATION': 'T*', // Iteration
+  'OPTIONAL': '[T]', // Optional
+}
 
 /**
 *	type: type of node(Tasktype)

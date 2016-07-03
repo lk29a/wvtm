@@ -70,7 +70,9 @@ export class Simulator {
       aTask.relation === TaskRelation.UNRESTRICTED ||
       aTask.relation === TaskRelation.CHOICE ||
       aTask.relation === TaskRelation.RANDOM ||
-      aTask.relation === TaskRelation.CONCURRENTINFO
+      aTask.relation === TaskRelation.CONCURRENTINFO ||
+      aTask.relation === TaskRelation.DEACT ||
+      aTask.relation === TaskRelation.RESUME
     ) {
       return true;
     }
@@ -97,6 +99,15 @@ export class Simulator {
     } else {
       //remove task from enabled set
       this.ets.splice(idx, 1);
+
+      //check if parent has choice relation, if yes then disable those tasks
+      var parent = aTask.parent;
+//qilJaQyvGY;o4]3u|sa+T?J+6K-Yts/11D+||)z,sm9+N:fqj_b@!GI|g0$skq+:
+
+      if(parent.relation === TaskRelation.CHOICE) {
+        this.executeTask(parent);
+      }
+
 
       // if (!silent) {
       //check if left task also needs to be performed in case of choice, unrestricted, etc

@@ -63,7 +63,9 @@ export class Renderer {
     var updatedTask = model.searchTask(taskId),
       taskGroup = this.modelGroup.select('#' + taskId);
 
-    if (type === 'task') {
+
+    //@lk for name do not redraw everything whole 
+    if (type === 'type' || type == 'name') {
       this.render(model);
       //@lk just for now until atomic updates is complete 
       // selectTask(taskId);

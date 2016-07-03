@@ -67,7 +67,7 @@ export class TaskModel extends GenericTree {
         this.updateTaskRelation(task, value);
         break;
 
-      case "taskType":
+      case "type":
         this.updateTaskType(task, value);
         break;
 
@@ -122,19 +122,19 @@ export class TaskModel extends GenericTree {
 		task.type = taskType;
 	};
 
-	updateTaskName(taskId, name) {
+	updateTaskName(task: Task, name) {
     if (!name) {
       throw new Error('`name` of task must be provided');
     }
-
+    task.name = name;
 
 	}
 
-  updateTaskDescription(taskId, description) {
-		if (!taskId) {
+  updateTaskDescription(task: Task, description) {
+		if (!task) {
 			throw new Error('`taskId` must be provided');
 		}
-
+    task.description = description;
   }
 
 	/**
