@@ -18,7 +18,7 @@ gulp.task('clean', function (cb) {
 gulp.task('tslint', function () {
     return gulp.src("src/**/*.ts")
         .pipe(tslint())
-        .pipe(tslint.report('prose'));
+        .pipe(tslint.report('verbose'));
 });
 
 /**

@@ -1,5 +1,5 @@
-import { TreeNode } from './tree-node';
-import {GenericQueue as Queue} from '../queue/queue';
+import { TreeNode } from "./tree-node";
+import {GenericQueue as Queue} from "../queue/queue";
 
 interface LayoutBounds {
   x1: number,
@@ -18,14 +18,14 @@ export class GenericTree {
     if (parent instanceof TreeNode && node instanceof TreeNode) {
       parent.addChild(node);
     } else {
-      throw new Error('both `parent` and `node` must be instance of TreeNode');
+      throw new Error("both `parent` and `node` must be instance of TreeNode");
     }
   }
 
   traverseDF(callback) {
     // var foundNode = null;
     (function recursiveDF(currentNode) {
-      for (var i = 0; i < currentNode.children.length; i++) {
+      for (let i = 0; i < currentNode.children.length; i++) {
         recursiveDF(currentNode.children[i]);
       }
       callback(currentNode);
@@ -35,7 +35,7 @@ export class GenericTree {
   }
 
   traverseBF(callback) {
-    var queue = new Queue(),
+    let queue = new Queue(),
       currentNode;
 
     queue.enqueue(this.root);
@@ -44,7 +44,7 @@ export class GenericTree {
     callback(currentNode);
 
     while (currentNode) {
-      for (var i = 0; i < currentNode.children.length; i++) {
+      for (let i = 0; i < currentNode.children.length; i++) {
         queue.enqueue(currentNode.children[i]);
       }
 

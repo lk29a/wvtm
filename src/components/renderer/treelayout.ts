@@ -4,11 +4,11 @@
  *   http://dirk.jivas.de/papers/buchheim02improving.pdf
  * 
  */
-import { Injectable } from '@angular/core';
-import {Task} from '../taskModel/task';
-import {TREE_LAYOUT_DEFAULTS} from '../common/constants'
+import { Injectable } from "@angular/core";
+import {Task} from "../taskModel/task";
+import {TREE_LAYOUT_DEFAULTS} from "../common/constants";
 
-@Injectable() 
+@Injectable()
 export class TreeLayout {
   private bounds: any;
 
@@ -19,7 +19,7 @@ export class TreeLayout {
       x2: 0,
       y2: 0
     };
-    
+
   }
 
   calculate(root, centerX) {
@@ -33,7 +33,7 @@ export class TreeLayout {
     if (node.isLeaf()) {
       let leftSibling = node.getLeftSibling();
       if (leftSibling) {
-        //set set preliminary x relative to left sibling
+        // set set preliminary x relative to left sibling
         node.layout.x = this.getX(leftSibling) + this.getDistance();
       } else {
         node.layout.x = 0;
@@ -69,7 +69,7 @@ export class TreeLayout {
     node.layout.mod += m;
     node.coord.y = TREE_LAYOUT_DEFAULTS.levelDistance * level;
 
-    for (var i = 0; i < node.children.length; i++) {
+    for (let i = 0; i < node.children.length; i++) {
       this.secondWalk(node.children[i], this.getMod(node), level + 1);
     }
 
@@ -77,7 +77,7 @@ export class TreeLayout {
   }
 
   private centreLayout(root, centre) {
-    var shift = 0;
+    let shift = 0;
     if (Math.abs(this.bounds.x2 - this.bounds.x1) / 2 > centre) {
       centre = (this.bounds.x2 - this.bounds.x1) / 2;
     }
@@ -90,18 +90,18 @@ export class TreeLayout {
 
     (function traverse(node) {
       node.coord.x += shift;
-      for (var i = 0; i < node.children.length; i++) {
+      for (let i = 0; i < node.children.length; i++) {
         traverse(node.children[i]);
       }
     })(root);
   }
 
   private apportion(node, defaultAncestor) {
-    var leftSibling = node.getLeftSibling();
+    let leftSibling = node.getLeftSibling();
     if (leftSibling) {
-      //I = inner; O = outer; R = right; L = left;
-      //shift = shift value for node/subtree 
-      var nodeIR, nodeOR, nodeIL, nodeOL, shiftIR, shiftOR, shiftIL, shiftOL;
+      // I = inner; O = outer; R = right; L = left;
+      // shift = shift value for node/subtree 
+      let nodeIR, nodeOR, nodeIL, nodeOL, shiftIR, shiftOR, shiftIL, shiftOL;
 
       nodeIR = nodeOR = node;
       nodeIL = leftSibling;
@@ -112,8 +112,8 @@ export class TreeLayout {
       shiftIL = nodeIL.layout.mod;
       shiftOL = nodeOL.layout.mod;
 
-      var nextRightIL = this.nextRight(nodeIL);
-      var nextLeftIR = this.nextLeft(nodeIR);
+      let nextRightIL = this.nextRight(nodeIL);
+      let nextLeftIR = this.nextLeft(nodeIR);
 
       while (nextRightIL !== null && nextLeftIR !== null) {
         nodeIL = nextRightIL;
@@ -122,9 +122,9 @@ export class TreeLayout {
         nodeOR = this.nextRight(nodeOR);
         this.setAncestor(nodeOR, node);
 
-        var shift = (this.getX(nodeIL) + shiftIL) - (this.getX(nodeIR) + shiftIR) + this.getDistance();
+        let shift = (this.getX(nodeIL) + shiftIL) - (this.getX(nodeIR) + shiftIR) + this.getDistance();
         if (shift > 0) {
-          var tmpAncestor = this.ancestor(nodeIL, node, defaultAncestor);
+          let tmpAncestor = this.ancestor(nodeIL, node, defaultAncestor);
           this.moveSubtree(tmpAncestor, node, shift);
           shiftIR = shiftIR + shift;
           shiftOR = shiftOR + shift;
@@ -157,7 +157,7 @@ export class TreeLayout {
   }
 
   private moveSubtree(subtreeL, subtreeR, shift) {
-    var subtrees = subtreeR.idx - subtreeL.idx;
+    let subtrees = subtreeR.idx - subtreeL.idx;
     subtreeR.layout.change -= shift / subtrees;
     subtreeR.layout.shift += shift;
     subtreeL.layout.change += shift / subtrees;
@@ -167,18 +167,18 @@ export class TreeLayout {
   }
 
   private executeShifts(node) {
-    var shift = 0,
+    let shift = 0,
       change = 0;
 
-    for (var i = node.children.length - 1; i >= 0; i--) {
-      var child = node.children[i];
+    for (let i = node.children.length - 1; i >= 0; i--) {
+      let child = node.children[i];
       child.layout.x += shift;
       child.layout.mod += shift;
 
       change += child.layout.change;
       shift += child.layout.shift + change;
     }
-  } 
+  }
 
   private nextLeft(node) {
     return node.isLeaf() ? node.layout.thread : node.getFirstChild();
@@ -205,7 +205,7 @@ export class TreeLayout {
   }
 
   private getDistance() {
-    //@lk return proper distance using node1 and node2      
+    // @lk return proper distance using node1 and node2      
     return TREE_LAYOUT_DEFAULTS.nodeDistance + (TREE_LAYOUT_DEFAULTS.nodeRadius * 2);
   }
 
@@ -215,5 +215,5 @@ export class TreeLayout {
 
   private getX(node) {
     return (node === null) ? 0 : node.layout.x;
-  }   
+  }
 }

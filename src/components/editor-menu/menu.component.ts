@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {EditorService} from '../editor/editor.service';
-import {LoggerService} from '../common/logger.service'
+import {Component} from "@angular/core";
+import {EditorService} from "../editor/editor.service";
+import {LoggerService} from "../common/logger.service";
 
 @Component({
-  selector: 'editor-menu',
-  templateUrl: 'components/editor-menu/menu.html',
-	styleUrls: ['components/editor-menu/menu.css'],
+  selector: "editor-menu",
+  templateUrl: "components/editor-menu/menu.html",
+  styleUrls: ["components/editor-menu/menu.css"],
   host: {
-    '(click)': 'onClick($event)'
+    "(click)": "onClick($event)"
   }
 })
 export class EditorMenu {
@@ -35,30 +35,30 @@ export class EditorMenu {
   }
 
   onClick(event) {
-    var elm = event.target;
-    if (elm.classList.contains('menu-btn') || elm.parentNode.classList.contains('menu-btn')) {
-      var action: string = elm.getAttribute('action') || elm.parentNode.getAttribute('action');
+    let elm = event.target;
+    if (elm.classList.contains("menu-btn") || elm.parentNode.classList.contains("menu-btn")) {
+      let action: string = elm.getAttribute("action") || elm.parentNode.getAttribute("action");
 
-      switch(action) {
-        case 'new':
+      switch (action) {
+        case "new":
           this.newProject();
           break;
-        case 'save':
+        case "save":
           this.saveProject();
           break;
-        case 'validate':
+        case "validate":
           this.validate();
           break;
-        case 'simulate':
+        case "simulate":
           this.simulate();
           break;
-        case 'zoom-fit':
+        case "zoom-fit":
           this.zoom("fit");
           break;
-        case 'zoom-minus':
+        case "zoom-minus":
           this.zoom("minus");
           break;
-        case 'zoom-plus':
+        case "zoom-plus":
           this.zoom("plus");
           break;
       }

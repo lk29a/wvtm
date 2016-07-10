@@ -1,6 +1,6 @@
-import {Injectable, Inject} from '@angular/core';
-import { Task, TaskType, TaskRelation } from '../taskmodel/task';
-import { TaskModel } from '../taskmodel/taskmodel';
+import {Injectable, Inject} from "@angular/core";
+import { Task, TaskType, TaskRelation } from "../taskmodel/task";
+import { TaskModel } from "../taskmodel/taskmodel";
 
 @Injectable()
 export class Simulator {
@@ -13,12 +13,12 @@ export class Simulator {
 
     // first validate structure of the model
     if (!model.validateStructure()) {
-      throw new Error('Model has errors please fix them first.');
+      throw new Error("Model has errors please fix them first.");
     }
 
     this.enableTask(model.root);
 
-    return this.ets;    
+    return this.ets;
 
   }
 
@@ -31,11 +31,11 @@ export class Simulator {
   * @param  {[type]} aTask [description]
   */
   enableTask(aTask) {
-    console.log('enabling: ' + aTask.name);
-    var curTask = aTask,
+    console.log("enabling: " + aTask.name);
+    let curTask = aTask,
       lPath = [];
 
-    //find left most decendent of this task
+    // find left most decendent of this task
     lPath.push(curTask);
     while (curTask.children.length) {
       curTask = curTask.children[0];
@@ -48,7 +48,7 @@ export class Simulator {
         this.ets.push(curTask);
       }
 
-      //if relation is non blocking
+      // if relation is non blocking
       if (this.checkRelation(curTask)) {
         this.enableTask(curTask.getRightSibling());
       }
@@ -65,7 +65,7 @@ export class Simulator {
    * @param  {[type]} aTask [description]
    */
   checkRelation(aTask) {
-    //can add more relations to check here
+    // can add more relations to check here
     if (
       aTask.relation === TaskRelation.UNRESTRICTED ||
       aTask.relation === TaskRelation.CHOICE ||
@@ -78,7 +78,7 @@ export class Simulator {
     }
 
     return false;
-  }  
+  }
 
   /**
    * We need to check both right and left sibling for relations.
@@ -92,46 +92,46 @@ export class Simulator {
    */
   executeTask(aTask, silent?) {
     silent = silent || false;
-    var idx = this.ets.indexOf(aTask);
+    let idx = this.ets.indexOf(aTask);
     if (idx < 0) {
-      console.log('Task not enabled');
+      console.log("Task not enabled");
       return;
     } else {
-      //remove task from enabled set
+      // remove task from enabled set
       this.ets.splice(idx, 1);
 
-      //check if parent has choice relation, if yes then disable those tasks
-      var parent = aTask.parent;
-//qilJaQyvGY;o4]3u|sa+T?J+6K-Yts/11D+||)z,sm9+N:fqj_b@!GI|g0$skq+:
+      // check if parent has choice relation, if yes then disable those tasks
+      let parent = aTask.parent;
+      // qilJaQyvGY;o4]3u|sa+T?J+6K-Yts/11D+||)z,sm9+N:fqj_b@!GI|g0$skq+:
 
-      if(parent.relation === TaskRelation.CHOICE) {
+      if (parent.relation === TaskRelation.CHOICE) {
         this.executeTask(parent);
       }
 
 
       // if (!silent) {
-      //check if left task also needs to be performed in case of choice, unrestricted, etc
+      // check if left task also needs to be performed in case of choice, unrestricted, etc
       // var lSibling = aTask.getLeftSibling();
       // if (lSibling && checkRelation(lSibling)) {
       //   executeTask(lSibling);
       // }
 
-      var rSibling = aTask.getRightSibling();
+      let rSibling = aTask.getRightSibling();
       if (rSibling) {
-        //some *relation* with right sibling
-        var action = this.simulateRelation(aTask, rSibling);
+        // some *relation* with right sibling
+        let action = this.simulateRelation(aTask, rSibling);
         switch (action) {
-          case 'enable':
+          case "enable":
             this.enableTask(rSibling);
             break;
 
-          case 'perform':
+          case "perform":
             this.executeTask(rSibling);
             break;
         }
       }
 
-      //check if parent is still active else execute parent task
+      // check if parent is still active else execute parent task
       if (!this.isTaskActive(aTask.parent)) {
         this.ets.push(aTask.parent);
         this.executeTask(aTask.parent);
@@ -149,16 +149,16 @@ export class Simulator {
    * @return {Boolean}       [description]
    */
   isTaskActive(aTask) {
-    var enabled = false;
+    let enabled = false;
 
-    var _this = this;
-    //a task is enabled is any of its children is enabled
+    let _this = this;
+    // a task is enabled is any of its children is enabled
     enabled = (function isTaskEnabled(parent) {
       if (_this.ets.indexOf(parent) > -1) {
         return true;
       } else {
-        var tmp = false;
-        for (var i = 0; i < parent.children.length; i++) {
+        let tmp = false;
+        for (let i = 0; i < parent.children.length; i++) {
           tmp = isTaskEnabled(parent.children[i]);
           if (tmp === true) {
             return tmp;
@@ -177,30 +177,30 @@ export class Simulator {
    * @return {[type]}          [description]
    */
   simulateRelation(task, rSibling) {
-    var relations = {
-      //Independent Concurrency
-      '|||': function() {
-        return 'noop';
+    let relations = {
+      // Independent Concurrency
+      "|||": function() {
+        return "noop";
       },
-      //choice
-      '[]': function() {
-        return 'execute';
+      // Choice
+      "[]": function() {
+        return "execute";
       },
-      //Concurrency with information exchange
-      '|[]|': function() {
+      // Concurrency with information exchange
+      "|[]|": function() {
         return true;
       },
-      //Order Independence
-      '|=|': function() {
+      // Order Independence
+      "|=|": function() {
         return true;
       },
-      //Deactivating
-      '[>': function() {
+      // Deactivating
+      "[>": function() {
         return true;
       },
-      //Enabling
-      '>>': function() {
-        return 'enable';
+      // Enabling
+      ">>": function() {
+        return "enable";
       },
       /**
        * Enabling with information passing
@@ -208,12 +208,12 @@ export class Simulator {
        * 
        * @return {[type]} [description]
        */
-      '[]>>': function() {
+      "[]>>": function() {
 
-        return 'enable';
+        return "enable";
       },
-      //Suspend - resume
-      '|>': function() {
+      // Suspend - resume
+      "|>": function() {
         return true;
       },
     };

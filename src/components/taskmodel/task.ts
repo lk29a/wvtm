@@ -1,27 +1,27 @@
-import {TreeNode} from '../generic-tree/tree-node';
+import {TreeNode} from "../generic-tree/tree-node";
 
 export var TaskType = {
-  'ABSTRACT': 'Abstract',
-  'USER': 'User',
-  'INTERACTION': 'Interaction',
-  'SYSTEM': 'System',
+  "ABSTRACT": "Abstract",
+  "USER": "User",
+  "INTERACTION": "Interaction",
+  "SYSTEM": "System",
 };
 
 export var TaskRelation = {
-  'UNRESTRICTED': '|||', // Independent Concurrency
-  'CHOICE': '[]', // Choice
-  'CONCURRENTINFO': '|[]|', // Concurrency with information exchange
-  'RANDOM': '|=|', // Order Independence
-  'DEACT': '[>', // Deactivation
-  'ENABLE': '>>', // Enabling
-  'CHOICEINFO': '[]>>', // Enabling with information passing
-  'RESUME': '|>', // Suspend resume
+  "UNRESTRICTED": "|||", // Independent Concurrency
+  "CHOICE": "[]", // Choice
+  "CONCURRENTINFO": "|[]|", // Concurrency with information exchange
+  "RANDOM": "|=|", // Order Independence
+  "DEACT": "[>", // Deactivation
+  "ENABLE": ">>", // Enabling
+  "CHOICEINFO": "[]>>", // Enabling with information passing
+  "RESUME": "|>", // Suspend resume
 };
 
 export var TaskProperty = {
-  'ITERATION': 'T*', // Iteration
-  'OPTIONAL': '[T]', // Optional
-}
+  "ITERATION": "T*", // Iteration
+  "OPTIONAL": "[T]", // Optional
+};
 
 /**
 *	type: type of node(Tasktype)
@@ -44,9 +44,9 @@ export class Task extends TreeNode {
   // relation: string;
   children: Task[];
   coord: {
-  	x: number,
-  	y: number,
-  }
+    x: number,
+    y: number,
+  };
   public get id(): string {
     return this._data.id;
   }
@@ -54,7 +54,7 @@ export class Task extends TreeNode {
     if (!this._data || !this._data.id)
       this._data.id = v;
     else
-      throw new Error('Cannot change ID of task');
+      throw new Error("Cannot change ID of task");
   }
 
   public get type(): string {
@@ -63,7 +63,7 @@ export class Task extends TreeNode {
 
   public set type(v: string) {
     if (!TaskType[v.toUpperCase()])
-      throw new Error('Invalid task type');
+      throw new Error("Invalid task type");
     else
       this._data.type = v;
   }
@@ -74,32 +74,32 @@ export class Task extends TreeNode {
 
   public set relation(value: string) {
     // if (this.parent && (this.parent.getLastChild() !== this)) {
-      this._data.relation = value;
+    this._data.relation = value;
     // } else {
     //   throw new Error('Cannot add/edit relation no right sibling');
     // }
   }
 
-  public get name() : string {
+  public get name(): string {
     return this._data.name;
   }
 
-  public set name(v : string) {
-  	if(v && v.length > 0)
-  		this._data.name = v;
-  	else
-  		throw new Error('Invalid name for task');
+  public set name(v: string) {
+    if (v && v.length > 0)
+      this._data.name = v;
+    else
+      throw new Error("Invalid name for task");
   }
 
-  public get description() : string {
+  public get description(): string {
     return this._data.description;
   }
 
-  public set description(v : string) {
+  public set description(v: string) {
     if (v)
       this._data.description = v;
     else
-      this._data.description = '';
+      this._data.description = "";
   }
 
   constructor(data: TaskData) {

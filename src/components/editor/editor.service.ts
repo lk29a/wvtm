@@ -1,10 +1,10 @@
-import {Injectable, Inject} from '@angular/core';
-import { Subject }    from 'rxjs/Subject';
-import {TaskModel} from '../taskmodel/taskmodel';
-import {Task, TaskType, TaskRelation} from '../taskmodel/task';
-import {Simulator} from '../simulator/simulator';
-import {EDITOR_MODES} from '../common/constants'
-import {LoggerService} from '../common/logger.service'
+import {Injectable, Inject} from "@angular/core";
+import { Subject }    from "rxjs/Subject";
+import {TaskModel} from "../taskmodel/taskmodel";
+import {Task, TaskType, TaskRelation} from "../taskmodel/task";
+import {Simulator} from "../simulator/simulator";
+import {EDITOR_MODES} from "../common/constants";
+import {LoggerService} from "../common/logger.service";
 
 interface ModelUpdateInfo {
   action: string,
@@ -58,7 +58,7 @@ export class EditorService {
 
   selectTask(taskId: string) {
     this.selectedTaskId = taskId;
-    this.userActionSource.next({ type: 'task', action: 'select', data: { taskId: taskId } });
+    this.userActionSource.next({ type: "task", action: "select", data: { taskId: taskId } });
   }
 
   getSelectedTask() {
@@ -70,7 +70,7 @@ export class EditorService {
 
   unSelectTask() {
     this.selectedTaskId = this.selectedTaskNode = null;
-    this.userActionSource.next({ type: 'task', action: 'unselect', data: null});
+    this.userActionSource.next({ type: "task", action: "unselect", data: null});
   }
 
   validateModel() {
@@ -81,17 +81,17 @@ export class EditorService {
   startSimulation() {
     if (this.editorMode === EDITOR_MODES.DRAWING) {
       let ets = this.simulator.start(this.taskModel);
-      this.userActionSource.next({ type: 'simulation', action: 'start', data: ets });
+      this.userActionSource.next({ type: "simulation", action: "start", data: ets });
       this.editorMode = EDITOR_MODES.SIMULATION;
     } else {
-      this.userActionSource.next({ type: 'simulation', action: 'stop', data: null });
+      this.userActionSource.next({ type: "simulation", action: "stop", data: null });
       this.editorMode = EDITOR_MODES.DRAWING;
     }
   }
 
   simPerformTask(taskId: string) {
     let ets = this.simulator.executeTask(this.getTaskNode(taskId));
-    this.userActionSource.next({ type: 'simulation', action: 'update', data: ets });
+    this.userActionSource.next({ type: "simulation", action: "update", data: ets });
   }
 
   getTaskNode(taskId: string) {
@@ -101,14 +101,14 @@ export class EditorService {
 
   addTask(type: string) {
     if (!this.selectedTaskId) {
-      this.logger.error('Cannot add new task, select a task first');
+      this.logger.error("Cannot add new task, select a task first");
       return;
     }
-    var newTaskId = this.taskModel.addTask({ parentTaskId: this.selectedTaskId, taskType: type });
+    let newTaskId = this.taskModel.addTask({ parentTaskId: this.selectedTaskId, taskType: type });
     this.logger.debug(this.taskModel);
-    var updateInfo = {
-      action: 'add',
-      type: 'task',
+    let updateInfo = {
+      action: "add",
+      type: "task",
       taskId: newTaskId
     };
     this.modelUpdatedSource.next(updateInfo);
@@ -119,14 +119,14 @@ export class EditorService {
 
     taskId = taskId || this.selectedTaskId;
     if (!type || !taskId) {
-      this.logger.error('Cannot update task - Invalid input');
+      this.logger.error("Cannot update task - Invalid input");
       return;
     }
 
-    var result = this.taskModel.updateTask(taskId, type, value);
-    if(result) {
-      var updateInfo = {
-        action: 'update',
+    let result = this.taskModel.updateTask(taskId, type, value);
+    if (result) {
+      let updateInfo = {
+        action: "update",
         type: type,
         taskId: taskId
       };

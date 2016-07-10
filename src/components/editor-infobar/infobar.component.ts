@@ -1,19 +1,20 @@
-import {Component} from '@angular/core';
-import {EditorService} from '../editor/editor.service'
+import {Component} from "@angular/core";
+import {EditorService} from "../editor/editor.service";
 
 enum InfoTypes {
+  None = 0,
   Task = 1,
-  Validation,
-  Simulation
+  Validation = 2,
+  Simulation = 3
 }
 
 @Component({
-	selector: 'editor-infobar',
-	templateUrl: 'components/editor-infobar/infobar.html',
-	styleUrls: ['components/editor-infobar/infobar.css'],
+  selector: "editor-infobar",
+  templateUrl: "components/editor-infobar/infobar.html",
+  styleUrls: ["components/editor-infobar/infobar.css"],
 })
 export class EditorInfobar {
-	currentTask: any;
+  currentTask: any;
   infobar: any;
   taskTypes;
   taskRelations;
@@ -36,35 +37,35 @@ export class EditorInfobar {
         let reset = false;
         switch (userAction.type) {
           case "task":
-            if (userAction.action == 'select')
+            if (userAction.action === "select")
               this.showTaskInfo(userAction.data.taskId);
             else
               reset = true;
             break;
 
           case "simulation":
-            if (userAction.action == 'start')
+            if (userAction.action === "start")
               this.showSimulationInfo();
             else
               reset = true;
             break;
 
           case "validation":
-            if (userAction.action == 'start')
+            if (userAction.action === "start")
               this.showValidationInfo();
             else
               reset = true;
             break;
-          
+
           default:
             reset = true;
             break;
         }
 
-        if(reset) {
+        if (reset) {
           this.resetInfoBar();
         }
-      } 
+      }
     );
   }
 
@@ -86,7 +87,7 @@ export class EditorInfobar {
   }
 
   resetInfoBar() {
-
+    this.infobar.type = null;
   }
 
   showSimulationInfo() {
