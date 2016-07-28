@@ -2,7 +2,7 @@
   <div class="info-head"><span class="title">{{infobar.title}}</span></div>
   <div class="info-body">
     <div [ngSwitch]="infobar.type">
-      <div *ngSwitchWhen="infoType.Task">
+      <div *ngSwitchCase="infoType.Task">
         <div class="form-group">
           <label>Name: </label>
           <input class="form-control info-control" [(ngModel)]="currentTask.name" (ngModelChange)="updateTask('name', $event)">
@@ -24,19 +24,35 @@
           </select>
         </div>
         <button (click)="addToLibrary()">Add to library</button>
+        <button (click)="deleteTask()">Delete task</button>
       </div>
-      <div *ngSwitchWhen="infoType.Validation">
+      <div *ngSwitchCase="infoType.Validation">
         <div class="validation-info">
           <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
           <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
           <div class="messages">
-            <div class="msg" *ngFor="let msg of vInfo.messages">{{msg}}</div>
+            <div class="msg" *ngFor="let item of vInfo.data">{{item.msg}}</div>
           </div>
         </div>
       </div>
-      <div *ngSwitchWhen="infoType.Simulation">
+      <div *ngSwitchCase="infoType.Simulation">
+        <div class="sim-info">
+          <div class="enabled-tasks">
+            <h4>Enabled tasks</h4>
+            <div *ngFor="let task of simData.ets">
+              {{task.name}}
+            </div>
+          </div>
+          <div class="sim-task-info">
+            
+          </div>
+        </div>
       </div>
       <div *ngSwitchDefault>
+        <div *ngIf="infobar.error">
+          {{infobar.errMsg}}
+        </div>
+        <div *ngIf="!infobar.error"></div>
         <h4>Select a Task to see details.</h4>
       </div>
     </div>

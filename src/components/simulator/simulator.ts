@@ -12,8 +12,9 @@ export class Simulator {
     this.tasksExecuted = [];
 
     // first validate structure of the model
-    if (!model.validateStructure()) {
-      throw new Error("Model has errors please fix them first.");
+    let vObj = model.validateStructure();
+    if (!vObj.valid) {
+      throw new Error("Validation failed. Model has errors please fix them first.");
     }
 
     this.enableTask(model.root);

@@ -32,7 +32,9 @@ export class Renderer {
 
   // root <svg> element
   init(el: HTMLElement, dim: any) {
-    this.svgCanvas = Snap(el).attr(dim);
+    console.log("started");
+    this.svgCanvas = Snap(el);
+    // this.svgCanvas = Snap(el).attr(dim);
     // this.svgCanvas.attr(dim);
 
     this.modelGroup = this.svgCanvas.g();
@@ -52,6 +54,8 @@ export class Renderer {
     this.modelGroup.clear();
     this.treeLayout.calculate(model.root, this.svgCanvas.node.width.baseVal.value / 2);
     this.renderTaskTree(model.root);
+
+    // this.svgCanvas.attr({height: 1000, width: 1000});
   }
 
   update(model: TaskModel, type: string, taskId: string) {
@@ -65,7 +69,7 @@ export class Renderer {
 
 
     // @lk for name do not redraw everything whole 
-    if (type === "type" || type === "name") {
+    if (type === "task" || type === "name") {
       this.render(model);
       // @lk just for now until atomic updates is complete 
       // selectTask(taskId);
@@ -229,7 +233,8 @@ export class Renderer {
     group.add(node);
 
     // render task relation
-    this.renderTaskRelation(cx, cy, origNode, group);
+    if (origNode.relation)
+      this.renderTaskRelation(cx, cy, origNode, group);
 
     // modelGroup.add(group);
     // this.treeSets.nodeSet.push(node);
@@ -251,7 +256,7 @@ export class Renderer {
   }
 
   private renderTaskRelation(cx, cy, origNode: Task, group) {
-    if (origNode.relation) {
+    // if (origNode.relation) {
       let rightSibling = origNode.getRightSibling();
 
       // check if relation already exists if yes then update it
@@ -290,7 +295,7 @@ export class Renderer {
         group.add(relationText);
         group.add(relationLink);
       }
-    }
+    // }
   }
 
   private getTaskNodeById(taskId) {

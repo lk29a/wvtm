@@ -47,7 +47,9 @@
 	border-bottom: 1px solid #ccc;
 }
 
-
+.sim-info .enabled-tasks {
+	max-height: 50%;
+}
 
 
 

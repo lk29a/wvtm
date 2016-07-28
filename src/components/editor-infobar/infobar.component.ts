@@ -21,6 +21,8 @@ export class EditorInfobar {
   relations;
   types;
   infoType;
+  vInfo: any = {};
+  simData: any = {};
 
   constructor(private editorService: EditorService) {
     this.taskTypes = editorService.getTaskTypes();
@@ -29,7 +31,9 @@ export class EditorInfobar {
     this.relations = Object.keys(this.taskRelations);
     this.infobar = {
       type: InfoTypes,
-      title: "Information"
+      title: "Information",
+      error: false,
+      errMsg: ""
     };
     this.infoType = InfoTypes;
     this.editorService.userAction$.subscribe(
@@ -45,15 +49,18 @@ export class EditorInfobar {
 
           case "simulation":
             if (userAction.action === "start")
-              this.showSimulationInfo();
-            else
+              this.showSimulationInfo(userAction.data);
+            else if (userAction.action === "error") {
+              this.infobar.error = true;
+              this.infobar.errMsg = userAction.data;
+            } else if (userAction.action === "stop")
               reset = true;
             break;
 
           case "validation":
             if (userAction.action === "start")
-              this.showValidationInfo();
-            else
+              this.showValidationInfo(userAction.data);
+            else if (userAction.action === "stop")
               reset = true;
             break;
 
@@ -90,12 +97,40 @@ export class EditorInfobar {
     this.infobar.type = null;
   }
 
-  showSimulationInfo() {
-    this.infobar.type = InfoTypes.Simulation;
+  simulationAction(action: string, data: any) {
+    switch (action) {
+      case "start":
+        this.showSimulationInfo(data);
+        break;
+
+      case "update":
+        this.updateSimulationInfo(data);
+        break;
+
+      case "stop":
+        this.resetInfoBar();
+        break;
+    }
   }
 
-  showValidationInfo() {
+  showSimulationInfo(data) {
+    this.infobar.type = InfoTypes.Simulation;
+    this.infobar.title = "Simulation";
+    this.simData.ets = data;
+  }
+
+  updateSimulationInfo(data) {
+    this.simData.ets = data;
+  }
+
+  showValidationInfo(data) {
     this.infobar.type = InfoTypes.Validation;
+    this.infobar.title = "Validation Information";
+    this.vInfo = data;
+  }
+
+  deleteTask() {
+    this.editorService.removeTask(this.currentTask.id);
   }
 
   updateTask(type, value) {

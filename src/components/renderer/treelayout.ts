@@ -25,8 +25,8 @@ export class TreeLayout {
   calculate(root, centerX) {
     this.firstWalk(root);
     this.secondWalk(root, -root.layout.x, 0.3);
+    console.log(this.bounds);
     this.centreLayout(root, centerX);
-
   }
 
   private firstWalk(node) {
@@ -60,14 +60,21 @@ export class TreeLayout {
   private secondWalk(node, m, level) {
     // node.layout.x += m;
     node.coord.x = node.layout.x + m;
-    if (node.coord.x < this.bounds.x1) {
-      this.bounds.x1 = node.coord.x;
-    }
-    if (node.coord.x > this.bounds.x2) {
-      this.bounds.x2 = node.coord.x;
-    }
-    node.layout.mod += m;
     node.coord.y = TREE_LAYOUT_DEFAULTS.levelDistance * level;
+    if (node.coord.x < this.bounds.x1)
+      this.bounds.x1 = node.coord.x;
+
+    if (node.coord.x > this.bounds.x2)
+      this.bounds.x2 = node.coord.x;
+
+    if (node.coord.y < this.bounds.y1)
+      this.bounds.y1 = node.coord.y;
+
+    if (node.coord.y > this.bounds.y2)
+      this.bounds.y2 = node.coord.y;
+
+
+    node.layout.mod += m;
 
     for (let i = 0; i < node.children.length; i++) {
       this.secondWalk(node.children[i], this.getMod(node), level + 1);
@@ -89,7 +96,9 @@ export class TreeLayout {
     }
 
     (function traverse(node) {
+      console.log(node.name, node.coord.x, node.coord.y);
       node.coord.x += shift;
+      console.log(node.name, node.coord.x, node.coord.y);
       for (let i = 0; i < node.children.length; i++) {
         traverse(node.children[i]);
       }

@@ -43,6 +43,7 @@ export class Task extends TreeNode {
   private _data: TaskData;
   // relation: string;
   children: Task[];
+  parent: Task;
   coord: {
     x: number,
     y: number,
@@ -117,5 +118,21 @@ export class Task extends TreeNode {
     this.name = data.name;
     this.description = data.description;
   }
+
+  getLeftSibling() {
+    return (this.idx && this.parent) ? this.parent.children[this.idx - 1] : null;
+
+    // var idx = this.parent.getChildIndex(this);
+    // if(idx <= 0) {
+    //  return null;
+    // } else {
+    //  return this.parent.children[idx-1];
+    // }
+  }
+
+  getRightSibling() {
+    return (!this.parent || (this.idx === this.parent.children.length - 1)) ? null : this.parent.children[this.idx + 1];
+  }
+
 
 }

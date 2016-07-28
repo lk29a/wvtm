@@ -46,7 +46,7 @@ gulp.task("resources", function () {
  */
 gulp.task("libs", function () {
     return gulp.src([
-            'es6-shim/es6-shim.min.js',
+            'core-js/client/es6-shim.min.js',
             'systemjs/dist/system-polyfills.js',
             'systemjs/dist/system.src.js',
             'reflect-metadata/Reflect.js',
@@ -79,6 +79,6 @@ gulp.task("builddev", ['compile', 'resources'], function () {
 /**
  * Build project complete.
  */
-gulp.task("build", ['compile', 'resources', 'libs'], function () {
+gulp.task("build", ["compile", "resources", "libs"], function () {
     console.log("Building the project ...");
 });

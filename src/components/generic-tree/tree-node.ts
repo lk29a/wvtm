@@ -69,26 +69,26 @@ export class TreeNode {
     // } else {
     //  return this.parent.children[idx-1];
     // }
-  };
+  }
 
   getRightSibling() {
     return (!this.parent || (this.idx === this.parent.children.length - 1)) ? null : this.parent.children[this.idx + 1];
-  };
+  }
 
   isParentOf(node) {
     return (this.children.indexOf(node) > -1) ? true : false;
-  };
+  }
 
   swapChildren(i, j) {
     let tmp = this.children[i];
     this.children[i] = this.children[j];
     this.children[j] = tmp;
-  };
+  }
 
   removeChild(idx) {
     // @lk change to reflect idx property
     this.children.splice(idx, 1);
-  };
+  }
 
   resetLayoutData() {
     this.layout = {
@@ -99,5 +99,5 @@ export class TreeNode {
       thread: null,
       ancestor: null,
     };
-  };
+  }
 }

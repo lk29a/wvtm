@@ -1,6 +1,6 @@
-import {Component, ElementRef, AfterViewInit} from "@angular/core";
+import {Component, ElementRef, AfterViewInit, Renderer} from "@angular/core";
 import {EditorService} from "../editor/editor.service";
-import {Renderer} from "../renderer/renderer.service";
+import {Renderer as WVTMRenderer} from "../renderer/renderer.service";
 import {TreeLayout} from "../renderer/treelayout";
 import {LoggerService} from "../common/logger.service";
 import {EDITOR_MODES} from "../common/constants";
@@ -27,8 +27,8 @@ export class EditorCanvas implements AfterViewInit {
 
   constructor(private el: ElementRef,
     private editorService: EditorService,
+    private wvtmRenderer: WVTMRenderer,
     private renderer: Renderer,
-    // private simulator: Simulator,
     private logger: LoggerService) {
 
     this.editorService.modelUpdated$.subscribe(
@@ -49,7 +49,7 @@ export class EditorCanvas implements AfterViewInit {
     console.log(this.editorService.getTaskModel());
     this.logger.debug("model updated");
     // if(updateInfo.action) {
-    this.renderer.update(this.editorService.getTaskModel(), updateInfo.type, updateInfo.taskId);
+    this.wvtmRenderer.update(this.editorService.getTaskModel(), updateInfo.type, updateInfo.taskId);
     // }
   }
 
@@ -73,17 +73,17 @@ export class EditorCanvas implements AfterViewInit {
   }
 
   startSimulationMode(data: any) {
-    this.renderer.startSimulation();
+    this.wvtmRenderer.startSimulation();
     this.updateSimulation(data);
   }
 
   updateSimulation(data: any) {
     console.log(data);
-    this.renderer.updateSimulation(data);
+    this.wvtmRenderer.updateSimulation(data);
   }
 
   stopSimulationMode(data: any) {
-    this.renderer.stopSimulation();
+    this.wvtmRenderer.stopSimulation();
   }
 
   ngAfterViewInit() {
@@ -92,9 +92,18 @@ export class EditorCanvas implements AfterViewInit {
       width: this.el.nativeElement.firstChild.clientWidth,
     };
     this.svgElm = this.el.nativeElement.querySelector("svg");
-    this.renderer.init(this.svgElm, dim);
 
-    this.renderer.render(this.editorService.getTaskModel());
+    // bind hover event to svg node
+    // this.renderer.listen(this.svgElm, "mouseenter", (evt) => {
+    //   console.log("mouseover" , evt);
+    // });
+
+    // this.renderer.listen(this.svgElm, "mouseleave", (evt) => {
+    //   console.log("mouseleave", evt);
+    // });
+
+    this.wvtmRenderer.init(this.svgElm, dim);
+    this.wvtmRenderer.render(this.editorService.getTaskModel());
   }
 
   getTaskElementById(taskId: string) {
@@ -112,7 +121,7 @@ export class EditorCanvas implements AfterViewInit {
     if (event.target.classList.contains("task-node")) {
       let taskId = event.target.parentNode.id;
       this.editorService.selectTask(taskId);
-      this.renderer.selectTask(taskId);
+      this.wvtmRenderer.selectTask(taskId);
     }
   }
 
@@ -128,7 +137,7 @@ export class EditorCanvas implements AfterViewInit {
       return;
     }
     if (event.target.classList.contains("task-node")) {
-      this.renderer.highlightTask(event.target.parentNode.id);
+      this.wvtmRenderer.highlightTask(event.target.parentNode.id);
       this.logger.debug("highlight task node");
     }
 
@@ -140,7 +149,7 @@ export class EditorCanvas implements AfterViewInit {
       return;
     }
     if (event.target.classList.contains("task-node")) {
-      this.renderer.highlightTask(event.target.parentNode.id);
+      this.wvtmRenderer.highlightTask(event.target.parentNode.id);
       this.logger.debug("un-highlight task node");
     }
 

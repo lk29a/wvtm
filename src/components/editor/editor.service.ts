@@ -75,14 +75,19 @@ export class EditorService {
 
   validateModel() {
     this.validataionInfo = this.taskModel.validateStructure();
+    this.userActionSource.next({ type: "validation", action: "start", data: this.validataionInfo});
     console.log(this.validataionInfo);
   }
 
   startSimulation() {
     if (this.editorMode === EDITOR_MODES.DRAWING) {
-      let ets = this.simulator.start(this.taskModel);
-      this.userActionSource.next({ type: "simulation", action: "start", data: ets });
-      this.editorMode = EDITOR_MODES.SIMULATION;
+      try {
+        let ets = this.simulator.start(this.taskModel);
+        this.userActionSource.next({ type: "simulation", action: "start", data: ets });
+        this.editorMode = EDITOR_MODES.SIMULATION;
+      } catch (ex) {
+        this.userActionSource.next({ type: "simulation", action: "error", data: ex.message });
+      }
     } else {
       this.userActionSource.next({ type: "simulation", action: "stop", data: null });
       this.editorMode = EDITOR_MODES.DRAWING;
@@ -112,6 +117,23 @@ export class EditorService {
       taskId: newTaskId
     };
     this.modelUpdatedSource.next(updateInfo);
+  }
+
+  removeTask(taskId: string) {
+    if (!this.selectedTaskId) {
+      this.logger.error("Cannot remove task, select a task first");
+      return;
+    }
+    let result = this.taskModel.removeTask(taskId);
+    if (result) {
+      let updateInfo = {
+        action: "update",
+        type: "task",
+        taskId: taskId
+      };
+      this.modelUpdatedSource.next(updateInfo);
+    }
+    return result;
   }
 
   // if taskId is not provided operate on selected task??
