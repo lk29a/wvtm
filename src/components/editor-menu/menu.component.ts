@@ -15,7 +15,7 @@ export class EditorMenu {
   }
 
   newProject() {
-
+    this.editorService.createNew();
   }
 
   saveProject() {

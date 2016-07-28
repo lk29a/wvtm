@@ -55,24 +55,22 @@ export class TreeNode {
     return (this.children.length > 0) ? false : true;
   };
 
+  getIndex() {
+    return this.parent.children.indexOf(this);
+  }
+
   getChildIndex(node) {
     return this.children.indexOf(node);
   };
 
   getLeftSibling() {
-
-    return (this.idx && this.parent) ? this.parent.children[this.idx - 1] : null;
-
-    // var idx = this.parent.getChildIndex(this);
-    // if(idx <= 0) {
-    //  return null;
-    // } else {
-    //  return this.parent.children[idx-1];
-    // }
+    let idx = this.getIndex();
+    return (idx && this.parent) ? this.parent.children[idx - 1] : null;
   }
 
   getRightSibling() {
-    return (!this.parent || (this.idx === this.parent.children.length - 1)) ? null : this.parent.children[this.idx + 1];
+    let idx = this.getIndex();
+    return (!this.parent || (idx === this.parent.children.length - 1)) ? null : this.parent.children[idx + 1];
   }
 
   isParentOf(node) {

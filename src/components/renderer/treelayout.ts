@@ -166,7 +166,8 @@ export class TreeLayout {
   }
 
   private moveSubtree(subtreeL, subtreeR, shift) {
-    let subtrees = subtreeR.idx - subtreeL.idx;
+    // let subtrees = subtreeR.idx - subtreeL.idx;
+    let subtrees = subtreeR.getIndex() - subtreeL.getIndex();
     subtreeR.layout.change -= shift / subtrees;
     subtreeR.layout.shift += shift;
     subtreeL.layout.change += shift / subtrees;

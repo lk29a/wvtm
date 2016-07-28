@@ -41,8 +41,16 @@ export class EditorCanvas implements AfterViewInit {
       userAction => {
         if (userAction.type === "simulation")
           this.simulationAction(userAction.action, userAction.data);
+        if (userAction.type === "new")
+          this.clearCanvas();
       }
     );
+  }
+
+  clearCanvas() {
+    console.log(this.svgElm);
+    this.svgElm.innerHTML = "";
+    this.ngAfterViewInit();
   }
 
   modelUpdated(updateInfo) {
@@ -105,6 +113,8 @@ export class EditorCanvas implements AfterViewInit {
     this.wvtmRenderer.init(this.svgElm, dim);
     this.wvtmRenderer.render(this.editorService.getTaskModel());
   }
+
+
 
   getTaskElementById(taskId: string) {
     if (!taskId) {

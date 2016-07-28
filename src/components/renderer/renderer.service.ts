@@ -22,6 +22,10 @@ export class Renderer {
   simulationMask: any;
   filters: any;
   currentState: any;
+  treeSets = {
+        node: [],
+        link: []
+  };
 
   constructor(private treeLayout: TreeLayout, private logger: LoggerService) {
     this.filters = {};
@@ -63,18 +67,12 @@ export class Renderer {
       this.logger.error("no model or taskId provided");
       throw new Error("renderer: no task provided to update");
     }
-
-    let updatedTask = model.searchTask(taskId),
-      taskGroup = this.modelGroup.select("#" + taskId);
-
-
-    // @lk for name do not redraw everything whole 
     if (type === "task" || type === "name") {
-      this.render(model);
       // @lk just for now until atomic updates is complete 
-      // selectTask(taskId);
-      //
+      this.render(model);
     } else if (type === "relation") {
+      let updatedTask = model.searchTask(taskId),
+      taskGroup = this.modelGroup.select("#" + taskId);
       this.renderTaskRelation(updatedTask.coord.x, updatedTask.coord.y, updatedTask, taskGroup);
     }
   }
@@ -171,8 +169,6 @@ export class Renderer {
     }
   }
 
-
-
   private renderTaskTree(root: Task) {
     let _this = this;
     (function traverseBF(currentNode: Task) {
@@ -237,7 +233,7 @@ export class Renderer {
       this.renderTaskRelation(cx, cy, origNode, group);
 
     // modelGroup.add(group);
-    // this.treeSets.nodeSet.push(node);
+    this.treeSets.node.push(node);
     return group;
   }
 

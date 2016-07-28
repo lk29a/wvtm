@@ -22,6 +22,7 @@ import { LoggerService } from "../common/logger.service";
 export class WVTMEditor {
   taskModel: TaskModel = null;
   constructor(private editorService: EditorService, private logger: LoggerService) {
+    this.logger.log("... WVTM STARTED ...");
     this.editorService.createNew();
     this.taskModel = editorService.getTaskModel();
     this.createTestModel();

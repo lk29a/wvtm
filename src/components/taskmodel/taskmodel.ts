@@ -58,7 +58,6 @@ export class TaskModel extends GenericTree {
   removeTask(taskId: string) {
     let selectedTask: Task = this.searchTask(taskId);
     let leftSibling = selectedTask.getLeftSibling();
-    
     // if left sibling exists then remove its relation
     if (leftSibling)
       leftSibling.relation = "";
@@ -66,7 +65,6 @@ export class TaskModel extends GenericTree {
     let parent: Task  = selectedTask.parent;
     console.log(parent);
     let idx = parent.children.indexOf(selectedTask);
-    console.log(idx);
     parent.removeChild(idx);
     // @lk proper error checking
 

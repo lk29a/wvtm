@@ -41,6 +41,7 @@ export class EditorService {
     this.taskModel = new TaskModel();
     this.selectedTaskId = this.taskModel.root.id;
     this.editorMode = EDITOR_MODES.DRAWING;
+    this.userActionSource.next({ type: "new", action: null, data: null });
     this.taskSelectedSource.next(this.selectedTaskId);
   }
 
