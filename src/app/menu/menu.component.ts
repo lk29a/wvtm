@@ -1,16 +1,16 @@
 import {Component} from "@angular/core";
-import {EditorService} from "../editor/editor.service";
-import {LoggerService} from "../common/logger.service";
+import {EditorService} from "../editor/shared/editor.service";
+import {LoggerService} from "../shared";
 
 @Component({
-  selector: "editor-menu",
-  templateUrl: "components/editor-menu/menu.html",
-  styleUrls: ["components/editor-menu/menu.css"],
+  selector: "wvtm-menu",
+  templateUrl: "menu/menu.html",
+  styleUrls: ["menu/menu.css"],
   host: {
     "(click)": "onClick($event)"
   }
 })
-export class EditorMenu {
+export class MenuComponent {
   constructor(private editorService: EditorService, private logger: LoggerService) {
   }
 

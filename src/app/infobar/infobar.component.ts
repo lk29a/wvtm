@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
-import {EditorService} from "../editor/editor.service";
+import {EditorService} from "../editor/shared/editor.service";
+import {LoggerService} from "../shared";
 
 enum InfoTypes {
   None = 0,
@@ -13,7 +14,7 @@ enum InfoTypes {
   templateUrl: "components/editor-infobar/infobar.html",
   styleUrls: ["components/editor-infobar/infobar.css"],
 })
-export class EditorInfobar {
+export class InfobarComponent {
   currentTask: any;
   infobar: any;
   taskTypes;

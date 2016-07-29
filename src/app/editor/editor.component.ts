@@ -19,7 +19,7 @@ import { LoggerService } from "../common/logger.service";
   providers: [EditorService, Renderer, TreeLayout, Simulator],
   directives: [EditorMenu, EditorToolbar, EditorCanvas, EditorInfobar],
 })
-export class WVTMEditor {
+export class EditorComponent {
   taskModel: TaskModel = null;
   constructor(private editorService: EditorService, private logger: LoggerService) {
     this.logger.log("... WVTM STARTED ...");

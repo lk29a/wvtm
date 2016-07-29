@@ -1,5 +1,5 @@
 import { TreeNode } from "./tree-node";
-import {GenericQueue as Queue} from "../queue/queue";
+import {GenericQueue as Queue} from "./queue";
 
 interface LayoutBounds {
   x1: number,

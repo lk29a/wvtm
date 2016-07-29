@@ -7,6 +7,12 @@
 	overflow: auto;
 }
 
+.model-group {
+  fill: rgba(0,0,0,0);
+  stroke: #212121;
+  stroke-width: 1;  
+}
+
 svg {
   -webkit-user-select: none;
   -moz-user-select: none;
