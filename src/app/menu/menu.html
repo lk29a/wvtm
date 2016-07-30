@@ -1,24 +1,24 @@
 <div id="main-menu">
   <div id="menu-items">
-    <div class="menu-btn" action="new">
+    <div class="menu-btn" (click)="newProject()">
       <i class="menu-icon fa fa-file-image-o"></i>
     </div>
-    <div class="menu-btn" action="save">
+    <div class="menu-btn" (click)="saveProject()">
       <i class="menu-icon fa fa-floppy-o"></i>
     </div>
-    <div class="menu-btn" action="validate">
+    <div class="menu-btn" (click)="validate()">
       <i class="menu-icon fa fa-check"></i>
     </div>
-    <div class="menu-btn" action="simulate">
+    <div class="menu-btn" (click)="simulate()">
       <i class="menu-icon fa fa-play"></i>
     </div>
-    <div class="menu-btn" action="zoom-fit">
+    <div class="menu-btn" (click)="zoom('[]')">
       <i class="menu-icon fa fa-object-group"></i>
     </div>
-    <div class="menu-btn" action="zoom-minus">
+    <div class="menu-btn" (click)="zoom('-')">
       <i class="menu-icon fa fa-search-minus"></i>
     </div>
-    <div class="menu-btn" action="zoom-plus">
+    <div class="menu-btn" (click)="zoom('+')">
       <i class="menu-icon fa fa-search-plus"></i>
     </div>
   </div>

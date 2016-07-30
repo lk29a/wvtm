@@ -5,8 +5,8 @@
  * 
  */
 import { Injectable } from "@angular/core";
-import {Task} from "../taskModel/task";
-import {TREE_LAYOUT_DEFAULTS} from "../common/constants";
+import {Task} from "../../taskModel/index";
+import {TREE_LAYOUT_DEFAULTS} from "../../shared/index";
 
 @Injectable()
 export class TreeLayout {

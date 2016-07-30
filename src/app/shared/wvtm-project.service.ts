@@ -1,10 +1,8 @@
 import {Injectable, Inject} from "@angular/core";
-import { Subject }    from "rxjs/Subject";
-import {TaskModel} from "../taskmodel/taskmodel";
-import {Task, TaskType, TaskRelation} from "../taskmodel/task";
+import { Subject }  from "rxjs/Subject";
+import {TaskModel, Task, TaskType, TaskRelation} from "../taskmodel";
 import {Simulator} from "../simulator/simulator";
-import {EDITOR_MODES} from "../common/constants";
-import {LoggerService} from "../common/logger.service";
+import {LoggerService, EDITOR_MODES} from "./";
 
 interface ModelUpdateInfo {
   action: string,
@@ -18,7 +16,7 @@ interface UserAction {
 }
 
 @Injectable()
-export class EditorService {
+export class WVTMProjectService {
   private taskModel: TaskModel;
   private selectedTaskId: string;
   private selectedTaskNode: Task;
@@ -71,12 +69,12 @@ export class EditorService {
 
   unSelectTask() {
     this.selectedTaskId = this.selectedTaskNode = null;
-    this.userActionSource.next({ type: "task", action: "unselect", data: null});
+    this.userActionSource.next({ type: "task", action: "unselect", data: null });
   }
 
   validateModel() {
     this.validataionInfo = this.taskModel.validateStructure();
-    this.userActionSource.next({ type: "validation", action: "start", data: this.validataionInfo});
+    this.userActionSource.next({ type: "validation", action: "start", data: this.validataionInfo });
     console.log(this.validataionInfo);
   }
 

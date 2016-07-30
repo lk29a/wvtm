@@ -1,4 +1,4 @@
-export class GenericQueue {
+export class Queue {
     private _offset: number;
     _queue: Object[];
 

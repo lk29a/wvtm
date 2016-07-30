@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {EditorService} from "../editor/shared/editor.service";
-import {LoggerService} from "../shared";
+import {LoggerService} from "../shared/index";
 
 enum InfoTypes {
   None = 0,
@@ -9,10 +9,13 @@ enum InfoTypes {
   Simulation = 3
 }
 
+declare var __moduleName: string;
+
 @Component({
   selector: "editor-infobar",
-  templateUrl: "components/editor-infobar/infobar.html",
-  styleUrls: ["components/editor-infobar/infobar.css"],
+  moduleId: __moduleName || module.id,
+  templateUrl: "infobar.html",
+  styleUrls: ["infobar.css"],
 })
 export class InfobarComponent {
   currentTask: any;

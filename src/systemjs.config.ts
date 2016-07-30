@@ -2,33 +2,64 @@ declare var System: any;
 (function(global) {
   // map tells the System loader where to look for things
   let map = {
-    "src":                        "", // 'dist',
-    "rxjs":                       "lib/rxjs",
+    "app": "", // 'dist',
+    "rxjs": "lib/rxjs",
     "angular2-in-memory-web-api": "lib/angular2-in-memory-web-api",
-    "@angular":                   "lib/@angular"
+    "@angular": "lib/@angular",
+    // "app/shared": "app/shared",
+    // "app/editor/shared": "app/editor/shared",
+    // "app/tree": "app/tree",
+    // "app/taskmodel": "app/taskmodel"
+
   };
   // packages tells the System loader how to load when no filename and/or no extension
   let packages = {
-    "src":                        { main: "wvtm.js",  defaultExtension: "js" },
-    "rxjs":                       { defaultExtension: "js" },
-    "angular2-in-memory-web-api": { defaultExtension: "js" },
+    "app": { main: "wvtm.js", defaultExtension: "js" },
+    "rxjs": { defaultExtension: "js" },
+    "angular2-in-memory-web-api": { main: "index.js", defaultExtension: "js" },
   };
-  let packageNames = [
-    "@angular/common",
-    "@angular/compiler",
-    "@angular/core",
-    // '@angular/http',
-    "@angular/platform-browser",
-    "@angular/platform-browser-dynamic",
-    // '@angular/router',
-    // '@angular/router-deprecated',
-    "@angular/testing",
-    "@angular/upgrade",
+
+  let barrelPackages = [
+    "app/shared",
+    "app/editor/shared",
+    "app/tree",
+    "app/taskmodel"
   ];
-  // add package entries for angular packages in the form '@angular/common': { main: 'index.js', defaultExtension: 'js' }
-  packageNames.forEach(function(pkgName) {
-    packages[pkgName] = { main: "index.js", defaultExtension: "js" };
-  });
+
+    // add barrel package entries for app packages in the form 'barrel/package': { main: 'index.js', defaultExtension: 'js' }
+  // barrelPackages.forEach(function(pkgName) {
+  //   packages[pkgName] = { main: "index.js", defaultExtension: "js" };
+  // });
+
+  let ngPackageNames = [
+    "common",
+    "compiler",
+    "core",
+    "forms",
+    "http",
+    "platform-browser",
+    "platform-browser-dynamic",
+    "router",
+    "router-deprecated",
+    "upgrade",
+  ];
+
+
+  // Individual files (~300 requests):
+  function packIndex(pkgName) {
+    packages["@angular/" + pkgName] = { main: "index.js", defaultExtension: "js" };
+  }
+  // Bundled (~40 requests):
+  function packUmd(pkgName) {
+    packages["@angular/" + pkgName] = { main: "/bundles/" + pkgName + ".umd.js", defaultExtension: "js" };
+  }
+  // Most environments should use UMD; some (Karma) need the individual index files
+  let setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+
+  // Add package entries for angular packages
+  ngPackageNames.forEach(setPackageConfig);
+
+
   let config = {
     map: map,
     packages: packages

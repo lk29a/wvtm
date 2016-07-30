@@ -1,4 +1,4 @@
-import {TreeNode} from "../generic-tree/tree-node";
+import {TreeNode} from "../tree/index";
 
 export var TaskType = {
   "ABSTRACT": "Abstract",

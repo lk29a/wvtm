@@ -1,12 +1,15 @@
 import {Component} from "@angular/core";
-import {TaskType, TaskRelation} from "../taskmodel/task";
-import {EditorService} from "../editor/shared/editor.service";
-import {LoggerService} from "../shared";
+import {TaskType, TaskRelation} from "../taskmodel/index";
+import {EditorService} from "../editor/shared/index";
+import {LoggerService} from "../shared/index";
+
+declare var __moduleName: string;
 
 @Component({
   selector: "wvtm-toolbar",
-  templateUrl: "./toolbar/toolbar.html",
-  styleUrls: ["./toolbar/toolbar.css"],
+  moduleId: __moduleName || module.id,
+  templateUrl: "toolbar.html",
+  styleUrls: ["toolbar.css"],
   host: {
     "(click)": "onClick($event)"
   }

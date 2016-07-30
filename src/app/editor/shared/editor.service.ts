@@ -1,10 +1,8 @@
 import {Injectable, Inject} from "@angular/core";
 import { Subject }    from "rxjs/Subject";
-import {TaskModel} from "../taskmodel/taskmodel";
-import {Task, TaskType, TaskRelation} from "../taskmodel/task";
-import {Simulator} from "../simulator/simulator";
-import {EDITOR_MODES} from "../common/constants";
-import {LoggerService} from "../common/logger.service";
+import {TaskModel, Task, TaskType, TaskRelation} from "../../taskmodel/index";
+import {Simulator} from "../../simulator/simulator";
+import {LoggerService, EDITOR_MODES} from "../../shared/index";
 
 interface ModelUpdateInfo {
   action: string,

@@ -1,9 +1,8 @@
 import {Component, ElementRef, AfterViewInit, Renderer} from "@angular/core";
-import {EditorService} from "../editor/editor.service";
+import {EditorService} from "../shared/index";
 import {Renderer as WVTMRenderer} from "../renderer/renderer.service";
 import {TreeLayout} from "../renderer/treelayout";
-import {LoggerService} from "../common/logger.service";
-import {EDITOR_MODES} from "../common/constants";
+import {LoggerService, EDITOR_MODES} from "../../shared/index";
 
 
 @Component({

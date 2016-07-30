@@ -1,14 +1,14 @@
 import {Component} from "@angular/core";
 import {EditorService} from "../editor/shared/editor.service";
-import {LoggerService} from "../shared";
+import {LoggerService} from "../shared/index";
+
+declare var __moduleName: string;
 
 @Component({
   selector: "wvtm-menu",
-  templateUrl: "menu/menu.html",
-  styleUrls: ["menu/menu.css"],
-  host: {
-    "(click)": "onClick($event)"
-  }
+  moduleId: __moduleName || module.id,
+  templateUrl: "./menu.html",
+  styleUrls: ["./menu.css"],
 })
 export class MenuComponent {
   constructor(private editorService: EditorService, private logger: LoggerService) {
@@ -32,38 +32,6 @@ export class MenuComponent {
 
   zoom(action: string) {
     this.logger.debug("zoom - " + action);
-  }
-
-  onClick(event) {
-    let elm = event.target;
-    if (elm.classList.contains("menu-btn") || elm.parentNode.classList.contains("menu-btn")) {
-      let action: string = elm.getAttribute("action") || elm.parentNode.getAttribute("action");
-
-      switch (action) {
-        case "new":
-          this.newProject();
-          break;
-        case "save":
-          this.saveProject();
-          break;
-        case "validate":
-          this.validate();
-          break;
-        case "simulate":
-          this.simulate();
-          break;
-        case "zoom-fit":
-          this.zoom("fit");
-          break;
-        case "zoom-minus":
-          this.zoom("minus");
-          break;
-        case "zoom-plus":
-          this.zoom("plus");
-          break;
-      }
-    }
-
   }
 
 };

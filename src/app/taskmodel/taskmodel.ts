@@ -1,5 +1,5 @@
-import {Task, TaskType, TaskRelation} from "./task";
-import {GenericTree} from "../generic-tree/generic-tree";
+import {Task, TaskType, TaskRelation} from "./index";
+import {GenericTree} from "../tree/index";
 
 interface TaskBase {
   parentTaskId: string,
@@ -15,7 +15,7 @@ export class TaskModel extends GenericTree {
   description: string;
   taskTree: any;
   simulation: any;
-  root: Task;
+  // root: Task;
 
   constructor() {
     let data = {

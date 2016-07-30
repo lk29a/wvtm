@@ -1,9 +1,7 @@
 import { Injectable, Inject } from "@angular/core";
-import { Task } from "../taskmodel/task";
-import { TaskModel } from "../taskmodel/taskmodel";
+import { Task, TaskModel } from "../../taskmodel/index";
 import {TreeLayout} from "./treelayout";
-import { LoggerService } from "../common/logger.service";
-import { RENDERER_DEFAULTS } from "../common/constants";
+import { LoggerService, RENDERER_DEFAULTS } from "../../shared/index";
 
 declare var Snap: any;
 

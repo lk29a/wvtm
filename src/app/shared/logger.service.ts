@@ -2,15 +2,17 @@ import { Injectable } from "@angular/core";
 
 declare var Error: any;
 
-const STACK_FRAME_RE = new RegExp("\\s*at ((\\S+)\\s)?\\((.*)\\)");
+// const STACK_FRAME_RE = new RegExp("\\s*at ((\\S+)\\s)?\\((.*)\\)");
+// using negative look ahead
+const STACK_FRAME_RE = new RegExp("\\s*at ((?:(?!\\().)*)?\\((.*)\\)");
+// const STACK_FRAME_RE = new RegExp("\\s*at ([^\()]*)?\\((.*)\\)");
 
 @Injectable()
 export class LoggerService {
 
   private getCaller() {
-    let err = new Error();
-
     // @lk Make sure this is cross-browser
+    let err = new Error();
     // Throw away the first three lines of trace and get fourth line
     // 0 - Error
     // 1 - this function
@@ -18,7 +20,7 @@ export class LoggerService {
     // 3 - code calling logger
     let frame = err.stack.split("\n")[3];
     let  callerInfo = STACK_FRAME_RE.exec(frame);
-    callerInfo[3] = callerInfo[3].split("/").slice(-1).pop();
+    callerInfo[2] = callerInfo[2].split("/").slice(-1).pop();
 
     // Find the first line in the stack that doesn't name this module.
     // for (var i = 0; i < frames.length; i++) {
@@ -30,8 +32,8 @@ export class LoggerService {
 
     if (callerInfo) {
       return {
-        func: callerInfo[2] || "aNoN",
-        fileInfo: callerInfo[3] || null,
+        func: callerInfo[1] || "aNoN",
+        fileInfo: callerInfo[2] || null,
       };
     }
     return null;
