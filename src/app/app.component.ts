@@ -9,16 +9,16 @@ import { LoggerService } from "./shared/index";
 declare var __moduleName: string;
 
 @Component({
-  selector: "wvtm",
+  selector: "app-root",
   moduleId: __moduleName || module.id,
-  templateUrl: "app.html",
-  styleUrls: ["app.css"],
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.css"],
   // providers: [],
   directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 
-export class WVTMComponent {
+export class AppComponent {
   constructor(private logger: LoggerService) {
     this.logger.info("...WVTM STARTED...");
   }
-};
+}

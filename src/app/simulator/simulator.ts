@@ -1,5 +1,6 @@
-import {Injectable, Inject} from "@angular/core";
-import { TaskModel, Task, TaskType, TaskRelation } from "../taskmodel/index";
+import {Injectable} from "@angular/core";
+import { TaskModel, Task} from "../taskmodel/index";
+import { TaskRelation } from "../shared";
 
 @Injectable()
 export class Simulator {

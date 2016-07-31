@@ -1,4 +1,4 @@
-import {Injectable, Inject} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {Subject}    from "rxjs/Rx";
 import {TaskModel, Task} from "../../taskmodel/index";
 import {Simulator} from "../../simulator/index";
@@ -60,8 +60,7 @@ export class EditorService {
   }
 
   getSelectedTask() {
-    if (!this.selectedTaskId)
-      return null;
+    if (!this.selectedTaskId) return null;
 
     return this.getTaskNode(this.selectedTaskId);
   }
@@ -163,5 +162,4 @@ export class EditorService {
   getTaskRelations() {
     return TaskRelation;
   }
-
 }

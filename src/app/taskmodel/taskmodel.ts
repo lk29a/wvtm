@@ -1,4 +1,6 @@
-import {Task, TaskType, TaskRelation} from "./index";
+import {Task} from "./";
+import {TaskType, TaskRelation} from "../shared";
+
 import {GenericTree} from "../tree/index";
 
 interface TaskBase {
@@ -8,6 +10,7 @@ interface TaskBase {
   relation?: string
 }
 
+/* tslint:disable:requireParameterType */
 export class TaskModel extends GenericTree {
 
   private taskCounter: number;
@@ -15,7 +18,7 @@ export class TaskModel extends GenericTree {
   description: string;
   taskTree: any;
   simulation: any;
-  // root: Task;
+  root: Task;
 
   constructor() {
     let data = {

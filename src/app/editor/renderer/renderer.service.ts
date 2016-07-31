@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Task, TaskModel } from "../../taskmodel/index";
 import {TreeLayout} from "./treelayout";
 import { LoggerService, RENDERER_DEFAULTS } from "../../shared/index";
@@ -104,7 +104,9 @@ export class Renderer {
     // for each enabled task in the set create a circular mask that wil highlight the node
     ets.forEach(
       task => {
-        this.simulationMask.add(this.svgCanvas.rect(task.coord.x - 22, task.coord.y - 22, 44, 44).data({ "fortask": task.id }).attr({ fill: "#fff", stroke: "#000", class: "maskrect" }));
+        this.simulationMask.add(this.svgCanvas.rect(task.coord.x - 22, task.coord.y - 22, 44, 44)
+                            .data({ "fortask": task.id })
+                            .attr({ fill: "#fff", stroke: "#000", class: "maskrect" }));
         this.modelGroup.select("#" + task.id).addClass("enabled");
       }
     );

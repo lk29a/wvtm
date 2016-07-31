@@ -16,6 +16,7 @@ interface TaskData {
   special?: any
 }
 
+/* tslint:disable:requireParameterType */
 export class Task extends TreeNode {
   private _data: TaskData;
   // relation: string;
