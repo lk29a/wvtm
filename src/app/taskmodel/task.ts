@@ -1,28 +1,5 @@
 import {TreeNode} from "../tree/index";
 
-export var TaskType = {
-  "ABSTRACT": "Abstract",
-  "USER": "User",
-  "INTERACTION": "Interaction",
-  "SYSTEM": "System",
-};
-
-export var TaskRelation = {
-  "UNRESTRICTED": "|||", // Independent Concurrency
-  "CHOICE": "[]", // Choice
-  "CONCURRENTINFO": "|[]|", // Concurrency with information exchange
-  "RANDOM": "|=|", // Order Independence
-  "DEACT": "[>", // Deactivation
-  "ENABLE": ">>", // Enabling
-  "CHOICEINFO": "[]>>", // Enabling with information passing
-  "RESUME": "|>", // Suspend resume
-};
-
-export var TaskProperty = {
-  "ITERATION": "T*", // Iteration
-  "OPTIONAL": "[T]", // Optional
-};
-
 /**
 *	type: type of node(Tasktype)
 *	id: unique identifier for a node

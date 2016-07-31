@@ -1,7 +1,10 @@
 import {Component} from "@angular/core";
-import {TaskType, TaskRelation} from "../taskmodel/index";
-import {EditorService} from "../editor/shared/index";
-import {LoggerService} from "../shared/index";
+import {
+  LoggerService,
+  WVTMService,
+  TaskType,
+  TaskRelation
+} from "../shared/index";
 
 declare var __moduleName: string;
 
@@ -19,22 +22,31 @@ export class ToolbarComponent {
   relations = Object.keys(TaskRelation);
   taskRelations = null;
 
-  constructor(private editorService: EditorService, private logger: LoggerService) {
+  constructor(private wvtm: WVTMService, private logger: LoggerService) {
     this.taskRelations = TaskRelation;
   }
 
-  onClick(event) {
-    let elm = event.target;
-    if (elm.classList.contains("toolbar-btn") || elm.parentNode.classList.contains("toolbar-btn")) {
-      let action: string = elm.getAttribute("action") || elm.parentNode.getAttribute("action");
-      let type: string = elm.getAttribute(action) || elm.parentNode.getAttribute(action);
-      if (action.toLowerCase() === "task") {
-        this.editorService.addTask(type);
-      }
-      if (action.toLowerCase() === "relation") {
-        this.editorService.updateTask("relation", type);
-      }
-    }
 
+  addTask(type: string) {
+    this.wvtm.toolAction(type);
   }
+
+  addRelation(type: string) {
+    this.wvtm.toolAction(type);
+  }
+
+  // onClick(event) {
+  //   let elm = event.target;
+  //   if (elm.classList.contains("toolbar-btn") || elm.parentNode.classList.contains("toolbar-btn")) {
+  //     let action: string = elm.getAttribute("action") || elm.parentNode.getAttribute("action");
+  //     let type: string = elm.getAttribute(action) || elm.parentNode.getAttribute(action);
+  //     if (action.toLowerCase() === "task") {
+  //       this.editorService.addTask(type);
+  //     }
+  //     if (action.toLowerCase() === "relation") {
+  //       this.editorService.updateTask("relation", type);
+  //     }
+  //   }
+  // }
+
 };

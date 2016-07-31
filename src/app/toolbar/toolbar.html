@@ -1,7 +1,7 @@
 <div id="toolbar">
   <div class="toolbar-items">
     <div class="task-types menu-group">
-      <div class="toolbar-btn" *ngFor="let type of taskTypes" action="task" [attr.task]="type">
+      <div class="toolbar-btn" *ngFor="let type of taskTypes" (click)="addTask(type)">
         <div class="toolbar-icon" [ngClass]="type.toLowerCase()"></div>
       </div>
       <div class="toolbar-btn" action="library">

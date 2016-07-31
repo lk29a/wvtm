@@ -53,7 +53,7 @@ export class LoggerService {
     a.push(...args);
     console.log.apply(console, a);
   }
-  info(args: any): void {
+  info(...args: any[]): void {
     let caller = this.getCaller();
     let a: any = ["%c%s LOG: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);

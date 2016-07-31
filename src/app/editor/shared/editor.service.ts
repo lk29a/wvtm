@@ -1,8 +1,8 @@
 import {Injectable, Inject} from "@angular/core";
-import { Subject }    from "rxjs/Subject";
-import {TaskModel, Task, TaskType, TaskRelation} from "../../taskmodel/index";
-import {Simulator} from "../../simulator/simulator";
-import {LoggerService, EDITOR_MODES} from "../../shared/index";
+import {Subject}    from "rxjs/Rx";
+import {TaskModel, Task} from "../../taskmodel/index";
+import {Simulator} from "../../simulator/index";
+import {LoggerService, EDITOR_MODES, TaskType, TaskRelation} from "../../shared/index";
 
 interface ModelUpdateInfo {
   action: string,
@@ -30,8 +30,7 @@ export class EditorService {
   taskSelected$ = this.taskSelectedSource.asObservable();
   userAction$ = this.userActionSource.asObservable();
 
-  constructor( @Inject(LoggerService) private logger: LoggerService,
-    @Inject(Simulator) private simulator: Simulator) {
+  constructor(private logger: LoggerService, private simulator: Simulator) {
     // this.createNew();
   }
 

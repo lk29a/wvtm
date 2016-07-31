@@ -1,6 +1,10 @@
 import {Component} from "@angular/core";
-import {EditorService} from "../editor/shared/editor.service";
-import {LoggerService} from "../shared/index";
+import {
+  WVTMService,
+  LoggerService,
+  TaskType,
+  TaskRelation
+} from "../shared/index";
 
 enum InfoTypes {
   None = 0,
@@ -12,7 +16,7 @@ enum InfoTypes {
 declare var __moduleName: string;
 
 @Component({
-  selector: "editor-infobar",
+  selector: "wvtm-infobar",
   moduleId: __moduleName || module.id,
   templateUrl: "infobar.html",
   styleUrls: ["infobar.css"],
@@ -28,10 +32,10 @@ export class InfobarComponent {
   vInfo: any = {};
   simData: any = {};
 
-  constructor(private editorService: EditorService) {
-    this.taskTypes = editorService.getTaskTypes();
+  constructor(private wvtm: WVTMService) {
+    this.taskTypes = TaskType;
     this.types = Object.keys(this.taskTypes);
-    this.taskRelations = editorService.getTaskRelations();
+    this.taskRelations = TaskRelation;
     this.relations = Object.keys(this.taskRelations);
     this.infobar = {
       type: InfoTypes,
@@ -40,61 +44,61 @@ export class InfobarComponent {
       errMsg: ""
     };
     this.infoType = InfoTypes;
-    this.editorService.userAction$.subscribe(
-      userAction => {
-        let reset = false;
-        switch (userAction.type) {
-          case "task":
-            if (userAction.action === "select")
-              this.showTaskInfo(userAction.data.taskId);
-            else
-              reset = true;
-            break;
+    // this.wvtm.userAction$.subscribe(
+    //   userAction => {
+    //     let reset = false;
+    //     switch (userAction.type) {
+    //       case "task":
+    //         if (userAction.action === "select")
+    //           this.showTaskInfo(userAction.data.taskId);
+    //         else
+    //           reset = true;
+    //         break;
 
-          case "simulation":
-            if (userAction.action === "start")
-              this.showSimulationInfo(userAction.data);
-            else if (userAction.action === "error") {
-              this.infobar.error = true;
-              this.infobar.errMsg = userAction.data;
-            } else if (userAction.action === "stop")
-              reset = true;
-            break;
+    //       case "simulation":
+    //         if (userAction.action === "start")
+    //           this.showSimulationInfo(userAction.data);
+    //         else if (userAction.action === "error") {
+    //           this.infobar.error = true;
+    //           this.infobar.errMsg = userAction.data;
+    //         } else if (userAction.action === "stop")
+    //           reset = true;
+    //         break;
 
-          case "validation":
-            if (userAction.action === "start")
-              this.showValidationInfo(userAction.data);
-            else if (userAction.action === "stop")
-              reset = true;
-            break;
+    //       case "validation":
+    //         if (userAction.action === "start")
+    //           this.showValidationInfo(userAction.data);
+    //         else if (userAction.action === "stop")
+    //           reset = true;
+    //         break;
 
-          default:
-            reset = true;
-            break;
-        }
+    //       default:
+    //         reset = true;
+    //         break;
+    //     }
 
-        if (reset) {
-          this.resetInfoBar();
-        }
-      }
-    );
+    //     if (reset) {
+    //       this.resetInfoBar();
+    //     }
+    //   }
+    // );
   }
 
   showTaskInfo(taskId) {
     this.infobar.type = InfoTypes.Task;
-    // this.currentTask.data = this.editorService.getTaskData(taskId);
-    let task = this.editorService.getSelectedTask();
+    // this.currentTask.data = this.wvtm.getTaskData(taskId);
+    // let task = this.wvtm.getSelectedTask();
 
-    this.currentTask = {
-      id: task.id,
-      type: task.type,
-      relation: task.relation,
-      name: task.name,
-      description: task.description,
-      isRoot: task.parent ? false : true,
-      isLast: task.getRightSibling() ? false : true,
-    };
-    this.infobar.title = "Task: " + this.currentTask.name;
+    // this.currentTask = {
+    //   id: task.id,
+    //   type: task.type,
+    //   relation: task.relation,
+    //   name: task.name,
+    //   description: task.description,
+    //   isRoot: task.parent ? false : true,
+    //   isLast: task.getRightSibling() ? false : true,
+    // };
+    // this.infobar.title = "Task: " + this.currentTask.name;
   }
 
   resetInfoBar() {
@@ -134,15 +138,15 @@ export class InfobarComponent {
   }
 
   deleteTask() {
-    this.editorService.removeTask(this.currentTask.id);
+    // this.wvtm.removeTask(this.currentTask.id);
   }
 
   updateTask(type, value) {
-    if (type && value) {
-      if (this.editorService.updateTask(type, value, this.currentTask.id)) {
-        this.currentTask[type] = value;
-      }
-    }
+    // if (type && value) {
+    //   if (this.wvtm.updateTask(type, value, this.currentTask.id)) {
+    //     this.currentTask[type] = value;
+    //   }
+    // }
   }
 
   getRelationSym(relation) {

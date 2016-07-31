@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 
-import {MenuComponent} from "./menu/menu.component";
-import {ToolbarComponent} from "./toolbar/toolbar.component";
-import {EditorComponent} from "./editor/editor.component";
-import {InfobarComponent} from "./infobar/infobar.component";
+import {MenuComponent} from "./menu/index";
+import {ToolbarComponent} from "./toolbar/index";
+import {EditorComponent} from "./editor/index";
+import {InfobarComponent} from "./infobar/index";
 import { LoggerService } from "./shared/index";
 
 declare var __moduleName: string;
@@ -14,11 +14,11 @@ declare var __moduleName: string;
   templateUrl: "app.html",
   styleUrls: ["app.css"],
   // providers: [],
-  directives: [MenuComponent, ToolbarComponent, EditorComponent, InfobarComponent],
+  directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 
 export class WVTMComponent {
   constructor(private logger: LoggerService) {
-    this.logger.log("... WVTM STARTED ...");
+    this.logger.info("...WVTM STARTED...");
   }
 };

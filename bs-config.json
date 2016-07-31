@@ -6,5 +6,5 @@
   "server": {
     "baseDir": "build"
   },
-  "reloadDelay": 500
+  "reloadDebounce": 2000
 }

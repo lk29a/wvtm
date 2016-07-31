@@ -1,5 +1,5 @@
-<div id="canvas-container">
-  <svg preserveAspectRatio="xMidYMid meet" id="wvtm-canvas">
+<div id="editor-canvas">
+  <svg id="wvtm-canvas" [attr.height]="canvasDim.height" [attr.width]="canvasDim.width">
     <desc>Created with WVTM editor - lk</desc>
     <defs>
       <g id="def-abstract">
@@ -25,10 +25,12 @@
       </g>
     </defs>
     <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;">
+
       <g id="TASK_0" class="task">
-        <text x="498.09375" y="65" dy="3" class="task-name">Default</text>
+        <text x="498.09375" y="300" dy="3" class="task-name">Default</text>
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" x="478.09375" y="10" class="task-node"></use>
       </g>
+      <task-view></task-view>
     </g>
   </svg>
 </div>

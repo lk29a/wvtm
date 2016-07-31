@@ -1,37 +1,42 @@
 import {Component} from "@angular/core";
-import {EditorService} from "../editor/shared/editor.service";
-import {LoggerService} from "../shared/index";
+import {LoggerService, WVTMService} from "../shared/index";
 
 declare var __moduleName: string;
 
 @Component({
   selector: "wvtm-menu",
   moduleId: __moduleName || module.id,
-  templateUrl: "./menu.html",
-  styleUrls: ["./menu.css"],
+  templateUrl: "menu.html",
+  styleUrls: ["menu.css"],
 })
 export class MenuComponent {
-  constructor(private editorService: EditorService, private logger: LoggerService) {
+  constructor(private wvtmService: WVTMService, private logger: LoggerService) {
+    this.logger.info("Menu initialised");
   }
 
   newProject() {
-    this.editorService.createNew();
+    this.logger.debug("Menu click - New Project" );
+    this.wvtmService.menuAction("new");
   }
 
   saveProject() {
-
+    this.logger.debug("Menu click - Save Project" );
+    this.wvtmService.menuAction("save");
   }
 
   validate() {
-    this.editorService.validateModel();
+    this.logger.debug("Menu click - Validate" );
+    this.wvtmService.menuAction("validate");
   }
 
   simulate() {
-    this.editorService.startSimulation();
+    this.logger.debug("Menu click - Simulate" );
+    this.wvtmService.menuAction("simulate");
   }
 
   zoom(action: string) {
-    this.logger.debug("zoom - " + action);
+    this.logger.debug("Menu click - Zoom " + action );
+    this.wvtmService.menuAction("zoom" + action);
   }
 
 };
