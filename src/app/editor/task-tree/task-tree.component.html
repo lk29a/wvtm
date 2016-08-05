@@ -1,0 +1,3 @@
+<svg:use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" [attr.x]="task.coord.x" [attr.y]="task.coord.y" class="task-node"></svg:use>
+<svg:text [attr.x]="task.coord.x" [attr.y]="task.coord.y" dy="3" class="task-name">{{task.name}}</svg:text>
+<svg:g task-tree *ngFor="let ctask of task.children" [task]="ctask"></svg:g>

@@ -1,11 +1,9 @@
 import {Component} from "@angular/core";
 import {LoggerService, WVTMService} from "../shared/index";
 
-declare var __moduleName: string;
-
 @Component({
   selector: "wvtm-menu",
-  moduleId: __moduleName || module.id,
+  moduleId: module.id,
   templateUrl: "menu.html",
   styleUrls: ["menu.css"],
 })

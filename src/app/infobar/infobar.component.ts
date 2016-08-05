@@ -13,11 +13,9 @@ enum InfoTypes {
   Simulation = 3
 }
 
-declare var __moduleName: string;
-
 @Component({
   selector: "wvtm-infobar",
-  moduleId: __moduleName || module.id,
+  moduleId: module.id,
   templateUrl: "infobar.html",
   styleUrls: ["infobar.css"],
 })

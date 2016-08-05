@@ -1,12 +1,10 @@
-import {Component, ElementRef, AfterViewInit, Renderer} from "@angular/core";
+import {Component, ElementRef, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
-// import {EditorService} from "./shared/index";
-import {TaskModel} from "../taskmodel/index";
-// import {Renderer, TreeLayout} from "./renderer/index";
-// import {Simulator} from "../simulator/index";
-import { WVTMService, LoggerService } from "../shared/index";
-
-declare var __moduleName: string;
+import {Task, TaskModel} from "../taskmodel";
+import {EditorService, TaskStore} from "./shared";
+import {Simulator} from "../simulator";
+import {TaskTreeComponent} from "./task-tree";
+import { WVTMService, LoggerService } from "../shared";
 
 interface Dim {
   height: number,
@@ -15,32 +13,35 @@ interface Dim {
 
 @Component({
   selector: "wvtm-editor",
-  moduleId: __moduleName || module.id,
+  moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
-  // providers: [EditorService, Renderer, TreeLayout, Simulator],
-  // directives: [],
+  providers: [EditorService, Simulator],
+  directives: [TaskTreeComponent],
 })
-export class EditorComponent {
+export class EditorComponent implements AfterViewInit {
   taskModel: TaskModel = null;
   svgElm: HTMLElement;
+  rootTask: Task = null;
   canvasDim: Dim = {
     height: null,
     width: null
   };
 
   constructor(private el: ElementRef,
+    private editor: EditorService,
+    private wvtm: WVTMService,
+    private taskStore: TaskStore,
     private logger: LoggerService) {
-    this.logger.log("... WVTM STARTED ...");
     Observable.fromEvent(window, "resize")
       .debounceTime(500)
       .subscribe((event) => {
         this.resizeCanvas(event);
       }
     );
-    // this.editorService.createNew();
-    // this.taskModel = editorService.getTaskModel();
-    // this.createTestModel();
+    this.editor.createNew();
+    this.taskModel = editor.getTaskModel();
+    this.createTestModel();
   }
 
   resizeCanvas(event) {
@@ -59,16 +60,12 @@ export class EditorComponent {
     this.svgElm.setAttribute("height", dim.height);
     this.svgElm.setAttribute("width", dim.width);
 
+    this.render();
+  }
 
-    // this.setCanvasDimensions(dim.width, dim.height);
-    // bind hover event to svg node
-    // this.renderer.listen(this.svgElm, "mouseenter", (evt) => {
-    //   console.log("mouseover" , evt);
-    // });
-
-    // this.renderer.listen(this.svgElm, "mouseleave", (evt) => {
-    //   console.log("mouseleave", evt);
-    // });
+  render() {
+    let width = this.el.nativeElement.firstChild.clientWidth;
+    this.treeLayout.calculate(this.taskModel.root, width / 2);
   }
 
 
@@ -78,21 +75,21 @@ export class EditorComponent {
     this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "INTERACTION", name: "Close access" });
     // this.taskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
 
-    this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert card", relation: ">>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "System", name: "Require password", relation: ">>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert Password" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert card", relation: ">>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "System", name: "Require password", relation: ">>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert Password" });
 
 
-    this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Withdraw cash", relation: "[]" });
-    this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Deposit cash", relation: "[]" });
-    this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Get information" });
-    this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "System", name: "Test" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Withdraw cash", relation: "[]" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Deposit cash", relation: "[]" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Get information" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "System", name: "Test" });
 
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select withdraw", relation: ">>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Show possible amounts", relation: "[]>>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "User", name: "Decide amount", relation: "[]>>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select account", relation: "[]>>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Provide cash", relation: "[]>>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Check cash" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select withdraw", relation: ">>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Show possible amounts", relation: "[]>>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "User", name: "Decide amount", relation: "[]>>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select account", relation: "[]>>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Provide cash", relation: "[]>>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Check cash" });
   }
 };

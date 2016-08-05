@@ -8,8 +8,8 @@ export const RENDERER_DEFAULTS = {
 };
 
 export const TREE_LAYOUT_DEFAULTS = {
-  nodeDistance: 90,
-  levelDistance: 100,
+  nodeDistance: 120,
+  levelDistance: 120,
   nodeRadius: 20
 };
 

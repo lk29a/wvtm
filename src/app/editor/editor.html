@@ -26,11 +26,11 @@
     </defs>
     <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;">
 
-      <g id="TASK_0" class="task">
-        <text x="498.09375" y="300" dy="3" class="task-name">Default</text>
+<!--       <g id="TASK_0" class="task">
+        <text x="498.09375" y="10" dy="3" class="task-name">Default</text>
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" x="478.09375" y="10" class="task-node"></use>
-      </g>
-      <task-view></task-view>
+      </g> -->
+      <svg:g task-tree [task]="taskModel.root"></svg:g>
     </g>
   </svg>
 </div>

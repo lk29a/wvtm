@@ -34,49 +34,43 @@ export class TaskModel extends GenericTree {
     this.taskCounter = 1;
   }
 
-  addTask(options: TaskBase) {
+  addTask(options: TaskBase): Task {
     if (!options.parentTaskId) {
       throw new Error("`parentId` must be provided");
     }
-
     if (!options.taskType) {
       throw new Error("`type` of task must be provided");
     }
 
     let parentNode = this.searchTask(options.parentTaskId);
-    let newTaskId = "TASK_" + (this.taskCounter++); // @lk comeup with some naming convention
-
     let data = {
       type: TaskType[options.taskType.toUpperCase()] || TaskType.ABSTRACT,
       name: (options.name) || (options.taskType + "_" + this.taskCounter),
-      id: newTaskId,
+      id: "TASK_" + (this.taskCounter++), // @lk comeup with some naming convention
       relation: options.relation || "",
       description: "",
     };
+    let newTask = new Task(data);
     this.addNode(parentNode, new Task(data));
 
-    return newTaskId;
+    return newTask;
   }
 
   removeTask(taskId: string) {
-    let selectedTask: Task = this.searchTask(taskId);
+    let selectedTask = this.searchTask(taskId);
     let leftSibling = selectedTask.getLeftSibling();
     // if left sibling exists then remove its relation
     if (leftSibling)
       leftSibling.relation = "";
 
-    let parent: Task  = selectedTask.parent;
-    console.log(parent);
+    let parent  = selectedTask.parent;
     let idx = parent.children.indexOf(selectedTask);
     parent.removeChild(idx);
     // @lk proper error checking
-
-    console.log(this.root);
-    return true;
+    return selectedTask;
   }
 
   updateTask(taskId, type, value) {
-    console.log(type, value);
     if (!taskId) {
       throw new Error("`taskId` must be provided");
     }
@@ -104,7 +98,7 @@ export class TaskModel extends GenericTree {
     }
 
     // update successfull
-    return true;
+    return task;
   }
 
   searchTask(taskId: String): Task {

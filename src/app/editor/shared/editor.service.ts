@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {Subject}    from "rxjs/Rx";
-import {TaskModel, Task} from "../../taskmodel/index";
-import {Simulator} from "../../simulator/index";
-import {LoggerService, EDITOR_MODES, TaskType, TaskRelation} from "../../shared/index";
+import {TaskModel, Task} from "../../taskmodel";
+import {Simulator} from "../../simulator";
+import {LoggerService, EDITOR_MODES, TaskType, TaskRelation} from "../../shared";
 
 interface ModelUpdateInfo {
   action: string,

@@ -1,4 +1,5 @@
-import {TreeNode} from "../tree/index";
+import {TreeNode} from "../tree";
+import {TaskType} from "../shared";
 
 /**
 *	type: type of node(Tasktype)
@@ -111,6 +112,4 @@ export class Task extends TreeNode {
   getRightSibling() {
     return (!this.parent || (this.idx === this.parent.children.length - 1)) ? null : this.parent.children[this.idx + 1];
   }
-
-
 }

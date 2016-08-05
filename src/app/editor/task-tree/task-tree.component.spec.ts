@@ -3,11 +3,11 @@
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { addProviders, async, inject } from '@angular/core/testing';
-import { TreeViewComponent } from './tree-view.component';
+import { TaskTreeComponent } from './task-tree.component';
 
-describe('Component: TreeView', () => {
+describe('Component: TaskTree', () => {
   it('should create an instance', () => {
-    let component = new TreeViewComponent();
+    let component = new TaskTreeComponent();
     expect(component).toBeTruthy();
   });
 });

@@ -6,16 +6,11 @@ import {
   TaskRelation
 } from "../shared/index";
 
-declare var __moduleName: string;
-
 @Component({
   selector: "wvtm-toolbar",
-  moduleId: __moduleName || module.id,
+  moduleId: module.id,
   templateUrl: "toolbar.html",
-  styleUrls: ["toolbar.css"],
-  host: {
-    "(click)": "onClick($event)"
-  }
+  styleUrls: ["toolbar.css"]
 })
 export class ToolbarComponent {
   taskTypes = Object.keys(TaskType);

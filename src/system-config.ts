@@ -36,12 +36,16 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
+  'app/tree',
+  'app/taskmodel',
+  'app/simulator',
   'app/menu',
   'app/toolbar',
   'app/infobar',
   'app/editor',
   'app/editor/shared',
-  'app/editor/tree-view',
+  'app/editor/renderer',
+  'app/editor/task-tree',
   /** @cli-barrel */
 ];
 

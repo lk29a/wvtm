@@ -5,8 +5,7 @@
  * 
  */
 import { Injectable } from "@angular/core";
-import {Task} from "../../taskModel/index";
-import {TREE_LAYOUT_DEFAULTS} from "../../shared/index";
+import {TREE_LAYOUT_DEFAULTS} from "../../shared";
 
 @Injectable()
 export class TreeLayout {
@@ -25,7 +24,6 @@ export class TreeLayout {
   calculate(root, centerX) {
     this.firstWalk(root);
     this.secondWalk(root, -root.layout.x, 0.3);
-    console.log(this.bounds);
     this.centreLayout(root, centerX);
   }
 
@@ -96,9 +94,7 @@ export class TreeLayout {
     }
 
     (function traverse(node) {
-      console.log(node.name, node.coord.x, node.coord.y);
       node.coord.x += shift;
-      console.log(node.name, node.coord.x, node.coord.y);
       for (let i = 0; i < node.children.length; i++) {
         traverse(node.children[i]);
       }

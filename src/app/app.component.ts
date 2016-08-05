@@ -6,11 +6,9 @@ import {EditorComponent} from "./editor/index";
 import {InfobarComponent} from "./infobar/index";
 import { LoggerService } from "./shared/index";
 
-declare var __moduleName: string;
-
 @Component({
   selector: "app-root",
-  moduleId: __moduleName || module.id,
+  moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
   // providers: [],
