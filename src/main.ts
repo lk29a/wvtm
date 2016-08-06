@@ -1,10 +1,10 @@
 import { bootstrap } from "@angular/platform-browser-dynamic";
 import { enableProdMode } from "@angular/core";
 import { AppComponent, environment } from "./app/";
-import {LoggerService, WVTMService} from "./app/shared/";
+import {LoggerService} from "./app/shared/";
 
 if (environment.production) {
   enableProdMode();
 }
 
-bootstrap(AppComponent, [LoggerService, WVTMService]);
+bootstrap(AppComponent, [LoggerService]);

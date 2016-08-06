@@ -5,7 +5,7 @@
  * 
  */
 import { Injectable } from "@angular/core";
-import {TREE_LAYOUT_DEFAULTS} from "../../shared";
+import {RENDERER_DEFAULTS} from "../../shared";
 
 @Injectable()
 export class TreeLayout {
@@ -58,7 +58,7 @@ export class TreeLayout {
   private secondWalk(node, m, level) {
     // node.layout.x += m;
     node.coord.x = node.layout.x + m;
-    node.coord.y = TREE_LAYOUT_DEFAULTS.levelDistance * level;
+    node.coord.y = RENDERER_DEFAULTS.levelDistance * level;
     if (node.coord.x < this.bounds.x1)
       this.bounds.x1 = node.coord.x;
 
@@ -212,7 +212,7 @@ export class TreeLayout {
 
   private getDistance() {
     // @lk return proper distance using node1 and node2      
-    return TREE_LAYOUT_DEFAULTS.nodeDistance + (TREE_LAYOUT_DEFAULTS.nodeRadius * 2);
+    return RENDERER_DEFAULTS.nodeDistance + (RENDERER_DEFAULTS.nodeRadius * 2);
   }
 
   private getMod(node) {

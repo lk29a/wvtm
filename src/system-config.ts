@@ -9,10 +9,14 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
+  'immutable': 'vendor/immutable/dist/immutable.js'
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'immutable': {
+    'format': 'cjs'
+  }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +43,7 @@ const barrels: string[] = [
   'app/tree',
   'app/taskmodel',
   'app/simulator',
+  'app/store',
   'app/menu',
   'app/toolbar',
   'app/infobar',

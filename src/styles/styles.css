@@ -43,9 +43,10 @@ svg .task-name {
   font-weight: bold;
 }
 
-svg .task-node .node-area {
-  fill: red;
+svg .task-node:hover {
+  filter:  url(#hovered);
 }
+
 
 svg .task-node.selected {
   fill: #5C6BC0;

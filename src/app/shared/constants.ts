@@ -1,16 +1,12 @@
 export const RENDERER_DEFAULTS = {
-  radius: 20,
+  nodeDistance: 120,
+  levelDistance: 120,
+  nodeRadius: 20,
   baseAttrs: {
     fill: "transparent",
     stroke: "#212121",
     strokeWidth: 1,
   }
-};
-
-export const TREE_LAYOUT_DEFAULTS = {
-  nodeDistance: 120,
-  levelDistance: 120,
-  nodeRadius: 20
 };
 
 export enum EDITOR_MODES {

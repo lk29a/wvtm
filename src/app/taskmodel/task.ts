@@ -23,6 +23,9 @@ export class Task extends TreeNode {
   // relation: string;
   children: Task[];
   parent: Task;
+  state = {
+    selected: false
+  };
   coord: {
     x: number,
     y: number,
@@ -96,6 +99,7 @@ export class Task extends TreeNode {
     this.relation = data.relation;
     this.name = data.name;
     this.description = data.description;
+    this.state.selected = false;
   }
 
   getLeftSibling() {

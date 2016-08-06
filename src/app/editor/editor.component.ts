@@ -1,7 +1,8 @@
 import {Component, ElementRef, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import {Task, TaskModel} from "../taskmodel";
-import {EditorService, TaskStore} from "./shared";
+import {EditorService, SVGHelper, TreeLayout} from "./shared";
+import {TaskStore} from "../store";
 import {Simulator} from "../simulator";
 import {TaskTreeComponent} from "./task-tree";
 import { WVTMService, LoggerService } from "../shared";
@@ -16,13 +17,13 @@ interface Dim {
   moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
-  providers: [EditorService, Simulator],
+  providers: [EditorService, TreeLayout, SVGHelper, Simulator],
   directives: [TaskTreeComponent],
 })
 export class EditorComponent implements AfterViewInit {
   taskModel: TaskModel = null;
   svgElm: HTMLElement;
-  rootTask: Task = null;
+  taskTree: Task = null;
   canvasDim: Dim = {
     height: null,
     width: null
@@ -32,20 +33,19 @@ export class EditorComponent implements AfterViewInit {
     private editor: EditorService,
     private wvtm: WVTMService,
     private taskStore: TaskStore,
+    private treeLayout: TreeLayout,
     private logger: LoggerService) {
     Observable.fromEvent(window, "resize")
-      .debounceTime(500)
+      .debounceTime(300)
       .subscribe((event) => {
         this.resizeCanvas(event);
       }
     );
-    this.editor.createNew();
-    this.taskModel = editor.getTaskModel();
-    this.createTestModel();
+    // this.editor.createNew();
+    // this.taskModel = editor.getTaskModel();
   }
 
   resizeCanvas(event) {
-    console.log(event);
     this.canvasDim.height = this.el.nativeElement.firstChild.clientHeight;
     this.canvasDim.width = this.el.nativeElement.firstChild.clientWidth;
   }
@@ -59,20 +59,36 @@ export class EditorComponent implements AfterViewInit {
     this.svgElm = this.el.nativeElement.querySelector("svg");
     this.svgElm.setAttribute("height", dim.height);
     this.svgElm.setAttribute("width", dim.width);
+    this.createTestModel();
 
-    this.render();
+    // this.render();
   }
 
   render() {
-    let width = this.el.nativeElement.firstChild.clientWidth;
+    let width = this.canvasDim.width || this.el.nativeElement.firstChild.clientWidth;
+    this.taskStore.taskTree.subscribe(root => {
+      this.treeLayout.calculate(root, width / 2)
+      this.taskTree = root;
+    });
+    this.createTestModel();
     // this.treeLayout.calculate(this.taskModel.root, width / 2);
   }
 
 
   createTestModel() {
-    this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Enable access", relation: ">>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Access", relation: "[>" });
-    this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "INTERACTION", name: "Close access" });
+
+    setTimeout(() => {
+      this.taskStore.addTask("Abstract", "TASK_0");
+    }, 2000)
+    setTimeout(() => {
+      this.taskStore.addTask("Abstract", "TASK_0");
+    }, 3000)
+    setTimeout(() => {
+      this.taskStore.addTask("Abstract", "TASK_0");
+    }, 4000)
+    // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Enable access", relation: ">>" });
+    // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Access", relation: "[>" });
+    // this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "INTERACTION", name: "Close access" });
     // this.taskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
 
     // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert card", relation: ">>" });
