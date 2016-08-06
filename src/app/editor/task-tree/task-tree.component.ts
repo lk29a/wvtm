@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import {Task} from "../../taskmodel";
+import {List} from 'immutable';
 import {TaskStore} from "../shared";
 
 @Component({
@@ -12,7 +13,7 @@ import {TaskStore} from "../shared";
 export class TaskTreeComponent implements OnInit, OnDestroy {
 
   @Input() task: Task;
-  subTasks: Task[];
+  subTasks: List<Task>;
   subscription;
   constructor(private taskStore: TaskStore) { }
 

@@ -1,6 +1,5 @@
-///<reference path='../../../node_modules/immutable/dist/immutable.d.ts'/>
 import {Injectable} from "@angular/core";
-import {Rx, Observable, BehaviorSubject} from "rxjs/Rx";
+import {Observable, BehaviorSubject} from "rxjs/Rx";
 import {List, Map} from 'immutable';
 import {Task, TaskModel} from "../../taskmodel";
 import {EditorService, TreeLayout} from "../shared";
@@ -9,9 +8,9 @@ import {LoggerService} from "../../shared";
 @Injectable()
 export class TaskStore {
 
-  private _tasks: BehaviorSubject<List<Task>> = new Rx.BehaviorSubject(List([]));
+  private _tasks: BehaviorSubject<List<Task>> = new BehaviorSubject(List([]));
   private taskModel: TaskModel;
-  private taskMap: Map<string, Observable> = Map({});
+  private taskMap: Map<string, BehaviorSubject<List<Task>>> = Map({});
   // public task
 
   constructor(private logger: LoggerService,
@@ -31,14 +30,14 @@ export class TaskStore {
     this._tasks.next(List(tasks));
   }
 
-  getSubTasks(taskId: string): Observable {
+  getSubTasks(taskId: string): Observable<List<Task>> {
     if (!this.taskMap.has(taskId)) {
       // let currentTask = new Subject<List<Task>>();
       // currentTask.
       // let tmp = this.taskMap.set(taskId, );
-      console.log(tmp);
+      // console.log(tmp);
     }
-    return this.taskMap.get(taskId).asObeservable();
+    return this.taskMap.get(taskId);
   }
 
   addTask(type: string, parentId: string) {

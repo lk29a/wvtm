@@ -106,12 +106,12 @@ export class EditorService {
       this.logger.error("Cannot add new task, select a task first");
       return;
     }
-    let newTaskId = this.taskModel.addTask({ parentTaskId: this.selectedTaskId, taskType: type });
+    let newTask = this.taskModel.addTask({ parentTaskId: this.selectedTaskId, taskType: type });
     this.logger.debug(this.taskModel);
     let updateInfo = {
       action: "add",
       type: "task",
-      taskId: newTaskId
+      taskId: newTask.id
     };
     this.modelUpdatedSource.next(updateInfo);
   }

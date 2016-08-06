@@ -65,7 +65,7 @@ export class EditorComponent implements AfterViewInit {
 
   render() {
     let width = this.el.nativeElement.firstChild.clientWidth;
-    this.treeLayout.calculate(this.taskModel.root, width / 2);
+    // this.treeLayout.calculate(this.taskModel.root, width / 2);
   }
 
 
