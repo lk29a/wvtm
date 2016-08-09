@@ -6,6 +6,11 @@ import {
   TaskRelation
 } from "../shared/index";
 
+import {
+  TaskStore,
+  EditorStateStore,
+} from "../store";
+
 enum InfoTypes {
   None = 0,
   Task = 1,
@@ -30,7 +35,13 @@ export class InfobarComponent {
   vInfo: any = {};
   simData: any = {};
 
-  constructor(private wvtm: WVTMService) {
+  constructor(private logger: LoggerService,
+              private wvtm: WVTMService,
+              private taskStore: TaskStore,
+              private editorStateStore: EditorStateStore) {
+
+    this.logger.debug("Infobar initialized");
+
     this.taskTypes = TaskType;
     this.types = Object.keys(this.taskTypes);
     this.taskRelations = TaskRelation;
@@ -42,6 +53,12 @@ export class InfobarComponent {
       errMsg: ""
     };
     this.infoType = InfoTypes;
+
+
+    this.editorStateStore.editorState.subscribe(state => {
+      console.log(state);
+    });
+
     // this.wvtm.userAction$.subscribe(
     //   userAction => {
     //     let reset = false;
@@ -84,6 +101,7 @@ export class InfobarComponent {
 
   showTaskInfo(taskId) {
     this.infobar.type = InfoTypes.Task;
+    
     // this.currentTask.data = this.wvtm.getTaskData(taskId);
     // let task = this.wvtm.getSelectedTask();
 

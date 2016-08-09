@@ -5,14 +5,14 @@ import {ToolbarComponent} from "./toolbar";
 import {EditorComponent} from "./editor";
 import {InfobarComponent} from "./infobar";
 import { LoggerService, WVTMService } from "./shared";
-import { TaskStore } from "./store";
+import { TaskModel } from "./taskmodel";
 
 @Component({
   selector: "app-root",
   moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
-  providers: [WVTMService, TaskStore],
+  providers: [WVTMService, TaskModel],
   directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 

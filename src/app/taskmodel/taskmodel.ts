@@ -1,3 +1,4 @@
+import {Injectable} from "@angular/core";
 import {Task} from "./";
 import {TaskType, TaskRelation} from "../shared";
 
@@ -11,6 +12,7 @@ interface TaskBase {
 }
 
 /* tslint:disable:requireParameterType */
+@Injectable()
 export class TaskModel extends GenericTree {
 
   private taskCounter: number;
@@ -21,6 +23,10 @@ export class TaskModel extends GenericTree {
   root: Task;
 
   constructor() {
+    super();
+  }
+
+  createNew() {
     let data = {
       type: TaskType.ABSTRACT,
       name: "Default",
@@ -28,10 +34,11 @@ export class TaskModel extends GenericTree {
       relation: null,
       description: "Default abstract node"
     };
-    let tmp = new Task(data);
-    super(tmp);
-    this.root = tmp;
+    let r = new Task(data);
+    this.root = r;
     this.taskCounter = 1;
+
+    return r;
   }
 
   addTask(options: TaskBase): Task {
@@ -51,23 +58,24 @@ export class TaskModel extends GenericTree {
       description: "",
     };
     let newTask = new Task(data);
-    this.addNode(parentNode, new Task(data));
+    this.addNode(parentNode, newTask);
 
     return newTask;
   }
 
   removeTask(taskId: string) {
-    let selectedTask = this.searchTask(taskId);
-    let leftSibling = selectedTask.getLeftSibling();
-    // if left sibling exists then remove its relation
-    if (leftSibling)
-      leftSibling.relation = "";
+    if (!taskId) {
+      throw new Error("`taskId` must be provided");
+    }
 
-    let parent  = selectedTask.parent;
-    let idx = parent.children.indexOf(selectedTask);
-    parent.removeChild(idx);
+    let task = this.searchTask(taskId);
+    let parent = task.parent;
+    // let idx = parent.children.indexOf(selectedTask);
+    if (parent.removeChild(task))
+      return parent;
+    else
+      return null;
     // @lk proper error checking
-    return selectedTask;
   }
 
   updateTask(taskId, type, value) {

@@ -16,7 +16,8 @@ module.exports = function(defaults) {
       'reflect-metadata/**/*.+(ts|js|js.map)',
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
-      'immutable/dist/immutable.js'
+      'immutable/dist/immutable.js',
+      'ng2-redux/lib/**/*.+(js|js.map)'
     ]
   });
 };

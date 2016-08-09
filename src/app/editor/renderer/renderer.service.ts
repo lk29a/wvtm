@@ -270,10 +270,10 @@ export class Renderer {
 
         relationLink.attr({
           d: [
-            ["M", cx + RENDERER_DEFAULTS.radius, cy],
+            ["M", cx + RENDERER_DEFAULTS.nodeRadius, cy],
             ["L", textBox.x - 2, cy],
             ["M", textBox.x2 + 2, cy],
-            ["L", rightSibling.coord.x - RENDERER_DEFAULTS.radius, cy],
+            ["L", rightSibling.coord.x - RENDERER_DEFAULTS.nodeRadius, cy],
           ]
         });
 
@@ -281,10 +281,10 @@ export class Renderer {
         relationText = this.svgCanvas.text(cx + (rightSibling.coord.x - cx) / 2, cy + 3, origNode.relation);
         textBox = relationText.getBBox();
         relationLink = this.svgCanvas.path([
-          ["M", cx + RENDERER_DEFAULTS.radius, cy],
+          ["M", cx + RENDERER_DEFAULTS.nodeRadius, cy],
           ["L", textBox.x - 2, cy],
           ["M", textBox.x2 + 2, cy],
-          ["L", rightSibling.coord.x - RENDERER_DEFAULTS.radius, cy],
+          ["L", rightSibling.coord.x - RENDERER_DEFAULTS.nodeRadius, cy],
         ]);
         relationLink.addClass("rel-link");
         relationText.addClass("rel-text");

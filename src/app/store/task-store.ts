@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {Observable, BehaviorSubject, Subject} from "rxjs/Rx";
-import {List, Map} from 'immutable';
+import {Observable, BehaviorSubject} from "rxjs/Rx";
+import {Map} from 'immutable';
 import {Task, TaskModel} from "../taskmodel";
 import {LoggerService} from "../shared";
 import {TreeLayout} from "../editor/shared";
@@ -8,70 +8,79 @@ import {TreeLayout} from "../editor/shared";
 @Injectable()
 export class TaskStore {
   private _tm: TaskModel;
-  private _taskModel: BehaviorSubject<TaskModel>;
-  private _taskTree: BehaviorSubject<Task>;
+  private currentTask: string;
+  private _rootTask: string;
   private taskMap: Map<string, Task> = Map({});
   private treeLayout = new TreeLayout();
-  private taskMapSource: Map<string, Subject<Task>> = Map({});
-  // 
-  rootTask: string;
+  private taskMapSource = {};
+
 
   constructor(private logger: LoggerService) {
     this._tm = new TaskModel();
+    this.currentTask = this._rootTask = this._tm.root.id;
+    // set root as selected task
+    this._tm.root.state.selected = true;
     this.treeLayout.calculate(this._tm.root, 500);
-    this.rootTask = this._tm.root.id;
-    this.taskMap.set(this.rootTask, this._tm.root)
-    // this._taskModel = new TaskModel();
-    this._taskModel =  new BehaviorSubject(this._tm);
-    this._taskTree = new BehaviorSubject(this._tm.root);
-    // let tasks = this.treeToList(this.taskModel.root);
-    // this._tasks.next(List(tasks));
+    this.taskMap = this.taskMap.set(this._rootTask, this._tm.root);
   }
 
-  get taskModel(): Observable<TaskModel> {
-    return this._taskModel.asObservable();
+  get rootTask(): string {
+    return this._rootTask;
   }
 
-  get taskTree(): Observable<Task> {
-    return this._taskTree.asObservable();
+  get taskModel(): TaskModel {
+    return this._tm;
   }
 
   getTask(taskId: string): Observable<Task> {
+    this.logger.debug("get task: ", taskId);
     if (!this.taskMap.has(taskId))
       return;
 
-    if (!this.taskMapSource.has(taskId)) {
-      this.taskMapSource.set(taskId, new Subject<Task>());
+    if (!this.taskMapSource.hasOwnProperty(taskId)) {
+      this.taskMapSource[taskId] = new BehaviorSubject(this.taskMap.get(taskId));
     }
-    return this.taskMapSource.get(taskId).asObservable();
+    // return this.taskMapSource.get(taskId).asObservable();
+    return this.taskMapSource[taskId];
   }
 
   addTask(type: string, parentId: string) {
-    // add the task to tree
-    let task = this._tm.addTask({ parentTaskId: parentId, taskType: type });
-    // calculate layout again
-    this.treeLayout.calculate(this._tm.root, 500)
-    // save it in flat map
-    this.taskMap.set(task.id, task);
-    // re-emitt all tasks
-    
-    // this.taskMapSource.get(taskId).asObservable();
-    // this._taskTree.next(this._tm.root);
+    try {
+      // add the task to tree
+      let task = this._tm.addTask({ parentTaskId: parentId, taskType: type });
+      // calculate layout again
+      this.treeLayout.calculate(this._tm.root, 500)
+      // save it in flat map
+      this.taskMap = this.taskMap.set(task.id, task);
+    } catch (ex) {
+      this.logger.error(ex);
+    }
   }
 
   selectTask(taskId: string) {
+    // unset previous 
+    let prevTask = this.taskMap.get(this.currentTask);
+    prevTask.state.selected = false;
+    this.taskMap = this.taskMap.set(this.currentTask, prevTask);
+
+    if (this.taskMap.has(taskId)) {
+      let curTask = this.taskMap.get(taskId);
+      curTask.state.selected = true;
+      this.taskMap = this.taskMap.set(taskId, curTask);
+      this.currentTask = taskId;
+      // this.taskMap = this.taskMap.setIn([this.currentTask, "state", "selected"], false);
+    }
+
+
   }
 
   updateTask(taskId: string, type: string, value: string) {
     try {
-      this._tm.updateTask(taskId, type, value);
+      let task = this._tm.updateTask(taskId, type, value);
       this.treeLayout.calculate(this._tm.root, 500)
-      // let tasks = this._tasks.getValue();
-      // let index = tasks.findIndex((task: Task) => task.id === updatedTask.id);
-      // this._tasks.next(tasks.set(index, updatedTask));
-      this._taskTree.next(this._tm.root);
+      this.taskMap = this.taskMap.set(task.id, task);
     } catch (ex) {
-      console.log(ex);
+      this.logger.error(ex);
     }
   }
 

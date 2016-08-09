@@ -1,15 +1,15 @@
 interface LayoutConfig {
-  mod: number,
-  x: number,
-  change: number,
-  shift: number,
-  thread: TreeNode,
-  ancestor: TreeNode,
+  mod: number;
+  x: number;
+  change: number;
+  shift: number;
+  thread: TreeNode;
+  ancestor: TreeNode;
 }
 
 interface Coord {
-  x: number,
-  y: number
+  x: number;
+  y: number;
 }
 
 export class TreeNode {
@@ -83,9 +83,14 @@ export class TreeNode {
     this.children[j] = tmp;
   }
 
-  removeChild(idx) {
-    // @lk change to reflect idx property
-    this.children.splice(idx, 1);
+  removeChild(child: TreeNode) {
+    let idx = this.children.indexOf(child);
+    if (idx > -1) {
+      this.children.splice(idx, 1);
+      return true
+    } else {
+      return false;
+    }
   }
 
   resetLayoutData() {

@@ -4,7 +4,6 @@ import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { addProviders, async, inject } from '@angular/core/testing';
 import { TaskTreeComponent } from './task-tree.component';
-import { TaskStore } from '../shared';
 
 // describe('Component: TaskTree', () => {
 //   it('should create an instance', () => {

@@ -103,17 +103,27 @@ export class Task extends TreeNode {
   }
 
   getLeftSibling() {
-    return (this.idx && this.parent) ? this.parent.children[this.idx - 1] : null;
-
-    // var idx = this.parent.getChildIndex(this);
-    // if(idx <= 0) {
-    //  return null;
-    // } else {
-    //  return this.parent.children[idx-1];
-    // }
+    let idx = this.getIndex();
+    return (idx && this.parent) ? this.parent.children[idx - 1] : null;
   }
 
   getRightSibling() {
-    return (!this.parent || (this.idx === this.parent.children.length - 1)) ? null : this.parent.children[this.idx + 1];
+    let idx = this.getIndex();
+    return (!this.parent || (idx === this.parent.children.length - 1)) ? null : this.parent.children[idx + 1];
   }
+
+  removeChild(task: Task) {
+    let idx = this.children.indexOf(task);
+    if (idx > -1) {
+      let leftSibling = task.getLeftSibling();
+      // if left sibling exists then remove its relation
+      if (leftSibling)
+        leftSibling.relation = "";
+
+      this.children.splice(idx, 1);
+      return true
+    } else {
+      return false;
+    }
+  }  
 }

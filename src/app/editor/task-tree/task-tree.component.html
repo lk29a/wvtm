@@ -1,6 +1,6 @@
-<svg:path *ngIf="task.parent" [attr.d]="getLinkPath()"></svg:path>
+<svg:path *ngIf="taskNode.parent" [attr.d]="getLinkPath()"></svg:path>
 <svg:g class="task-icon" title="my task" >
-  <svg:use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" [attr.x]="task.coord.x - 20" [attr.y]="task.coord.y - 20" class="task-node" (click)="onTaskNodeClick()" [ngClass]="{selected: task.state.selected}"></svg:use>
-  <svg:text [attr.x]="task.coord.x" [attr.y]="task.coord.y + 30" dy="3" class="task-name">{{task.name}}</svg:text>
+  <svg:use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" [attr.x]="taskNode.coord.x - 20" [attr.y]="taskNode.coord.y - 20" class="task-node" (click)="onTaskNodeClick()" [ngClass]="{selected: taskNode.state.selected}"></svg:use>
+  <svg:text [attr.x]="taskNode.coord.x" [attr.y]="taskNode.coord.y + 30" dy="3" class="task-name">{{taskNode.name}}</svg:text>
 </svg:g>
-<svg:g task-tree *ngFor="let ctask of task.children" [task]="ctask" class="tc"></svg:g>
+<svg:g task-tree *ngFor="let sub of subTasks" [task]="sub.id" class="tc"></svg:g>

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import {SVGHelper} from "../shared";
 import {Task} from "../../taskmodel";
 import {List} from 'immutable';
-import {TaskStore} from "../../store";
+import {TaskStore, EditorStateStore} from "../../store";
 
 @Component({
   moduleId: module.id,
@@ -13,35 +13,41 @@ import {TaskStore} from "../../store";
 })
 export class TaskTreeComponent implements OnInit, OnDestroy {
 
-  @Input() task: Task;
-  subTasks: List<Task>;
+  @Input() task: string;
+  taskNode: Task;
+  subTasks: Task[] = [];
+  subscription;
   // subscription;
   constructor(private taskStore: TaskStore,
+              private editorStateStore: EditorStateStore,
               private svgHelper: SVGHelper) {
-    console.log("new task");
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // this.subTasks = this.task.children;
+    this.subscription = this.taskStore.getTask(this.task).subscribe(task => {
+      this.taskNode = task;
+      if (this.subTasks !== task.children) {
+        console.log("new children");
+        this.subTasks = task.children;
+      }
+    });
+  }
 
 
   onTaskNodeClick() {
-    this.taskStore.selectTask(this.task.id);
-    // this.task.state.selected = !this.task.state.selected;
+    this.taskStore.selectTask(this.task);
+    this.editorState.
   }
-
-  getSubTasks() {
-    return this.task ? this.task.children : [];
-  }
-
 
   getLinkPath(): string {
-    return this.svgHelper.getLinkPath(this.task);
+    return this.svgHelper.getLinkPath(this.taskNode);
   }
 
 
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }
