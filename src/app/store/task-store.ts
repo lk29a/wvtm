@@ -90,7 +90,7 @@ export class TaskStore {
       this.treeLayout.calculate(this._tm.root, 500)
       // let tasks: List<Task> = this._tasks.getValue();
       // let index = tasks.findIndex((task) => task.id === deletedTask.id);
-      this._taskTree.next(this._tm.root);
+      // this._taskTree.next(this._tm.root);
       // this._tasks.next(tasks.delete(index));
     } catch (ex) {
       console.log(ex);

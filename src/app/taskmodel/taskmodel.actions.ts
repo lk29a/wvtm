@@ -19,11 +19,9 @@ export class TaskModelActions {
       // add the task to tree
       let task = this.taskModel.addTask({ parentTaskId: parentId, taskType: type });
       // calculate layout again
-      this.treeLayout.calculate(this._tm.root, 500)
-      // save it in flat map
-      this.taskMap = this.taskMap.set(task.id, task);
+      // this.treeLayout.calculate(this._tm.root, 500)
     } catch (ex) {
-      this.logger.error(ex);
+      console.log(ex);
     }
 
 
@@ -37,7 +35,7 @@ export class TaskModelActions {
 
   selectTask() {
     this.redux.dispatch({
-      type: TaskModelActions.SELECT_TASK,
+      type: TaskModelActions.TASK_SELECTED,
       data: {
 
       }
@@ -46,7 +44,7 @@ export class TaskModelActions {
 
   removeTask() {
     this.redux.dispatch({
-      type: TaskModelActions.REMOVE_TASK,
+      type: TaskModelActions.TASK_REMOVED,
       data: {
 
       }
@@ -55,7 +53,7 @@ export class TaskModelActions {
 
   updateTask() {
     this.redux.dispatch({
-      type: TaskModelActions.UPDATE_TASK,
+      type: TaskModelActions.TASK_UPDATED,
       data: {
 
       }

@@ -6,11 +6,6 @@ import {
   TaskRelation
 } from "../shared/index";
 
-import {
-  TaskStore,
-  EditorStateStore,
-} from "../store";
-
 enum InfoTypes {
   None = 0,
   Task = 1,
@@ -36,9 +31,7 @@ export class InfobarComponent {
   simData: any = {};
 
   constructor(private logger: LoggerService,
-              private wvtm: WVTMService,
-              private taskStore: TaskStore,
-              private editorStateStore: EditorStateStore) {
+              private wvtm: WVTMService) {
 
     this.logger.debug("Infobar initialized");
 
@@ -55,9 +48,6 @@ export class InfobarComponent {
     this.infoType = InfoTypes;
 
 
-    this.editorStateStore.editorState.subscribe(state => {
-      console.log(state);
-    });
 
     // this.wvtm.userAction$.subscribe(
     //   userAction => {

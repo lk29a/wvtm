@@ -23,7 +23,7 @@ export class TaskModel extends GenericTree {
   root: Task;
 
   constructor() {
-    super();
+    super(null);
   }
 
   createNew() {

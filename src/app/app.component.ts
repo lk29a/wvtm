@@ -1,5 +1,6 @@
 import {Component} from "@angular/core";
-
+import {NgRedux } from "ng2-redux";
+import { IWVTMState, rootReducer } from "./store";
 import {MenuComponent} from "./menu";
 import {ToolbarComponent} from "./toolbar";
 import {EditorComponent} from "./editor";
@@ -17,7 +18,10 @@ import { TaskModel } from "./taskmodel";
 })
 
 export class AppComponent {
-  constructor(private logger: LoggerService) {
+  constructor(private ngRedux: NgRedux<IWVTMState>,
+    private logger: LoggerService) {
     this.logger.info("...WVTM STARTED...");
+
+    this.ngRedux.configureStore(rootReducer, {});
   }
 }

@@ -2,7 +2,7 @@ import {Component, ElementRef, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import {Task, TaskModel} from "../taskmodel";
 import {EditorService, SVGHelper, TreeLayout} from "./shared";
-import {TaskStore} from "../store";
+// import {TaskStore} from "../store";
 import {Simulator} from "../simulator";
 import {TaskTreeComponent} from "./task-tree";
 import { WVTMService, LoggerService } from "../shared";
@@ -32,7 +32,7 @@ export class EditorComponent implements AfterViewInit {
   constructor(private el: ElementRef,
     private editor: EditorService,
     private wvtm: WVTMService,
-    private taskStore: TaskStore,
+    // private taskStore: TaskStore,
     private treeLayout: TreeLayout,
     private logger: LoggerService) {
     Observable.fromEvent(window, "resize")
@@ -66,10 +66,7 @@ export class EditorComponent implements AfterViewInit {
 
   render() {
     let width = this.canvasDim.width || this.el.nativeElement.firstChild.clientWidth;
-    this.taskStore.taskTree.subscribe(root => {
-      this.treeLayout.calculate(root, width / 2)
-      this.taskTree = root;
-    });
+
     this.createTestModel();
     // this.treeLayout.calculate(this.taskModel.root, width / 2);
   }
@@ -77,15 +74,15 @@ export class EditorComponent implements AfterViewInit {
 
   createTestModel() {
 
-    setTimeout(() => {
-      this.taskStore.addTask("Abstract", "TASK_0");
-    }, 2000)
-    setTimeout(() => {
-      this.taskStore.addTask("Abstract", "TASK_0");
-    }, 3000)
-    setTimeout(() => {
-      this.taskStore.addTask("Abstract", "TASK_0");
-    }, 4000)
+    // setTimeout(() => {
+    //   this.taskStore.addTask("Abstract", "TASK_0");
+    // }, 2000)
+    // setTimeout(() => {
+    //   this.taskStore.addTask("Abstract", "TASK_0");
+    // }, 3000)
+    // setTimeout(() => {
+    //   this.taskStore.addTask("Abstract", "TASK_0");
+    // }, 4000)
     // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Enable access", relation: ">>" });
     // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Access", relation: "[>" });
     // this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "INTERACTION", name: "Close access" });

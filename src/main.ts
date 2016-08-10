@@ -2,7 +2,7 @@ import { bootstrap } from "@angular/platform-browser-dynamic";
 import { enableProdMode } from "@angular/core";
 import { AppComponent, environment } from "./app/";
 import {LoggerService} from "./app/shared/";
-import { TaskStore, EditorStateStore } from "./app/store";
+import { NgRedux } from 'ng2-redux';
 
 if (environment.production) {
   enableProdMode();
@@ -10,6 +10,5 @@ if (environment.production) {
 
 bootstrap(AppComponent, [
   LoggerService,
-  TaskStore,
-  EditorStateStore
-  ]);
+  NgRedux
+]);

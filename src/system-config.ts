@@ -10,12 +10,16 @@
 /** Map relative paths to URLs. */
 const map: any = {
   'immutable': 'vendor/immutable/dist/immutable.js',
+  'redux': 'vendor/redux/dist/redux/redum.min.js',
   'ng2-redux': 'vendor/ng2-redux/lib'
 };
 
 /** User packages configuration. */
 const packages: any = {
   'immutable': {
+    'format': 'cjs'
+  },
+  'redux': {
     'format': 'cjs'
   },
   'ng2-redux': {

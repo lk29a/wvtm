@@ -1,6 +1,8 @@
 import {TaskModelActions} from "../../taskmodel";
+import { ITaskModel } from "./taskmodel.types";
+import { INITIAL_STATE } from "./taskmodel.initial-state";
 
-export function taskModelReducer(state: ITaskModelData = INITIAL_STATE, action): ITaskModelData {
+export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITaskModel {
   console.log(state);
   console.log(action);
 
@@ -26,6 +28,6 @@ export function taskModelReducer(state: ITaskModelData = INITIAL_STATE, action):
   //   default:
   //     // code...
   //     break;
-  }
+  // }
 
 }

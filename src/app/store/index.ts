@@ -1,13 +1,12 @@
-import {combineReducers} from "redux";
-import {ITaskModelData, taskModelReducer} from "./taskmodel.reducer";
+import { IWVTMState, rootReducer } from './store';
+import {ITask, ITaskModel} from "./taskmodel";
 
 
-export interface IWVTMState {
-  taskModel: ITaskModelData
+export {
+  IWVTMState,
+  rootReducer,
+  ITask,
+  ITaskModel
 }
 
-export const rootReducer = combineReducers<IWVTMState>({
-  taskModel: taskModelReducer
-  // simulation: simulationReducer,
-  // userAction: userActionReducer
-});
+
