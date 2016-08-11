@@ -1,19 +1,13 @@
 import {Injectable} from "@angular/core";
-import {Task} from "./Task";
+import {TaskRecord, TaskModelRecord} from "./taskmodel.types";
 import {TaskType, TaskRelation} from "../shared";
+import {Task} from "./task";
 
 import {GenericTree} from "../tree/index";
 
-interface TaskBase {
-  parentTaskId: string,
-  taskType: string,
-  name?: string,
-  relation?: string
-}
-
 /* tslint:disable:requireParameterType */
 @Injectable()
-export class TaskModel extends GenericTree {
+export class TaskModelService {
 
   private taskCounter: number;
   name: string;
@@ -31,7 +25,6 @@ export class TaskModel extends GenericTree {
       description: "Default abstract node"
     };
     let r = new Task(data);
-    super(r);
     this.root = r;
     this.taskCounter = 1;
   }
@@ -51,7 +44,7 @@ export class TaskModel extends GenericTree {
     return r;
   }
 
-  addTask(options: TaskBase): Task {
+  addTask(options: any): Task {
     if (!options.parentTaskId) {
       throw new Error("`parentId` must be provided");
     }
@@ -68,7 +61,7 @@ export class TaskModel extends GenericTree {
       description: "",
     };
     let newTask = new Task(data);
-    this.addNode(parentNode, newTask);
+    // this.addNode(parentNode, newTask);
 
     return newTask;
   }
@@ -169,11 +162,11 @@ export class TaskModel extends GenericTree {
     task.description = description;
   }
 
-	/**
-	 * Check correctness of the model
-	 * 1. Abstract task should have atleast one child
-	 * 2. Every sibling pair should have a relation
-	 */
+  /**
+   * Check correctness of the model
+   * 1. Abstract task should have atleast one child
+   * 2. Every sibling pair should have a relation
+   */
   validateStructure() {
     let validationObj = {
       data: [],
@@ -197,15 +190,15 @@ export class TaskModel extends GenericTree {
         // }
       }
     }
-    this.traverseDF(validateTask);
+    // this.traverseDF(validateTask);
     return validationObj;
   };
 
-	/*
-	 * Calculates relation precedence of children
-	 *
-	 * returns ???
-	 */
+  /*
+   * Calculates relation precedence of children
+   *
+   * returns ???
+   */
   calculateRelationPrecedence(aTask: Task) {
     let tasks = aTask.children;
     if (tasks.length < 3) {

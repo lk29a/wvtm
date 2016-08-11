@@ -1,23 +1,24 @@
 import {Injectable} from "@angular/core";
-import { TaskModel, Task} from "../taskmodel/index";
+import { List } from "immutable";
+import { ITaskModel, ITask} from "../taskmodel";
 import { TaskRelation } from "../shared";
 
 @Injectable()
 export class Simulator {
-  ets: Array < Task > ;
-  tasksExecuted: Array < Task > ;
+  ets: List<ITask>;
+  tasksExecuted: List<ITask>;
 
-  start(model: TaskModel) {
-    this.ets = [];
-    this.tasksExecuted = [];
+  start(model: ITaskModel) {
+    this.ets = List<ITask>();
+    this.tasksExecuted = List<ITask>();
 
     // first validate structure of the model
-    let vObj = model.validateStructure();
-    if (!vObj.valid) {
-      throw new Error("Validation failed. Model has errors please fix them first.");
-    }
+    // let vObj = model.validateStructure();
+    // if (!vObj.valid) {
+    //   throw new Error("Validation failed. Model has errors please fix them first.");
+    // }
 
-    this.enableTask(model.root);
+    // this.enableTask(model.root);
 
     return this.ets;
 
@@ -31,7 +32,7 @@ export class Simulator {
   * 
   * @param  {[type]} aTask [description]
   */
-  enableTask(aTask) {
+  enableTask(aTask: any) {
     console.log("enabling: " + aTask.name);
     let curTask = aTask,
       lPath = [];

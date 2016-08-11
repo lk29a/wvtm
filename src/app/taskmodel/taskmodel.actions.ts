@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { NgRedux } from "ng2-redux";
 import { IWVTMState } from "../store";
-import { TaskModel } from "./taskmodel";
+import { TaskModelService } from "./taskmodel.service";
 
 @Injectable()
 export class TaskModelActions {
@@ -11,7 +11,7 @@ export class TaskModelActions {
   static TASK_UPDATED: string = "TASK_UPDATED";
   static TASK_SELECTED: string = "TASK_SELECTED";
 
-  constructor(private taskModel: TaskModel,
+  constructor(private taskModel: TaskModelService,
     private redux: NgRedux<IWVTMState>) {}
 
   addTask(type: string, parentId: string) {
@@ -20,17 +20,15 @@ export class TaskModelActions {
       let task = this.taskModel.addTask({ parentTaskId: parentId, taskType: type });
       // calculate layout again
       // this.treeLayout.calculate(this._tm.root, 500)
+      this.redux.dispatch({
+        type: TaskModelActions.TASK_ADDED,
+        data: {
+        }
+      });
     } catch (ex) {
       console.log(ex);
     }
 
-
-    this.redux.dispatch({
-      type: TaskModelActions.TASK_ADDED,
-      data: {
-
-      }
-    });
   }
 
   selectTask() {

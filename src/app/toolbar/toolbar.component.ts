@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
 import {
   LoggerService,
-  WVTMService,
   TaskType,
   TaskRelation
-} from "../shared/index";
+} from "../shared";
+import {TaskModelActions} from "../taskmodel"
 
 @Component({
   selector: "wvtm-toolbar",
@@ -17,17 +17,18 @@ export class ToolbarComponent {
   relations = Object.keys(TaskRelation);
   taskRelations = null;
 
-  constructor(private wvtm: WVTMService, private logger: LoggerService) {
+  constructor(private tmActions: TaskModelActions, private logger: LoggerService) {
+    this.logger.debug("Toolbar initialized");
     this.taskRelations = TaskRelation;
   }
 
 
   addTask(type: string) {
-    this.wvtm.toolAction(type);
+    this.tmActions.addTask(type, "");
   }
 
   addRelation(type: string) {
-    this.wvtm.toolAction(type);
+    // this.wvtm.toolAction(type);
   }
 
   // onClick(event) {

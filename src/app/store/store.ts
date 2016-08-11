@@ -1,13 +1,16 @@
 import { combineReducers } from 'redux';
-import * as taskmodel from './taskmodel';
+import {ITaskModel, taskModelReducer} from '../taskmodel';
+import * as editor from './editor';
 
 
 export interface IWVTMState {
-  taskModel?: taskmodel.ITaskModel
+  taskModel?: ITaskModel,
+  editor?: editor.IEditorState
 }
 
 export const rootReducer = combineReducers<IWVTMState>({
-  taskModel: taskmodel.taskModelReducer
+  taskModel: taskModelReducer,
+  editor: editor.editorReducer,
   // simulation: simulationReducer,
   // userAction: userActionReducer
 });

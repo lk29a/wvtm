@@ -1,12 +1,21 @@
+declare var require: any
+const createLogger = require("redux-logger");
+const thunk = require("redux-thunk");
 import { IWVTMState, rootReducer } from './store';
-import {ITask, ITaskModel} from "./taskmodel";
+import {IEditorState} from "./editor";
 
 
 export {
   IWVTMState,
   rootReducer,
-  ITask,
-  ITaskModel
+  IEditorState
 }
 
+export const middlewares = [
+  thunk,
+  createLogger({
+    level: 'info',
+    collapsed: true,
+  })
+];
 

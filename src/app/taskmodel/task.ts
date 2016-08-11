@@ -125,5 +125,5 @@ export class Task extends TreeNode {
     } else {
       return false;
     }
-  }  
+  }
 }

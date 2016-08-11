@@ -1,8 +1,8 @@
 import {Component, ElementRef, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
-import {Task, TaskModel} from "../taskmodel";
-import {EditorService, SVGHelper, TreeLayout} from "./shared";
-// import {TaskStore} from "../store";
+import { NgRedux, select } from "ng2-redux";
+import {EditorService} from "./shared";
+import {EditorActions} from "./editor.actions";
 import {Simulator} from "../simulator";
 import {TaskTreeComponent} from "./task-tree";
 import { WVTMService, LoggerService } from "../shared";
@@ -17,13 +17,13 @@ interface Dim {
   moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
-  providers: [EditorService, TreeLayout, SVGHelper, Simulator],
+  providers: [EditorService, EditorActions, Simulator],
   directives: [TaskTreeComponent],
 })
 export class EditorComponent implements AfterViewInit {
-  taskModel: TaskModel = null;
+  @select('treeRoot') treeRoot: Observable<string>;
+
   svgElm: HTMLElement;
-  taskTree: Task = null;
   canvasDim: Dim = {
     height: null,
     width: null
@@ -32,8 +32,7 @@ export class EditorComponent implements AfterViewInit {
   constructor(private el: ElementRef,
     private editor: EditorService,
     private wvtm: WVTMService,
-    // private taskStore: TaskStore,
-    private treeLayout: TreeLayout,
+    private editorActions: EditorActions,
     private logger: LoggerService) {
     Observable.fromEvent(window, "resize")
       .debounceTime(300)
@@ -41,7 +40,8 @@ export class EditorComponent implements AfterViewInit {
         this.resizeCanvas(event);
       }
     );
-    // this.editor.createNew();
+
+    // this.taskModel.createNew();
     // this.taskModel = editor.getTaskModel();
   }
 
@@ -75,7 +75,7 @@ export class EditorComponent implements AfterViewInit {
   createTestModel() {
 
     // setTimeout(() => {
-    //   this.taskStore.addTask("Abstract", "TASK_0");
+    //   this.taskModelActions.addTask("Abstract", "TASK_0");
     // }, 2000)
     // setTimeout(() => {
     //   this.taskStore.addTask("Abstract", "TASK_0");

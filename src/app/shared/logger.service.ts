@@ -55,25 +55,25 @@ export class LoggerService {
   }
   info(...args: any[]): void {
     let caller = this.getCaller();
-    let a: any = ["%c%s LOG: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+    let a: any = ["%c%s INFO: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);
     console.info.apply(console, a);
   }
   error(...args: any[]): void {
     let caller = this.getCaller();
-    let a: any = ["%c%s LOG: %s", "color:#F44336;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+    let a: any = ["%c%s ERROR: %s", "color:#F44336;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);
     console.error.apply(console, a);
   }
   debug(...args: any[]) {
     let caller = this.getCaller();
-    let a: any = ["%c%s LOG: %s", "color:#424242;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+    let a: any = ["%c%s DEBUG: %s", "color:#424242;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);
     console.debug.apply(console, a);
   }
   trace(...args: any[]): void {
     let caller = this.getCaller();
-    let a: any = ["%c%s LOG: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+    let a: any = ["%c%s TRACE: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);
     console.trace.apply(console, a);
   }

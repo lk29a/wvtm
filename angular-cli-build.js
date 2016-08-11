@@ -18,7 +18,9 @@ module.exports = function(defaults) {
       '@angular/**/*.+(js|js.map)',
       'immutable/dist/immutable.js',
       'redux/dist/**/*.+(js|js.map)',
-      'ng2-redux/lib/**/*.+(js|js.map)'
+      'ng2-redux/lib/**/*.+(js|js.map)',
+      'redux-thunk/dist/**/*.+(js|js.map)',
+      'redux-logger/dist/**/*.+(js|js.map)'
     ]
   });
 };

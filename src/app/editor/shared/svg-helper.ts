@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Task} from "../../taskmodel";
+import {ITask} from "../../taskmodel";
 import {RENDERER_DEFAULTS} from "../../shared";
 
 
@@ -16,8 +16,8 @@ export class SVGHelper {
    * @param {Task} task [description]
    * @return {string} shortened task name with ellipses
    */
-  getTaskName(task: Task): string {
-    let taskName = task.name;
+  getTaskName(task: ITask): string {
+    let taskName = task.taskName;
 
     if (taskName.length > 12) {
       taskName = taskName.substr(0, 12).trim();
@@ -34,13 +34,13 @@ export class SVGHelper {
    * @param  {Task}   task A task-node to calculate path string for
    * @return {string}       Formatted SVG path string
    */
-  getLinkPath(task: Task): string {
-    let parent = task.parent;
-    let levelCenter = parent.coord.y + (task.coord.y - parent.coord.y) / 2;
-    return this.getSVGPath(
-      ["M", parent.coord.x, parent.coord.y + RENDERER_DEFAULTS.nodeRadius],
-      ["C", parent.coord.x, levelCenter, task.coord.x, levelCenter, task.coord.x, task.coord.y - RENDERER_DEFAULTS.nodeRadius]
-    );
+  getLinkPath(task: ITask) {
+    // let parent = task.parent;
+    // let levelCenter = parent.coord.y + (task.coord.y - parent.coord.y) / 2;
+    // return this.getSVGPath(
+    //   ["M", parent.coord.x, parent.coord.y + RENDERER_DEFAULTS.nodeRadius],
+    //   ["C", parent.coord.x, levelCenter, task.coord.x, levelCenter, task.coord.x, task.coord.y - RENDERER_DEFAULTS.nodeRadius]
+    // );
   }
 
 

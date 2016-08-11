@@ -10,8 +10,10 @@
 /** Map relative paths to URLs. */
 const map: any = {
   'immutable': 'vendor/immutable/dist/immutable.js',
-  'redux': 'vendor/redux/dist/redux/redum.min.js',
-  'ng2-redux': 'vendor/ng2-redux/lib'
+  'redux': 'vendor/redux/dist/redux.js',
+  'ng2-redux': 'vendor/ng2-redux/lib',
+  'redux-thunk': 'vendor/redux-thunk/dist/redux-thunk.js',
+  'redux-logger': 'vendor/redux-logger/dist/index.js'
 };
 
 /** User packages configuration. */
@@ -23,9 +25,19 @@ const packages: any = {
     'format': 'cjs'
   },
   'ng2-redux': {
-    format: 'cjs',
-    defaultExtension: 'js',
-    main: 'index'
+    'format': 'cjs',
+    // defaultExtension: 'js',
+    // main: 'index'
+  },
+  'redux-thunk': {
+    'format': 'cjs',
+    // defaultExtension: 'js',
+    // main: 'index'
+  },
+  'redux-logger': {
+    'format': 'cjs',
+    // defaultExtension: 'js',
+    // main: 'index'
   }
 };
 
@@ -49,6 +61,9 @@ const barrels: string[] = [
 
   // App specific barrels.
   'app',
+  'app/store',
+  'app/store/taskmodel',
+  'app/store/editor',
   'app/shared',
   'app/tree',
   'app/taskmodel',

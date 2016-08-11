@@ -1,11 +1,8 @@
-import {TaskModelActions} from "../../taskmodel";
-import { ITaskModel } from "./taskmodel.types";
-import { INITIAL_STATE } from "./taskmodel.initial-state";
+import {EditorActions} from "../../editor";
+import { IEditorState } from "./editor.types";
+import { INITIAL_STATE } from "./editor.initial-state";
 
-export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITaskModel {
-  console.log(state);
-  console.log(action);
-
+export function editorReducer(state: IEditorState = INITIAL_STATE, action): IEditorState {
   if (!action.type || !action.payload) {
     return state;
   }

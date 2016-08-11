@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
+import { NgRedux, select } from "ng2-redux";
 import {SVGHelper} from "../shared";
-import {Task} from "../../taskmodel";
+import {ITask} from "../../taskmodel";
 import {List} from 'immutable';
 // import {TaskStore, EditorStateStore} from "../../store";
 
@@ -13,15 +14,17 @@ import {List} from 'immutable';
 })
 export class TaskTreeComponent implements OnInit, OnDestroy {
 
-  @Input() task: string;
-  taskNode: Task;
-  subTasks: Task[] = [];
+  @Input() taskId: string;
+  // @select([])
+  taskNode: ITask;
+  subTasks: List<string> = List<string>();
   subscription;
   // subscription;
   constructor(private svgHelper: SVGHelper) {
   }
 
   ngOnInit() {
+    console.log(this.taskId);
     // this.subTasks = this.task.children;
     // this.subscription = this.taskStore.getTask(this.task).subscribe(task => {
     //   this.taskNode = task;
@@ -38,7 +41,8 @@ export class TaskTreeComponent implements OnInit, OnDestroy {
   }
 
   getLinkPath(): string {
-    return this.svgHelper.getLinkPath(this.taskNode);
+    // return this.svgHelper.getLinkPath(this.taskNode);
+    return "";
   }
 
 

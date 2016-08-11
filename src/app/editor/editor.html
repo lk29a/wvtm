@@ -56,7 +56,7 @@
         <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" x="478.09375" y="10" class="task-node"></use>
       </g> -->
       <!-- <svg:g task-tree [task]="taskStore.taskTree | async" class="tc"></svg:g> -->
-      <svg:g task-tree [task]="'rootTask'"></svg:g>
+      <svg:g task-tree [taskId]="treeRoot | async" class="tc"></svg:g>
     </g>
   </svg>
 </div>
