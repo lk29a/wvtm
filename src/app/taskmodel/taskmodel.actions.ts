@@ -1,49 +1,39 @@
 import { Injectable } from "@angular/core";
 import { NgRedux } from "ng2-redux";
 import { IWVTMState } from "../store";
-import { TaskModelService } from "./taskmodel.service";
 
 @Injectable()
 export class TaskModelActions {
 
-  static TASK_ADDED: string = "TASK_ADDED";
-  static TASK_REMOVED: string = "TASK_REMOVED";
-  static TASK_UPDATED: string = "TASK_UPDATED";
-  static TASK_SELECTED: string = "TASK_SELECTED";
+  static ADD_TASK: string = "ADD_TASK";
+  static REMOVE_TASK: string = "REMOVE_TASK";
+  static UPDATE_TASK: string = "UPDATE_TASK";
+  static SELECT_TASK: string = "SELECT_TASK";
 
-  constructor(private taskModel: TaskModelService,
-    private redux: NgRedux<IWVTMState>) {}
+  constructor(private redux: NgRedux<IWVTMState>) {}
 
-  addTask(type: string, parentId: string) {
-    try {
-      // add the task to tree
-      let task = this.taskModel.addTask({ parentTaskId: parentId, taskType: type });
-      // calculate layout again
-      // this.treeLayout.calculate(this._tm.root, 500)
-      this.redux.dispatch({
-        type: TaskModelActions.TASK_ADDED,
-        data: {
-        }
-      });
-    } catch (ex) {
-      console.log(ex);
-    }
-
+  addTask(type: string) {
+    this.redux.dispatch({
+      type: TaskModelActions.ADD_TASK,
+      payload: {
+        taskType: type
+      }
+    });
   }
 
-  selectTask() {
+  selectTask(taskId: string) {
     this.redux.dispatch({
-      type: TaskModelActions.TASK_SELECTED,
-      data: {
-
+      type: TaskModelActions.SELECT_TASK,
+      payload: {
+        taskId: taskId
       }
     });
   }
 
   removeTask() {
     this.redux.dispatch({
-      type: TaskModelActions.TASK_REMOVED,
-      data: {
+      type: TaskModelActions.REMOVE_TASK,
+      payload: {
 
       }
     });
@@ -51,8 +41,8 @@ export class TaskModelActions {
 
   updateTask() {
     this.redux.dispatch({
-      type: TaskModelActions.TASK_UPDATED,
-      data: {
+      type: TaskModelActions.UPDATE_TASK,
+      payload: {
 
       }
     });

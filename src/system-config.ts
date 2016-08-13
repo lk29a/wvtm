@@ -26,8 +26,8 @@ const packages: any = {
   },
   'ng2-redux': {
     'format': 'cjs',
-    // defaultExtension: 'js',
-    // main: 'index'
+    defaultExtension: 'js',
+    main: 'index'
   },
   'redux-thunk': {
     'format': 'cjs',

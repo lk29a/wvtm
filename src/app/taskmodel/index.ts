@@ -1,4 +1,4 @@
-import {ITask, ITaskModel} from "./taskmodel.types";
+import {ITask, ITaskModel, ICoord, deimmutifyTaskModel, reimmutifyTaskModel} from "./taskmodel.types";
 import {taskModelReducer} from "./taskmodel.reducer";
 
 export * from "./taskmodel.actions";
@@ -9,6 +9,9 @@ export * from "./taskmodel.service";
 export {
   ITask,
   ITaskModel,
-  taskModelReducer
+  ICoord,
+  taskModelReducer,
+  deimmutifyTaskModel,
+  reimmutifyTaskModel
 }
 

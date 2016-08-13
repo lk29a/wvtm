@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Task} from "./Task";
+import {Task} from "./task";
 import {TaskType, TaskRelation} from "../shared";
 
 import {GenericTree} from "../tree/index";

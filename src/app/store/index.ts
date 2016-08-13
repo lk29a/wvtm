@@ -1,14 +1,14 @@
 declare var require: any
 const createLogger = require("redux-logger");
-const thunk = require("redux-thunk");
-import { IWVTMState, rootReducer } from './store';
+const thunk = require("redux-thunk").default;
+import { IWVTMState, rootReducer, deimmutify, reimmutify } from './store';
 import {IEditorState} from "./editor";
-
 
 export {
   IWVTMState,
   rootReducer,
-  IEditorState
+  IEditorState,
+  reimmutify
 }
 
 export const middlewares = [
@@ -16,6 +16,6 @@ export const middlewares = [
   createLogger({
     level: 'info',
     collapsed: true,
+    stateTransformer: deimmutify
   })
 ];
-

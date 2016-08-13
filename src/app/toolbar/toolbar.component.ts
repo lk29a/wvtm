@@ -24,7 +24,7 @@ export class ToolbarComponent {
 
 
   addTask(type: string) {
-    this.tmActions.addTask(type, "");
+    this.tmActions.addTask(type);
   }
 
   addRelation(type: string) {

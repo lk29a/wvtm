@@ -1,44 +1,58 @@
-import { List, Map, Record } from "immutable";
+import { List, Map, Record, Seq } from "immutable";
+import {TaskType} from "../shared";
 
 export const TaskRecord = Record({
-  taskId: undefined,
-  taskType: undefined,
-  taskName: undefined,
-  taskDescription: undefined,
-  taskRelation: undefined,
+  id: undefined,
+  type: TaskType.ABSTRACT,
+  name: undefined,
+  description: undefined,
+  relation: undefined,
   parent: undefined,
   children: List<string>(),
-  coord: {
-    x: 0,
-    y: 0
-  }
 });
 
 export interface ITask extends Map<string, any> {
-  taskId: string; /* id of task */
-  taskType: string; /* type of task */
-  taskName: string; /* name of task */
-  taskDescription: string; /* description of task */
-  taskRelation: string; /* relation assigned to task */
+  id: string; /* id of task */
+  type: string; /* type of task */
+  name: string; /* name of task */
+  description: string; /* description of task */
+  relation: string; /* relation assigned to task */
   parent: string; /* id of parent task */
-  children: List<string>; /* list of child tasks ids */
-  coord: {
-    x: number;
-    y: number;
-  }; /* x & y coordniate for layout */
+  children: Array<string>; /* list of child tasks ids */
+}
+
+export interface ICoord extends Map<string, any> {
+  x: number;
+  y: number;
 }
 
 export const TaskModelRecord = Record({
   name: "",
   description: "",
+  selectedTask: undefined,
   treeRoot: undefined,
+  treeLayout: Map<string, ICoord>(),
   tasks: Map<string, ITask>()
 });
 
 export interface ITaskModel extends Map<string, any> {
   name: string, /* name of model */
   description: string, /* description of model */
+  selectedTask: string, /* id of selected task */
   treeRoot: string, /* id of root task */
+  treeLayout: Map<string, ICoord>,
   tasks: Map<string, ITask> /* map of tasks in model */
 };
+
+export function deimmutifyTaskModel(state: ITaskModel): Object[] {
+  return state.toJS();
+}
+
+export function reimmutifyTaskModel(plain): ITaskModel {
+  if (plain) {
+    return Seq(plain).map(TaskModelRecord) as ITaskModel;
+  } else {
+    return new TaskModelRecord() as ITaskModel;
+  }
+}
 

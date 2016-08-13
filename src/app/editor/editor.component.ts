@@ -1,11 +1,12 @@
 import {Component, ElementRef, AfterViewInit} from "@angular/core";
+import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import { NgRedux, select } from "ng2-redux";
 import {EditorService} from "./shared";
 import {EditorActions} from "./editor.actions";
 import {Simulator} from "../simulator";
 import {TaskTreeComponent} from "./task-tree";
-import { WVTMService, LoggerService } from "../shared";
+import {LoggerService } from "../shared";
 
 interface Dim {
   height: number,
@@ -17,11 +18,12 @@ interface Dim {
   moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
+  pipes: [AsyncPipe],
   providers: [EditorService, EditorActions, Simulator],
   directives: [TaskTreeComponent],
 })
 export class EditorComponent implements AfterViewInit {
-  @select('treeRoot') treeRoot: Observable<string>;
+  @select(["taskModel", "treeRoot"]) treeRoot: Observable<string>;
 
   svgElm: HTMLElement;
   canvasDim: Dim = {
@@ -31,9 +33,9 @@ export class EditorComponent implements AfterViewInit {
 
   constructor(private el: ElementRef,
     private editor: EditorService,
-    private wvtm: WVTMService,
     private editorActions: EditorActions,
     private logger: LoggerService) {
+    this.logger.debug("Editor component initialized")
     Observable.fromEvent(window, "resize")
       .debounceTime(300)
       .subscribe((event) => {

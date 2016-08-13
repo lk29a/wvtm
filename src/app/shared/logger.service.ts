@@ -67,7 +67,7 @@ export class LoggerService {
   }
   debug(...args: any[]) {
     let caller = this.getCaller();
-    let a: any = ["%c%s DEBUG: %s", "color:#424242;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+    let a: any = ["%c%s DEBUG: %s %s", "color:#BDBDBD;font-weight:bold", this.getTimestamp(), caller.fileInfo];
     a.push(...args);
     console.debug.apply(console, a);
   }

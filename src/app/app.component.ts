@@ -6,14 +6,14 @@ import {ToolbarComponent} from "./toolbar";
 import {EditorComponent} from "./editor";
 import {InfobarComponent} from "./infobar";
 import { LoggerService } from "./shared";
-import { TaskModelService } from "./taskmodel";
+import { TaskModelActions } from "./taskmodel";
 
 @Component({
   selector: "app-root",
   moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
-  providers: [TaskModelService],
+  providers: [TaskModelActions],
   directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 

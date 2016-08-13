@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
 import {
-  WVTMService,
   LoggerService,
   TaskType,
   TaskRelation
@@ -30,8 +29,7 @@ export class InfobarComponent {
   vInfo: any = {};
   simData: any = {};
 
-  constructor(private logger: LoggerService,
-              private wvtm: WVTMService) {
+  constructor(private logger: LoggerService) {
 
     this.logger.debug("Infobar initialized");
 

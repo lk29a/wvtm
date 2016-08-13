@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {LoggerService, WVTMService} from "../shared/index";
+import {LoggerService} from "../shared/index";
 
 @Component({
   selector: "wvtm-menu",
@@ -8,33 +8,33 @@ import {LoggerService, WVTMService} from "../shared/index";
   styleUrls: ["menu.css"],
 })
 export class MenuComponent {
-  constructor(private wvtmService: WVTMService, private logger: LoggerService) {
-    this.logger.info("Menu initialised");
+  constructor(private logger: LoggerService) {
+    this.logger.debug("Menu initialised");
   }
 
   newProject() {
     this.logger.debug("Menu click - New Project" );
-    this.wvtmService.menuAction("new");
+    // this.wvtmService.menuAction("new");
   }
 
   saveProject() {
     this.logger.debug("Menu click - Save Project" );
-    this.wvtmService.menuAction("save");
+    // this.wvtmService.menuAction("save");
   }
 
   validate() {
     this.logger.debug("Menu click - Validate" );
-    this.wvtmService.menuAction("validate");
+    // this.wvtmService.menuAction("validate");
   }
 
   simulate() {
     this.logger.debug("Menu click - Simulate" );
-    this.wvtmService.menuAction("simulate");
+    // this.wvtmService.menuAction("simulate");
   }
 
   zoom(action: string) {
     this.logger.debug("Menu click - Zoom " + action );
-    this.wvtmService.menuAction("zoom" + action);
+    // this.wvtmService.menuAction("zoom" + action);
   }
 
 };
