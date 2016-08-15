@@ -70,8 +70,6 @@ export class TaskTreeComponent implements OnInit, OnDestroy {
   }
 
   getTaskTypeLink() {
-    console.log("lklklk");
-    console.log(this.taskNode.type);
     return `#def-${this.taskNode.type.toLowerCase()}`;
   }
 

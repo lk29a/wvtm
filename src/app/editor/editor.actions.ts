@@ -10,10 +10,19 @@ export class EditorActions {
 
   constructor(private redux: NgRedux<IWVTMState>) {}
 
+  showValidationInfo() {
+    this.redux.dispatch({
+      type: EditorActions.EDITOR_MODE_CHANGE,
+      payload: {
+        mode: EDITOR_MODES.SIMULATION
+      }
+    });
+  }
+
   startSimulationMode() {
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
-      data: {
+      payload: {
         mode: EDITOR_MODES.SIMULATION
       }
     });
@@ -22,7 +31,7 @@ export class EditorActions {
   stopSimulationMode() {
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
-      data: {
+      payload: {
         mode: EDITOR_MODES.DRAWING
       }
     });

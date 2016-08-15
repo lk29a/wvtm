@@ -1,47 +1,11 @@
-import {Injectable} from "@angular/core";
-import {Subject}    from "rxjs/Rx";
-// import {TaskModel, Task} from "../../taskmodel";
-import {Simulator} from "../../simulator";
-import {LoggerService, EDITOR_MODES, TaskType, TaskRelation} from "../../shared";
+import {Map, List} from "immutable";
+import {IEditorState, EditorStateRecord} from "../editor.types";
+import {EDITOR_MODES} from "../../shared"
 
-interface ModelUpdateInfo {
-  action: string,
-  type: string,
-  taskId: string
+
+export function createNew(): IEditorState {
+  return new EditorStateRecord({}) as IEditorState;
 }
-interface UserAction {
-  type: string,
-  action: string,
-  data: any
-}
-
-@Injectable()
-export class EditorService {
-  // private taskModel: TaskModel;
-  // private selectedTaskId: string;
-  // private selectedTaskNode: Task;
-  // private editorMode: EDITOR_MODES;
-  // private validataionInfo: any;
-
-  // private modelUpdatedSource = new Subject<ModelUpdateInfo>();
-  // private taskSelectedSource = new Subject<string>();
-  // private userActionSource = new Subject<UserAction>();
-  // modelUpdated$ = this.modelUpdatedSource.asObservable();
-  // taskSelected$ = this.taskSelectedSource.asObservable();
-  // userAction$ = this.userActionSource.asObservable();
-
-  // constructor(private logger: LoggerService, private simulator: Simulator) {
-  //   // this.createNew();
-  // }
-
-  // createNew() {
-  //   this.taskModel = new TaskModel();
-  //   this.selectedTaskId = this.taskModel.root.id;
-  //   this.editorMode = EDITOR_MODES.DRAWING;
-  //   this.userActionSource.next({ type: "new", action: null, data: null });
-  //   this.taskSelectedSource.next(this.selectedTaskId);
-  // }
-
   // getEditorMode() {
   //   return this.editorMode;
   // }
@@ -162,4 +126,3 @@ export class EditorService {
   // getTaskRelations() {
   //   return TaskRelation;
   // }
-}

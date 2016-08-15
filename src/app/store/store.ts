@@ -1,17 +1,17 @@
 import { combineReducers } from "redux";
 // import {ITaskModel, taskModelReducer} from '../taskmodel';
 import * as taskModel from "../taskmodel";
-import * as editor from "./editor";
+import * as editor from "../editor";
 
 
 export interface IWVTMState {
   taskModel?: taskModel.ITaskModel,
-  editor?: editor.IEditorState
+  editorState?: editor.IEditorState
 }
 
 export const rootReducer = combineReducers<IWVTMState>({
   taskModel: taskModel.taskModelReducer,
-  editor: editor.editorReducer,
+  editorState: editor.editorStateReducer
   // simulation: simulationReducer,
   // userAction: userActionReducer
 });
@@ -19,6 +19,7 @@ export const rootReducer = combineReducers<IWVTMState>({
 export function deimmutify(state: IWVTMState): Object {
   return {
     taskModel: taskModel.deimmutifyTaskModel(state.taskModel),
+    editorState: editor.deimmutifyEditorState(state.editorState),
   };
 }
 

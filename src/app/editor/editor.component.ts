@@ -2,7 +2,6 @@ import {Component, ElementRef, AfterViewInit} from "@angular/core";
 import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import { NgRedux, select } from "ng2-redux";
-import {EditorService} from "./shared";
 import {EditorActions} from "./editor.actions";
 import {Simulator} from "../simulator";
 import {TaskTreeComponent} from "./task-tree";
@@ -19,7 +18,7 @@ interface Dim {
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
   pipes: [AsyncPipe],
-  providers: [EditorService, EditorActions, Simulator],
+  providers: [EditorActions, Simulator],
   directives: [TaskTreeComponent],
 })
 export class EditorComponent implements AfterViewInit {
@@ -32,7 +31,6 @@ export class EditorComponent implements AfterViewInit {
   };
 
   constructor(private el: ElementRef,
-    private editor: EditorService,
     private editorActions: EditorActions,
     private logger: LoggerService) {
     this.logger.debug("Editor component initialized")

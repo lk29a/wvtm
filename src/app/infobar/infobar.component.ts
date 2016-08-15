@@ -1,4 +1,8 @@
-import {Component} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
+import {AsyncPipe} from "@angular/common";
+import {Observable} from "rxjs/Rx";
+import {NgRedux, select} from "ng2-redux";
+import { IWVTMState } from "../store";
 import {
   LoggerService,
   TaskType,
@@ -18,7 +22,8 @@ enum InfoTypes {
   templateUrl: "infobar.html",
   styleUrls: ["infobar.css"],
 })
-export class InfobarComponent {
+export class InfobarComponent implements OnInit, OnDestroy {
+  @select(["taskmodel", "selectedTask"]) selectedTask: Observable<string>;
   currentTask: any;
   infobar: any;
   taskTypes;
@@ -29,7 +34,9 @@ export class InfobarComponent {
   vInfo: any = {};
   simData: any = {};
 
-  constructor(private logger: LoggerService) {
+  constructor(private logger: LoggerService,
+    private redux: NgRedux<IWVTMState>
+  ) {
 
     this.logger.debug("Infobar initialized");
 
@@ -87,9 +94,33 @@ export class InfobarComponent {
     // );
   }
 
+  ngOnInit() {
+
+    let selectedTask = this.redux.select((state) => state.taskModel.tasks.get(state.taskModel.selectedTask));
+    let isRoot = this.redux.select((state) => state.taskModel.treeRoot === state.taskModel.selectedTask);
+    // let isLast = this.redux.select((state) => {
+    //   let st = state.taskModel.selectedTask;
+    //   let parent = 
+    //   return state.taskModel.treeRoot === st;
+    // });
+
+    Observable.combineLatest(selectedTask, isRoot).subscribe((res) => {
+      if (res[0]) {
+        this.infobar.type = InfoTypes.Task;
+        this.currentTask = res[0];
+      }
+      console.log(res);
+    });
+
+    // first.concat(second).subscribe((data) => {
+    //   console.log(data);
+    // })
+
+  }
+
   showTaskInfo(taskId) {
     this.infobar.type = InfoTypes.Task;
-    
+
     // this.currentTask.data = this.wvtm.getTaskData(taskId);
     // let task = this.wvtm.getSelectedTask();
 
@@ -155,6 +186,10 @@ export class InfobarComponent {
 
   getRelationSym(relation) {
     return this.taskRelations[relation];
+  }
+
+  ngOnDestroy() {
+
   }
 
 };

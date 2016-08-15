@@ -1,8 +1,6 @@
 import {ITask, ITaskModel, ICoord, deimmutifyTaskModel, reimmutifyTaskModel} from "./taskmodel.types";
 import {taskModelReducer} from "./taskmodel.reducer";
-
 export * from "./taskmodel.actions";
-export * from "./taskmodel.thunk";
 export * from "./taskmodel.service";
 
 
