@@ -6,23 +6,28 @@ import * as taskModelService from "./taskmodel.service";
 
 
 function task(state: Map<string, ITask>, action): Map<string, ITask> {
-  return state;
+  switch (action.type) {
+
+    case TaskModelActions.UPDATE_TASK:
+      let updatedTask = taskModelService.updateTask(state.get(action.payload.taskId), action.payload.type, action.payload.value);
+      return state.set(action.payload.taskId, updatedTask);
+
+    default:
+    return state;
+  }
 }
 
 function taskModel(state: ITaskModel, action): ITaskModel {
   switch (action.type) {
     case TaskModelActions.ADD_TASK:
-    let selectedTask = state.selectedTask;
-    if (selectedTask) {
-      let task = taskModelService.createTask(state.selectedTask, action.payload.taskType);
-      return taskModelService.addTask(state, task) as ITaskModel;
-    } else {
+      if (state.selectedTask) {
+        let newTask = taskModelService.createTask(state.selectedTask, action.payload.taskType);
+        return taskModelService.addTask(state, newTask) as ITaskModel;
+      }
       return state;
-    }
 
     case TaskModelActions.REMOVE_TASK:
-    case TaskModelActions.UPDATE_TASK:
-      return state;
+        return taskModelService.removeTask(state, action.payload.taskId) as ITaskModel;
 
     default:
       return state;

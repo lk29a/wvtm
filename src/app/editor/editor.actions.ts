@@ -7,8 +7,18 @@ import { EDITOR_MODES } from "../shared";
 export class EditorActions {
 
   static EDITOR_MODE_CHANGE: string = "EDITOR_MODE_CHANGE";
+  static ADD_TO_LIBRARY: string = "ADD_TO_LIBRARY";
 
   constructor(private redux: NgRedux<IWVTMState>) {}
+
+  addToLibrary(taskId: string) {
+    this.redux.dispatch({
+      type: EditorActions.ADD_TO_LIBRARY,
+      payload: {
+        taskId: taskId
+      }
+    });
+  }
 
   showValidationInfo() {
     this.redux.dispatch({

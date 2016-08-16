@@ -58,6 +58,27 @@ export function addTask(taskModel: ITaskModel, subTask): ITaskModel {
   }) as ITaskModel;
 }
 
+export function removeTask(taskModel: ITaskModel, taskId: string): ITaskModel {
+  let tasks = taskModel.tasks;
+  let selected = tasks.get(taskId);
+  tasks = tasks.withMutations(function(data) {
+    data.delete(taskId)
+      .updateIn([selected.parent, "children" ], function(childList) {
+        return childList.delete(childList.indexOf(taskId));
+      })
+  });
+
+  let coords = calculateLayout(taskModel.treeRoot, tasks);
+
+  return taskModel.withMutations(model => {
+    model.set("tasks", tasks).set("treeLayout", coords);
+  }) as ITaskModel;
+}
+
+export function updateTask(task: ITask, type, value): ITask {
+  return task.set(type, value) as ITask;
+}
+
 export function calculateLayout(rootTask: string, tasks: Map<string, ITask>): Map<string, ICoord> {
   // get current canvas size
   let treeLayout = new TreeLayout();

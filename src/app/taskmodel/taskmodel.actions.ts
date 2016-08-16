@@ -10,7 +10,7 @@ export class TaskModelActions {
   static UPDATE_TASK: string = "UPDATE_TASK";
   static SELECT_TASK: string = "SELECT_TASK";
 
-  constructor(private redux: NgRedux<IWVTMState>) {}
+  constructor(private redux: NgRedux<IWVTMState>) { }
 
   addTask(type: string) {
     this.redux.dispatch({
@@ -30,20 +30,22 @@ export class TaskModelActions {
     });
   }
 
-  removeTask() {
+  removeTask(taskId) {
     this.redux.dispatch({
       type: TaskModelActions.REMOVE_TASK,
       payload: {
-
+        taskId: taskId
       }
     });
   }
 
-  updateTask() {
+  updateTask(taskId, type, value) {
     this.redux.dispatch({
       type: TaskModelActions.UPDATE_TASK,
       payload: {
-
+        taskId: taskId,
+        type: type,
+        value: value
       }
     });
   }

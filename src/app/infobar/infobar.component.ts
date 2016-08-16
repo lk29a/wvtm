@@ -1,8 +1,13 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, Control, FORM_DIRECTIVES} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import {NgRedux, select} from "ng2-redux";
 import { IWVTMState } from "../store";
+import {TaskModelActions} from "../taskmodel"
+
+import Immutable = require('immutable');
+
+
 import {
   LoggerService,
   TaskType,
@@ -24,7 +29,13 @@ enum InfoTypes {
 })
 export class InfobarComponent implements OnInit, OnDestroy {
   @select(["taskmodel", "selectedTask"]) selectedTask: Observable<string>;
-  currentTask: any;
+
+  private nameField: Control = new Control();
+  private descField: Control = new Control();
+  private typeField: Control = new Control();
+  private relationField: Control = new Control();
+
+  currentTask: any = {};
   infobar: any;
   taskTypes;
   taskRelations;
@@ -33,10 +44,12 @@ export class InfobarComponent implements OnInit, OnDestroy {
   infoType;
   vInfo: any = {};
   simData: any = {};
+  rxSubs: any = {};
+  curTaskObj: any;
 
   constructor(private logger: LoggerService,
-    private redux: NgRedux<IWVTMState>
-  ) {
+    private tmActions: TaskModelActions,
+    private redux: NgRedux<IWVTMState>) {
 
     this.logger.debug("Infobar initialized");
 
@@ -52,19 +65,37 @@ export class InfobarComponent implements OnInit, OnDestroy {
     };
     this.infoType = InfoTypes;
 
+    this.nameField.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask("name", name);
+      });
+
+    this.descField.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask("description", name);
+      });
+
+    this.typeField.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask("type", name);
+      });
+
+    this.relationField.valueChanges
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask("relation", name);
+      });
+
 
 
     // this.wvtm.userAction$.subscribe(
-    //   userAction => {
-    //     let reset = false;
-    //     switch (userAction.type) {
-    //       case "task":
-    //         if (userAction.action === "select")
-    //           this.showTaskInfo(userAction.data.taskId);
-    //         else
-    //           reset = true;
-    //         break;
-
     //       case "simulation":
     //         if (userAction.action === "start")
     //           this.showSimulationInfo(userAction.data);
@@ -95,45 +126,47 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    let selectedTask = this.redux.select((state) => state.taskModel.tasks.get(state.taskModel.selectedTask));
-    let isRoot = this.redux.select((state) => state.taskModel.treeRoot === state.taskModel.selectedTask);
-    // let isLast = this.redux.select((state) => {
-    //   let st = state.taskModel.selectedTask;
-    //   let parent = 
-    //   return state.taskModel.treeRoot === st;
-    // });
-
-    Observable.combineLatest(selectedTask, isRoot).subscribe((res) => {
-      if (res[0]) {
-        this.infobar.type = InfoTypes.Task;
-        this.currentTask = res[0];
+    this.rxSubs.selectedTask = this.redux.select((state) => {
+      let obj = null;
+      let t = state.taskModel.tasks.get(state.taskModel.selectedTask);
+      if (t && !Immutable.is(this.curTaskObj, t)) {
+        let parent = state.taskModel.tasks.get(t.parent);
+        this.curTaskObj = t;
+        obj = {
+          task: t,
+          parent: parent
+        };
       }
-      console.log(res);
-    });
-
-    // first.concat(second).subscribe((data) => {
-    //   console.log(data);
-    // })
-
+      return obj;
+    }).subscribe(data => {
+      this.showTaskInfo(data);
+    })
   }
 
-  showTaskInfo(taskId) {
-    this.infobar.type = InfoTypes.Task;
+  showTaskInfo(data) {
+    if (data) {
+      this.infobar.type = InfoTypes.Task;
+      let {task, parent} = data;
 
-    // this.currentTask.data = this.wvtm.getTaskData(taskId);
-    // let task = this.wvtm.getSelectedTask();
+      let isLast = false;
+      if (parent) {
+        let idx = parent.children.indexOf(task.id);
+        if (idx === (parent.children.size - 1))
+          isLast = true;
+      }
 
-    // this.currentTask = {
-    //   id: task.id,
-    //   type: task.type,
-    //   relation: task.relation,
-    //   name: task.name,
-    //   description: task.description,
-    //   isRoot: task.parent ? false : true,
-    //   isLast: task.getRightSibling() ? false : true,
-    // };
-    // this.infobar.title = "Task: " + this.currentTask.name;
+      this.currentTask = {
+        id: task.id,
+        type: task.type,
+        relation: task.relation,
+        name: task.name,
+        description: task.description,
+        children: task.children,
+        isRoot: task.parent ? false : true,
+        isLast: isLast,
+      };
+      this.infobar.title = "Task: " + this.currentTask.name;
+    }
   }
 
   resetInfoBar() {
@@ -173,15 +206,24 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   deleteTask() {
-    // this.wvtm.removeTask(this.currentTask.id);
+    let okToDelete = true;
+    if (this.currentTask.children.size > 0) {
+      let msg = "Warning: This will also remove the all subtasks\n Are you sure?";
+      okToDelete = window.confirm(msg);
+    }
+    if (okToDelete)
+      this.tmActions.removeTask(this.currentTask.id);
+  }
+
+  addToLibrary() {
+    // this.editor
   }
 
   updateTask(type, value) {
-    // if (type && value) {
-    //   if (this.wvtm.updateTask(type, value, this.currentTask.id)) {
-    //     this.currentTask[type] = value;
-    //   }
-    // }
+    if (this.currentTask[type] === value)
+      return;
+
+    this.tmActions.updateTask(this.currentTask.id, type, value);
   }
 
   getRelationSym(relation) {
@@ -189,7 +231,9 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    for (let key in this.rxSubs) {
+      if (this.rxSubs.hasOwnProperty(key))
+        this.rxSubs[key].unsubscribe();
+    }
   }
-
-};
+}

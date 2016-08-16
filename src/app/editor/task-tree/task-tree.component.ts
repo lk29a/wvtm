@@ -25,7 +25,7 @@ export class TaskTreeComponent implements OnInit, OnDestroy {
   // @select(state => state.) treeRoot: Observable<string>;
 
   // taskNode: Observable<ITask>;
-  private subscriptions: any = {};
+  private rxSubs: any = {};
   taskNode: ITask;
   isSelecetd: Observable<boolean>;
   taskCoords: ICoord;
@@ -39,25 +39,25 @@ export class TaskTreeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // subscribe to task data
-    this.subscriptions.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId))
+    this.rxSubs.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId))
               .subscribe(data => this.taskNode = data);
 
     // subscribe to selected task
-    this.subscriptions.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
+    this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
               .map(taskId => this.taskId === taskId);
 
     // subscribe to task layout coords
-    this.subscriptions.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskId))
+    this.rxSubs.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskId))
               .subscribe(data => this.taskCoords = data);
 
     // subscribe to parent task layout coords
-    this.subscriptions.coords = this.redux.select(state => {
+    this.rxSubs.coords = this.redux.select(state => {
       let parent = state.taskModel.tasks.getIn([this.taskId, "parent"]);
       return state.taskModel.treeLayout.get(parent)
     })
     .subscribe(data => this.parentCoords = data);
     // // subscribe to tasks child list
-    // this.subscriptions.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId).children)
+    // this.rxSubs.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId).children)
     //           .subscribe(data => {
     //             console.log(data);
     //             this.subTasks = data});
@@ -83,11 +83,11 @@ export class TaskTreeComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    for (let key in this.subscriptions) {
-      if (this.subscriptions.hasOwnProperty(key))
-        this.subscriptions[key].unsubscribe();
+    for (let key in this.rxSubs) {
+      if (this.rxSubs.hasOwnProperty(key))
+        this.rxSubs[key].unsubscribe();
     }
-    // this.subscriptions.unsubscribe();
+    // this.rxSubs.unsubscribe();
   }
 
 }
