@@ -26,6 +26,18 @@ function taskModel(state: ITaskModel, action): ITaskModel {
       }
       return state;
 
+   case TaskModelActions.NEW_MODULE:
+
+     taskModelService.newModule(state, action.payload.taskId);
+     return state;
+
+
+   case TaskModelActions.ADD_MODULE:
+     if (state.selectedTask) {
+       return state;
+     }
+     return state;
+
     case TaskModelActions.REMOVE_TASK:
         return taskModelService.removeTask(state, action.payload.taskId) as ITaskModel;
 
@@ -43,6 +55,8 @@ export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITa
   switch (action.type) {
     case TaskModelActions.ADD_TASK:
     case TaskModelActions.REMOVE_TASK:
+    case TaskModelActions.ADD_MODULE:
+    case TaskModelActions.NEW_MODULE:
       return taskModel(state, action);
 
     case TaskModelActions.UPDATE_TASK:

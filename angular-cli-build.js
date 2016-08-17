@@ -17,6 +17,7 @@ module.exports = function(defaults) {
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       '@ng2-bootstrap/**/*.js',
+      'ng2-bs3-modal/**/*.js',
       'immutable/dist/immutable.js',
       'redux/dist/**/*.+(js|js.map)',
       'ng2-redux/lib/**/*.+(js|js.map)',

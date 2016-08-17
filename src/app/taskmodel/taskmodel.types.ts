@@ -26,24 +26,27 @@ export interface ICoord extends Map<string, any> {
   y: number;
 }
 
-export const TaskModelRecord = Record({
-  name: "",
-  description: "",
-  selectedTask: undefined,
-  treeRoot: undefined,
-  treeLayout: Map<string, ICoord>(),
-  tasks: Map<string, ITask>()
-});
-
 export interface ITaskModel extends Map<string, any> {
   name: string, /* name of model */
+  id: string
   description: string, /* description of model */
   selectedTask: string, /* id of selected task */
   treeRoot: string, /* id of root task */
+  modules: List<Map<string, ITaskModel>>,
   treeLayout: Map<string, ICoord>,
   tasks: Map<string, ITask> /* map of tasks in model */
 };
 
+export const TaskModelRecord = Record({
+  id: "",
+  name: "",
+  description: "",
+  selectedTask: undefined,
+  treeRoot: undefined,
+  modules: List<Map<string, ITaskModel>>(),
+  treeLayout: Map<string, ICoord>(),
+  tasks: Map<string, ITask>()
+});
 export function deimmutifyTaskModel(state: ITaskModel): Object[] {
   return state.toJS();
 }

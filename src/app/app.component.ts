@@ -1,4 +1,5 @@
 import {Component} from "@angular/core";
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgRedux } from "ng2-redux";
 import { IWVTMState, rootReducer, middlewares } from "./store";
 import {MenuComponent} from "./menu";
@@ -13,7 +14,7 @@ import { TaskModelActions } from "./taskmodel";
   moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
-  providers: [TaskModelActions],
+  providers: [NgbModule, TaskModelActions],
   directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 

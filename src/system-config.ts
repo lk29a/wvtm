@@ -9,6 +9,8 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
+  '@ng2-bootstrap': 'vendor/@ng2-bootstrap',
+  'ng2-bs3-modal': 'vendor/ng2-bs3-modal',
   'immutable': 'vendor/immutable/dist/immutable.js',
   'redux': 'vendor/redux/dist/redux.js',
   'ng2-redux': 'vendor/ng2-redux/lib',
@@ -20,6 +22,15 @@ const map: any = {
 const packages: any = {
   'immutable': {
     'format': 'cjs'
+  },
+  'ng2-bootstrap': {
+    format: 'cjs',
+    defaultExtension: 'js',
+    main: 'ng2-bootstrap.js'
+  },
+  'ng2-bs3-modal': {
+    defaultExtension: 'js',
+    main: 'ng2-bs3-modal.js'
   },
   'redux': {
     'format': 'cjs'

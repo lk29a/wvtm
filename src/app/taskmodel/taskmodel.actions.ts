@@ -9,6 +9,9 @@ export class TaskModelActions {
   static REMOVE_TASK: string = "REMOVE_TASK";
   static UPDATE_TASK: string = "UPDATE_TASK";
   static SELECT_TASK: string = "SELECT_TASK";
+  static ADD_MODULE: string = "ADD_MODULE";
+  static NEW_MODULE: string = "NEW_MODULE";
+
 
   constructor(private redux: NgRedux<IWVTMState>) { }
 
@@ -17,6 +20,24 @@ export class TaskModelActions {
       type: TaskModelActions.ADD_TASK,
       payload: {
         taskType: type
+      }
+    });
+  }
+
+  newModule(taskId: string) {
+    this.redux.dispatch({
+      type: TaskModelActions.NEW_MODULE,
+      payload: {
+        taskId: taskId
+      }
+    });
+  }
+
+  addModule(moduleId: string) {
+    this.redux.dispatch({
+      type: TaskModelActions.ADD_MODULE,
+      payload: {
+        moduleId: moduleId
       }
     });
   }

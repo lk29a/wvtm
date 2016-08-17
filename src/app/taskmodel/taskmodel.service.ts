@@ -4,6 +4,7 @@ import {TreeLayout} from "./treelayout";
 import {TaskType} from "../shared";
 
 let taskCounter = 0;
+let moduleCounter = 1;
 
 export function createNew(): ITaskModel {
   let rootTask: ITask = createRootTask();
@@ -30,6 +31,7 @@ function createRootTask(): ITask {
     description: "Default abstract node"
   }) as ITask;
 }
+
 
 export function createTask(parentId: string, taskType: string): ITask {
   return new TaskRecord({
@@ -58,6 +60,13 @@ export function addTask(taskModel: ITaskModel, subTask): ITaskModel {
   }) as ITaskModel;
 }
 
+export function addModule(taskModel: ITaskModel, parentId: string, moduleId: string): ITaskModel {
+  let subTree = makeSubTreeFromModue(parentId, moduleId);
+
+  return taskModel;
+}
+
+
 export function removeTask(taskModel: ITaskModel, taskId: string): ITaskModel {
   let tasks = taskModel.tasks;
   let selected = tasks.get(taskId);
@@ -79,8 +88,33 @@ export function updateTask(task: ITask, type, value): ITask {
   return task.set(type, value) as ITask;
 }
 
+export function newModule(taskModel: ITaskModel, taskId: string) {
+  let tasks = taskModel.tasks;
+  let modules = taskModel.modules;
+  let taskList: List<string> = tasks.getIn([taskId, "children"]);
+
+  let modTasks: Map<string, ITask> = tasks.filter((val, key) => {
+    return taskList.includes(key) || key === taskId;
+  }).toMap();
+
+  let newMod = new TaskModelRecord({
+    "name": "Module " + moduleCounter++,
+    "description": "",
+    "tasks": modTasks
+  }) as ITaskModel;
+
+  modules = modules.push(newMod);
+
+  return taskModel.set("modules", modules);
+}
+
+
 export function calculateLayout(rootTask: string, tasks: Map<string, ITask>): Map<string, ICoord> {
   // get current canvas size
   let treeLayout = new TreeLayout();
   return treeLayout.calculate(rootTask, tasks)
+}
+
+export function makeSubTreeFromModue(parentId: string, module: string) {
+  
 }

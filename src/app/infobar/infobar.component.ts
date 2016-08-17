@@ -126,6 +126,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    //selected task
     this.rxSubs.selectedTask = this.redux.select((state) => {
       let obj = null;
       let t = state.taskModel.tasks.get(state.taskModel.selectedTask);
@@ -140,7 +141,11 @@ export class InfobarComponent implements OnInit, OnDestroy {
       return obj;
     }).subscribe(data => {
       this.showTaskInfo(data);
-    })
+    });
+
+
+
+
   }
 
   showTaskInfo(data) {
@@ -216,7 +221,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   addToLibrary() {
-    // this.editor
+    this.tmActions.newModule(this.currentTask.id);
   }
 
   updateTask(type, value) {
