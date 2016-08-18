@@ -16,7 +16,7 @@ module.exports = function(defaults) {
       'reflect-metadata/**/*.+(ts|js|js.map)',
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
-      '@ng2-bootstrap/**/*.js',
+      '@ng-bootstrap/**/*.js',
       'ng2-bs3-modal/**/*.js',
       'immutable/dist/immutable.js',
       'redux/dist/**/*.+(js|js.map)',

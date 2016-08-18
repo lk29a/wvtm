@@ -5,10 +5,11 @@
         <div class="toolbar-icon" [ngClass]="type.toLowerCase()"></div>
       </div>
       <div class="toolbar-btn" action="library">
-        <template #modulePopContent>
+        <template #libraryContent>
           No modules addes to library yet.
         </template>
-        <div class="toolbar-icon library" [ngbPopover]="modulePopContent"></div>
+        <div class="toolbar-icon library" [ngbPopover]="libraryContent" placement="bottom"></div>
+        <!-- <div class="toolbar-icon library"></div> -->
       </div>
     </div>
     <div class="menu-separator"></div>

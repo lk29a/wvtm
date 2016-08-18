@@ -1,21 +1,21 @@
 import {Component} from "@angular/core";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+// import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {NgRedux } from "ng2-redux";
 import { IWVTMState, rootReducer, middlewares } from "./store";
-import {MenuComponent} from "./menu";
-import {ToolbarComponent} from "./toolbar";
-import {EditorComponent} from "./editor";
-import {InfobarComponent} from "./infobar";
+// import {MenuComponent} from "./menu";
+// import {ToolbarComponent} from "./toolbar";
+// import {EditorComponent} from "./editor";
+// import {InfobarComponent} from "./infobar";
 import { LoggerService } from "./shared";
-import { TaskModelActions } from "./taskmodel";
+// import { TaskModelActions } from "./taskmodel";
 
 @Component({
   selector: "app-root",
   moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
-  providers: [NgbModule, TaskModelActions],
-  directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
+  providers: [],
+  // directives: [MenuComponent, ToolbarComponent, InfobarComponent, EditorComponent],
 })
 
 export class AppComponent {

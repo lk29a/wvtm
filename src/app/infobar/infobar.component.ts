@@ -25,6 +25,7 @@ enum InfoTypes {
   selector: "wvtm-infobar",
   moduleId: module.id,
   templateUrl: "infobar.html",
+  directives: [FORM_DIRECTIVES],
   styleUrls: ["infobar.css"],
 })
 export class InfobarComponent implements OnInit, OnDestroy {

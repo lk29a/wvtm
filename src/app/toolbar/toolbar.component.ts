@@ -1,9 +1,12 @@
-import {Component} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
+import {NgRedux, select} from "ng2-redux";
+import {List, Map } from "immutable";
 import {
   LoggerService,
   TaskType,
   TaskRelation
 } from "../shared";
+import { IWVTMState } from "../store";
 import {TaskModelActions} from "../taskmodel"
 
 @Component({
@@ -12,14 +15,29 @@ import {TaskModelActions} from "../taskmodel"
   templateUrl: "toolbar.html",
   styleUrls: ["toolbar.css"]
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit, OnDestroy {
   taskTypes = Object.keys(TaskType);
   relations = Object.keys(TaskRelation);
   taskRelations = null;
+  rxSubs: any = {};
 
-  constructor(private tmActions: TaskModelActions, private logger: LoggerService) {
+  constructor(private tmActions: TaskModelActions,
+    private logger: LoggerService,
+    private redux: NgRedux<IWVTMState>) {
+
     this.logger.debug("Toolbar initialized");
     this.taskRelations = TaskRelation;
+  }
+
+  ngOnInit() {
+    this.rxSubs.library = this.redux.select((state) => {
+      let lib = state.taskModel.modules;
+      console.log(lib.toJS());
+
+      return lib;
+    }).subscribe((data) => {
+      console.log(data);
+    });
   }
 
 
@@ -45,4 +63,9 @@ export class ToolbarComponent {
   //   }
   // }
 
-};
+  ngOnDestroy() {
+    
+  }
+
+}
+

@@ -1,14 +1,20 @@
-import { bootstrap } from "@angular/platform-browser-dynamic";
-import { enableProdMode } from "@angular/core";
-import { AppComponent, environment } from "./app";
-import {LoggerService} from "./app/shared";
-import { NgRedux } from 'ng2-redux';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module';
 
-if (environment.production) {
-  enableProdMode();
-}
+// if (environment.production) {
+//   enableProdMode();
+// }
 
-bootstrap(AppComponent, [
-  LoggerService,
-  NgRedux
-]);
+
+platformBrowserDynamic().bootstrapModule(AppModule);
+// import { bootstrap } from "@angular/platform-browser-dynamic";
+// import { enableProdMode } from "@angular/core";
+// import { AppComponent, environment } from "./app";
+// import {LoggerService} from "./app/shared";
+// import { NgRedux } from 'ng2-redux';
+
+
+// bootstrap(AppComponent, [
+//   LoggerService,
+//   NgRedux
+// ]);
