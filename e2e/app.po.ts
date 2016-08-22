@@ -1,4 +1,4 @@
-export class WVTMPage {
+export class WvtmPage {
   navigateTo() {
     return browser.get('/');
   }

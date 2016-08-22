@@ -1,4 +1,5 @@
-import { NgModule }      from '@angular/core';
+import { NgModule, ApplicationRef }      from '@angular/core';
+import { NgModule, CommonModule }      from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { AppComponent }  from './app.component';
@@ -22,7 +23,8 @@ import { NgRedux } from 'ng2-redux';
     InfobarModule
   ],
   declarations: [ AppComponent ],   // components and directives
-  bootstrap: [ AppComponent ],     // root component
-  providers: [NgRedux, LoggerService, TaskModelActions]    // services
+  providers: [NgRedux, LoggerService, TaskModelActions],    // services
+  entryComponent: [AppComponent],
+  bootstrap: [ AppComponent ]     // root component
 })
 export class AppModule { }

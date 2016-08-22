@@ -1,10 +1,10 @@
-import { WVTMPage } from './app.po';
+import { WvtmPage } from './app.po';
 
 describe('wvtm App', function() {
-  let page: WVTMPage;
+  let page: WvtmPage;
 
   beforeEach(() => {
-    page = new WVTMPage();
+    page = new WvtmPage();
   });
 
   it('should display message saying app works', () => {
