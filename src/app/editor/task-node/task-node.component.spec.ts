@@ -3,7 +3,7 @@
 import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { addProviders, async, inject } from '@angular/core/testing';
-import { TaskTreeComponent } from './task-tree.component';
+import { TaskNodeComponent } from './task-node.component';
 
 // describe('Component: TaskTree', () => {
 //   it('should create an instance', () => {

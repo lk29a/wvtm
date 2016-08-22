@@ -1,11 +1,14 @@
-import {Component, ElementRef, AfterViewInit} from "@angular/core";
-import {AsyncPipe} from "@angular/common";
+declare var require: any;
+import {Component, ElementRef, OnInit, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import { NgRedux, select } from "ng2-redux";
-import {EditorActions} from "./editor.actions";
-import {Simulator} from "../simulator";
-import {TaskTreeComponent} from "./task-tree";
+import { Map } from "immutable";
+import { EditorActions }      from "./editor.actions";
 import {LoggerService } from "../shared";
+import { IWVTMState } from "../store";
+import {ITask, ITaskModel} from "../taskmodel";
+
+const Immutable  = require("immutable");
 
 interface Dim {
   height: number,
@@ -17,13 +20,14 @@ interface Dim {
   moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
-  pipes: [AsyncPipe],
-  providers: [EditorActions, Simulator],
-  directives: [TaskTreeComponent],
+  // directives: [TaskNodeComponent],
 })
-export class EditorComponent implements AfterViewInit {
-  @select(["taskModel", "treeRoot"]) treeRoot: Observable<string>;
+export class EditorComponent implements OnInit, AfterViewInit {
 
+
+  // @select(["taskModel", "treeRoot"]) treeRoot: Observable<string>;
+  // @select(["taskModel", "tasks"]) tasks: Observable<Map<string, ITask>>;
+  tasks: Map<string, ITask>;
   svgElm: HTMLElement;
   canvasDim: Dim = {
     height: null,
@@ -32,6 +36,7 @@ export class EditorComponent implements AfterViewInit {
 
   constructor(private el: ElementRef,
     private editorActions: EditorActions,
+    private redux: NgRedux<IWVTMState>,
     private logger: LoggerService) {
     this.logger.debug("Editor component initialized")
     Observable.fromEvent(window, "resize")
@@ -41,8 +46,20 @@ export class EditorComponent implements AfterViewInit {
       }
     );
 
-    // this.taskModel.createNew();
-    // this.taskModel = editor.getTaskModel();
+    this.redux.select("taskModel")
+      .subscribe((taskModel: ITaskModel) => {
+        console.log(taskModel);
+      });
+
+    this.redux.select(["taskModel", "tasks"])
+      .subscribe((tasks: Map<string, ITask>) => {
+        console.log(tasks);
+        if (!Immutable.is(this.tasks, tasks))
+          this.tasks = tasks;
+      });
+  }
+
+  ngOnInit() {
   }
 
   resizeCanvas(event) {

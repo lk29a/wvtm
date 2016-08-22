@@ -50,13 +50,12 @@
         <rect x="0" y="0" width="40" height="40" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" class="node-area"></rect>
       </g>
     </defs>
+
     <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;">
-      <!--       <g id="TASK_0" class="task">
-        <text x="498.09375" y="10" dy="3" class="task-name">Default</text>
-        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#def-abstract" x="478.09375" y="10" class="task-node"></use>
-      </g> -->
-      <!-- <svg:g task-tree [task]="taskStore.taskTree | async" class="tc"></svg:g> -->
-      <svg:g task-tree [taskId]="treeRoot | async" class="tc"></svg:g>
+    <svg:g task-node *ngFor="let task of tasks.values()" [taskNode]="task"></svg:g>
+
+
+      <!-- <svg:g task-tree [taskId]="treeRoot | async" class="tc"></svg:g> -->
     </g>
   </svg>
 </div>

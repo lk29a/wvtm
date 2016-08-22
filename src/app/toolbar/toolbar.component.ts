@@ -32,8 +32,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.rxSubs.library = this.redux.select((state) => {
       let lib = state.taskModel.modules;
-      console.log(lib.toJS());
-
       return lib;
     }).subscribe((data) => {
       console.log(data);
