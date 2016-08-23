@@ -2,6 +2,14 @@ import { Injectable } from "@angular/core";
 
 declare var Error: any;
 
+const enum LOG_LEVEL {
+  ALL,
+  DEBUG,
+  ERROR,
+  INFO,
+  WARN
+}
+
 // const STACK_FRAME_RE = new RegExp("\\s*at ((\\S+)\\s)?\\((.*)\\)");
 // using negative look ahead
 const STACK_FRAME_RE = new RegExp("\\s*at ((?:(?!\\().)*)?\\((.*)\\)");
@@ -9,6 +17,12 @@ const STACK_FRAME_RE = new RegExp("\\s*at ((?:(?!\\().)*)?\\((.*)\\)");
 
 @Injectable()
 export class LoggerService {
+
+  private loglevel: LOG_LEVEL;
+
+  constructor() {
+    this.loglevel = LOG_LEVEL.ERROR;
+  }
 
   private getCaller() {
     // @lk Make sure this is cross-browser
@@ -19,15 +33,15 @@ export class LoggerService {
     // 2 - log function that called this
     // 3 - code calling logger
     let frame = err.stack.split("\n")[3];
-    let  callerInfo = STACK_FRAME_RE.exec(frame);
+    let callerInfo = STACK_FRAME_RE.exec(frame);
     callerInfo[2] = callerInfo[2].split("/").slice(-1).pop();
 
     // Find the first line in the stack that doesn't name this module.
     // for (var i = 0; i < frames.length; i++) {
-      // if (frames[i].indexOf("LoggerService") === -1) {
-      //   callerInfo = STACK_FRAME_RE.exec(frames[i]);
-      //   break;
-      // }
+    // if (frames[i].indexOf("LoggerService") === -1) {
+    //   callerInfo = STACK_FRAME_RE.exec(frames[i]);
+    //   break;
+    // }
     // }
 
     if (callerInfo) {
@@ -54,22 +68,28 @@ export class LoggerService {
     console.log.apply(console, a);
   }
   info(...args: any[]): void {
-    let caller = this.getCaller();
-    let a: any = ["%c%s INFO: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
-    a.push(...args);
-    console.info.apply(console, a);
+    if (this.loglevel <= LOG_LEVEL.INFO) {
+      let caller = this.getCaller();
+      let a: any = ["%c%s INFO: %s", "color:#2196F3;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+      a.push(...args);
+      console.info.apply(console, a);
+    }
   }
   error(...args: any[]): void {
-    let caller = this.getCaller();
-    let a: any = ["%c%s ERROR: %s", "color:#F44336;font-weight:bold", this.getTimestamp(), caller.fileInfo];
-    a.push(...args);
-    console.error.apply(console, a);
+    if (this.loglevel <= LOG_LEVEL.ERROR) {
+      let caller = this.getCaller();
+      let a: any = ["%c%s ERROR: %s", "color:#F44336;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+      a.push(...args);
+      console.error.apply(console, a);
+    }
   }
   debug(...args: any[]) {
-    let caller = this.getCaller();
-    let a: any = ["%c%s DEBUG: %s %s", "color:#BDBDBD;font-weight:bold", this.getTimestamp(), caller.fileInfo];
-    a.push(...args);
-    console.debug.apply(console, a);
+    if (this.loglevel <= LOG_LEVEL.DEBUG) {
+      let caller = this.getCaller();
+      let a: any = ["%c%s DEBUG: %s %s", "color:#BDBDBD;font-weight:bold", this.getTimestamp(), caller.fileInfo];
+      a.push(...args);
+      console.debug.apply(console, a);
+    }
   }
   trace(...args: any[]): void {
     let caller = this.getCaller();

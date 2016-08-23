@@ -1,3 +1,5 @@
+declare var require: any;
+
 import {Component, OnInit, OnDestroy} from "@angular/core";
 import {AsyncPipe, Control, FORM_DIRECTIVES} from "@angular/common";
 import {Observable} from "rxjs/Rx";
@@ -5,7 +7,7 @@ import {NgRedux, select} from "ng2-redux";
 import { IWVTMState } from "../store";
 import {TaskModelActions} from "../taskmodel"
 
-import Immutable = require('immutable');
+const Immutable = require('immutable');
 
 
 import {
@@ -23,7 +25,7 @@ enum InfoTypes {
 
 @Component({
   selector: "wvtm-infobar",
-  moduleId: module.id,
+  // moduleId: module.id,
   templateUrl: "infobar.html",
   directives: [FORM_DIRECTIVES],
   styleUrls: ["infobar.css"],

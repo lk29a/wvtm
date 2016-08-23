@@ -52,7 +52,7 @@
     </defs>
 
     <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;">
-    <svg:g task-node *ngFor="let task of tasks.values()" [taskNode]="task"></svg:g>
+    <svg:g task-node *ngFor="let task of tasks | async" [taskNode]="task"></svg:g>
 
 
       <!-- <svg:g task-tree [taskId]="treeRoot | async" class="tc"></svg:g> -->

@@ -38,7 +38,7 @@ export class TreeLayout {
     this.secondWalk(rootNode, -this.layoutData[rootNode].x, 0.3);
     this.centreLayout(rootNode, centerX);
 
-    let coordsMap: Map<string, ICoord> = Map({});
+    let coordsMap = Map({});
     coordsMap = coordsMap.withMutations((data) => {
       for (let key in this.layoutData) {
         if (this.layoutData.hasOwnProperty(key)) {
@@ -49,7 +49,7 @@ export class TreeLayout {
         }
       }
     })
-    return coordsMap;
+    return coordsMap as Map<string, ICoord>;
   }
 
   private firstWalk(node: string) {

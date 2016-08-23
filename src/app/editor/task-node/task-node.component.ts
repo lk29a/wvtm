@@ -9,7 +9,7 @@ import {ITask, ICoord, TaskModelActions} from "../../taskmodel";
 // import {TaskStore, EditorStateStore} from "../../store";
 
 @Component({
-  moduleId: module.id,
+  // moduleId: module.id,
   selector: "g[task-node]",
   templateUrl: "task-node.component.html",
   styleUrls: ["task-node.component.css"],
@@ -33,6 +33,11 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private redux: NgRedux<IWVTMState>,
     private taskModelActions: TaskModelActions,
     private svgHelper: SVGHelper) {
+
+    this.taskCoords = {
+      x: 0,
+      y: 0
+    } as ICoord;
   }
 
   ngOnInit() {
@@ -42,47 +47,44 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     //           .subscribe(data => this.taskNode = data);
 
     // // subscribe to selected task
-    // this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
-    //           .map(taskId => this.taskId === taskId);
+    this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
+      .map(taskId => this.taskNode.id === taskId);
 
     // // subscribe to task layout coords
     this.rxSubs.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskNode.id))
-              .subscribe(data => this.taskCoords = data);
+      .subscribe(data => {
+        console.log("new coords", this.taskNode.id);
+        if (this.taskCoords.x !== data.x || this.taskCoords.y !== data.y) {
+          this.taskCoords = data;
+        }
+      });
 
     // // subscribe to parent task layout coords
-    // this.rxSubs.coords = this.redux.select(state => {
-    //   let parent = state.taskModel.tasks.getIn([this.taskId, "parent"]);
-    //   return state.taskModel.treeLayout.get(parent)
-    // })
-    // .subscribe(data => this.parentCoords = data);
-    // // subscribe to tasks child list
-    // this.rxSubs.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId).children)
-    //           .subscribe(data => {
-    //             console.log(data);
-    //             this.subTasks = data});
-
+    this.rxSubs.coords = this.redux.select(state => {
+      let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
+      return state.taskModel.treeLayout.get(parent)
+    })
+    .subscribe(data => this.parentCoords = data);
   }
 
   onTaskNodeClick() {
     this.taskModelActions.selectTask(this.taskNode.id);
-    // this.taskStore.selectTask(this.task);
   }
 
   getTaskTypeLink() {
-    // console.log("re-render", this.taskNode);
-    // let type: string = this.taskNode.type;
     return `#def-${this.taskNode.type.toLowerCase()}`;
   }
 
   getLinkPath(): string {
-    if (this.parentCoords)
+    console.log("parent link", this.taskNode.id, this.parentCoords);
+    if (this.taskNode.parent)
       return this.svgHelper.getLinkPath(this.taskCoords, this.parentCoords);
     else
       return "";
   }
 
   ngOnChanges(changes) {
-    // console.log("changed", this.taskNode);
+    console.log("changed", this.taskNode.id);
   }
 
   ngOnDestroy() {

@@ -1,6 +1,5 @@
-<!-- <svg:path *ngIf="taskNode.parent" [attr.d]="getLinkPath()"></svg:path> -->
+<svg:path *ngIf="taskNode.parent" [attr.d]="getLinkPath()"></svg:path>
 <svg:g class="task-icon" title="my task" >
   <svg:use xmlns:xlink="http://www.w3.org/1999/xlink" [attr.xlink:href]="getTaskTypeLink()" [attr.x]="taskCoords.x - 20" [attr.y]="taskCoords.y - 20" class="task-node" (click)="onTaskNodeClick()" [ngClass]="{selected: isSelecetd | async}"></svg:use>
-  <!-- <svg:text [attr.x]="taskCoords.x" [attr.y]="taskCoords.y + 30" dy="3" class="task-name">{{taskNode.name}}</svg:text> -->
+  <svg:text [attr.x]="taskCoords.x" [attr.y]="taskCoords.y + 30" dy="3" class="task-name">{{taskNode.name}}</svg:text>
 </svg:g>
-<!-- <svg:g task-tree *ngFor="let subId of taskNode.children" [taskId]="subId" class="tc"></svg:g> -->

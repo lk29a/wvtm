@@ -3,7 +3,7 @@ import {LoggerService} from "../shared/index";
 
 @Component({
   selector: "wvtm-menu",
-  moduleId: module.id,
+  // moduleId: module.id,
   templateUrl: "menu.html",
   styleUrls: ["menu.css"],
 })

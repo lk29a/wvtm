@@ -11,7 +11,7 @@ import {TaskModelActions} from "../taskmodel"
 
 @Component({
   selector: "wvtm-toolbar",
-  moduleId: module.id,
+  // moduleId: module.id,
   templateUrl: "toolbar.html",
   styleUrls: ["toolbar.css"]
 })
