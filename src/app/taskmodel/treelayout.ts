@@ -22,7 +22,8 @@ export class TreeLayout {
 
   }
 
-  calculate(rootNode: string, tasks: Map<string, ITask>, centerX = 500): Map<string, ICoord> {
+  // calculate(rootNode: string, tasks: Map<string, ITask>, centerX = 500): Map<string, ICoord> {
+  calculate(rootNode: string, tasks: Map<string, ITask>, centerX = 500): Map<string, ITask> {
     this.tasks = tasks;
     this.layoutData = tasks.map((val) => {
       return {
@@ -38,18 +39,38 @@ export class TreeLayout {
     this.secondWalk(rootNode, -this.layoutData[rootNode].x, 0.3);
     this.centreLayout(rootNode, centerX);
 
-    let coordsMap = Map({});
-    coordsMap = coordsMap.withMutations((data) => {
+    tasks = tasks.withMutations((data) => {
       for (let key in this.layoutData) {
         if (this.layoutData.hasOwnProperty(key)) {
-          data.set(key, {
-            x: this.layoutData[key].x,
-            y: this.layoutData[key].y
-          } as ICoord)
+
+          console.log(data.getIn([key, "coords"])["x"], this.layoutData[key].x);
+
+          if(this.layoutData[key].x !== data.getIn([key, "coords"])["x"]) {
+            console.log(key, "new coords", data.getIn([key, "coords"]), this.layoutData[key]);
+            data.setIn([key, "coords"], {
+              x: this.layoutData[key].x,
+              y: this.layoutData[key].y
+            });
+          }
         }
-      }
-    })
-    return coordsMap as Map<string, ICoord>;
+      }      
+    });
+
+
+    // let coordsMap = Map({});
+    // coordsMap = coordsMap.withMutations((data) => {
+    //   for (let key in this.layoutData) {
+    //     if (this.layoutData.hasOwnProperty(key)) {
+    //       data.set(key, {
+    //         x: this.layoutData[key].x,
+    //         y: this.layoutData[key].y
+    //       } as ICoord)
+    //     }
+    //   }
+    // });
+    // return coordsMap as Map<string, ICoord>;
+    console.log(tasks.toJS());
+    return tasks;
   }
 
   private firstWalk(node: string) {

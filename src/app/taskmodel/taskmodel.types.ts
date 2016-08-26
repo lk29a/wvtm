@@ -9,6 +9,10 @@ export const TaskRecord = Record({
   relation: undefined,
   parent: undefined,
   children: List<string>(),
+  coords: {
+    x: 0,
+    y: 0
+  }
 });
 
 export interface ITask extends Map<string, any> {
@@ -19,6 +23,10 @@ export interface ITask extends Map<string, any> {
   relation: string; /* relation assigned to task */
   parent: string; /* id of parent task */
   children: Array<string>; /* list of child tasks ids */
+  coords: {
+    x: number;
+    y: number;    
+  }
 }
 
 export interface ICoord extends Map<string, any> {

@@ -51,20 +51,20 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
       .map(taskId => this.taskNode.id === taskId);
 
     // // subscribe to task layout coords
-    this.rxSubs.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskNode.id))
-      .subscribe(data => {
-        console.log("new coords", this.taskNode.id);
-        if (this.taskCoords.x !== data.x || this.taskCoords.y !== data.y) {
-          this.taskCoords = data;
-        }
-      });
+    // this.rxSubs.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskNode.id))
+    //   .subscribe(data => {
+    //     console.log("new coords", this.taskNode.id);
+    //     if (this.taskCoords.x !== data.x || this.taskCoords.y !== data.y) {
+    //       this.taskCoords = data;
+    //     }
+    //   });
 
     // // subscribe to parent task layout coords
-    this.rxSubs.coords = this.redux.select(state => {
-      let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
-      return state.taskModel.treeLayout.get(parent)
-    })
-    .subscribe(data => this.parentCoords = data);
+    // this.rxSubs.coords = this.redux.select(state => {
+    //   let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
+    //   return state.taskModel.treeLayout.get(parent)
+    // })
+    // .subscribe(data => this.parentCoords = data);
   }
 
   onTaskNodeClick() {

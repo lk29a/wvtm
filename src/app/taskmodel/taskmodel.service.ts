@@ -10,14 +10,15 @@ export function createNew(): ITaskModel {
   let rootTask: ITask = createRootTask();
 
   let tasks = Map<string, ITask>().set(rootTask.id, rootTask);
-  let coords = calculateLayout(rootTask.id, tasks);
+  // let coords = calculateLayout(rootTask.id, tasks);
+  tasks = calculateLayout(rootTask.id, tasks);
 
   return new TaskModelRecord({
     "name": "",
     "description": "",
     "treeRoot": rootTask.id,
     "selectedTask": "",
-    "treeLayout": coords,
+    // "treeLayout": coords,
     "tasks": tasks
   }) as ITaskModel;
 }
@@ -53,10 +54,14 @@ export function addTask(taskModel: ITaskModel, subTask): ITaskModel {
       })
   });
 
-  let coords = calculateLayout(taskModel.treeRoot, tasks);
+  tasks = calculateLayout(taskModel.treeRoot, tasks);
+
+  // return taskModel.withMutations(model => {
+  //   model.set("tasks", tasks).set("treeLayout", coords);
+  // }) as ITaskModel;
 
   return taskModel.withMutations(model => {
-    model.set("tasks", tasks).set("treeLayout", coords);
+    model.set("tasks", tasks);
   }) as ITaskModel;
 }
 
@@ -109,7 +114,7 @@ export function newModule(taskModel: ITaskModel, taskId: string) {
 }
 
 
-export function calculateLayout(rootTask: string, tasks: Map<string, ITask>): Map<string, ICoord> {
+export function calculateLayout(rootTask: string, tasks: Map<string, ITask>): Map<string, ITask> {
   // get current canvas size
   let treeLayout = new TreeLayout();
   return treeLayout.calculate(rootTask, tasks)
@@ -120,8 +125,7 @@ export function makeSubTreeFromModue(parentId: string, module: string) {
 }
 
 
-
-  createTestModel() {
+function createTestModel() {
 
     // setTimeout(() => {
     //   this.taskModelActions.addTask("Abstract", "TASK_0");
