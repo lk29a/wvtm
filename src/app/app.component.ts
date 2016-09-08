@@ -3,13 +3,15 @@ import {NgRedux } from "ng2-redux";
 import { IWVTMState, rootReducer, middlewares } from "./store";
 import { LoggerService } from "./shared";
 
+var ReduxThunk = require('redux-thunk').default
+
+
 @Component({
   selector: "app-root",
   // moduleId: module.id,
   templateUrl: "app.component.html",
   styleUrls: ["app.component.css"],
 })
-
 export class AppComponent {
   constructor(private ngRedux: NgRedux<IWVTMState>,
     private logger: LoggerService) {

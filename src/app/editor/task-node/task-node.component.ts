@@ -1,4 +1,13 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ElementRef
+} from "@angular/core";
 import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import {List} from "immutable";
@@ -6,7 +15,7 @@ import { NgRedux, select } from "ng2-redux";
 import {SVGHelper} from "../shared";
 import { IWVTMState } from "../../store";
 import {ITask, ICoord, TaskModelActions} from "../../taskmodel";
-// import {TaskStore, EditorStateStore} from "../../store";
+import {TaskRelation} from "../../shared";
 
 @Component({
   // moduleId: module.id,
@@ -26,45 +35,52 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   private rxSubs: any = {};
   // taskNode: ITask;
   isSelecetd: Observable<boolean>;
-  taskCoords: ICoord;
+  parentCoords: {
+    x: number,
+    y: number
+  };
+  rSiblingCoords: {
+    x: number,
+    y: number
+  };
   subTasks: string[];
-  parentCoords: ICoord;
   // subscription;
   constructor(private redux: NgRedux<IWVTMState>,
     private taskModelActions: TaskModelActions,
+    private el: ElementRef,
     private svgHelper: SVGHelper) {
-
-    this.taskCoords = {
-      x: 0,
-      y: 0
-    } as ICoord;
   }
 
   ngOnInit() {
-
-    // subscribe to task data
-    // this.rxSubs.task = this.redux.select(state => state.taskModel.tasks.get(this.taskId))
-    //           .subscribe(data => this.taskNode = data);
-
     // // subscribe to selected task
     this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
       .map(taskId => this.taskNode.id === taskId);
 
-    // // subscribe to task layout coords
-    // this.rxSubs.coords = this.redux.select(state => state.taskModel.treeLayout.get(this.taskNode.id))
-    //   .subscribe(data => {
-    //     console.log("new coords", this.taskNode.id);
-    //     if (this.taskCoords.x !== data.x || this.taskCoords.y !== data.y) {
-    //       this.taskCoords = data;
-    //     }
-    //   });
+    // subscribe to parent task layout coords
+    this.rxSubs.parentCoords = this.redux.select(state => {
+      let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
+      return state.taskModel.tasks.get(parent)
+    })
+    .subscribe(data => { if(data) this.parentCoords = data.coords });
 
-    // // subscribe to parent task layout coords
-    // this.rxSubs.coords = this.redux.select(state => {
-    //   let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
-    //   return state.taskModel.treeLayout.get(parent)
-    // })
-    // .subscribe(data => this.parentCoords = data);
+    // subscribe to right sibling task layout coords
+    this.rxSubs.rSiblingCoords = this.redux.select(state => {
+      let parent = state.taskModel.tasks.getIn([this.taskNode.id, "parent"]);
+      if(parent) {
+        let childs: List<string> = state.taskModel.tasks.getIn([parent, "children"]);
+        let taskIdx = childs.indexOf(this.taskNode.id);
+        if (childs.size > (taskIdx + 1)) {
+          let rsib = state.taskModel.tasks.getIn([parent, "children", taskIdx + 1]);
+          return state.taskModel.tasks.get(rsib)
+        }
+      }
+      return null;
+    })
+    .subscribe(data => { if(data) this.rSiblingCoords = data.coords });
+  }
+
+  ngAfterViewInit() {
+    // console.log(this.el.nativeElement);
   }
 
   onTaskNodeClick() {
@@ -75,16 +91,31 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     return `#def-${this.taskNode.type.toLowerCase()}`;
   }
 
-  getLinkPath(): string {
-    console.log("parent link", this.taskNode.id, this.parentCoords);
+  getParentLinkPath(): string {
+    // console.log("parent link", this.taskNode.id, this.parentCoords);
     if (this.taskNode.parent)
-      return this.svgHelper.getLinkPath(this.taskCoords, this.parentCoords);
+      return this.svgHelper.getParentLinkPath(this.taskNode.coords, this.parentCoords);
     else
       return "";
   }
 
+  getRelationLinkPath(): string {
+    let relTextElm = this.el.nativeElement.querySelector(".rel-text");
+    if(this.taskNode.relation)
+      return this.svgHelper.getRelationLinkPath(this.taskNode.coords, relTextElm.getBBox(), this.rSiblingCoords);
+    return "";
+  }
+
+  getRelationSym() {
+    return TaskRelation[this.taskNode.relation];
+  }
+
+  getRelationXCoord() {
+    return this.taskNode.coords.x + (this.rSiblingCoords.x - this.taskNode.coords.x) / 2;
+  }
+
   ngOnChanges(changes) {
-    console.log("changed", this.taskNode.id);
+    // console.log("changed", this.taskNode.id);
   }
 
   ngOnDestroy() {

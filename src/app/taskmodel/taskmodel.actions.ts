@@ -60,11 +60,10 @@ export class TaskModelActions {
     });
   }
 
-  updateTask(taskId, type, value) {
+  updateTask(type, value) {
     this.redux.dispatch({
       type: TaskModelActions.UPDATE_TASK,
       payload: {
-        taskId: taskId,
         type: type,
         value: value
       }

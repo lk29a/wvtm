@@ -29,7 +29,7 @@ export class EditorActions {
     });
   }
 
-  startSimulationMode() {
+  startSimulation() {
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
       payload: {
@@ -38,7 +38,7 @@ export class EditorActions {
     });
   }
 
-  stopSimulationMode() {
+  stopSimulation() {
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
       payload: {

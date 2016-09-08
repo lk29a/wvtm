@@ -34,15 +34,23 @@ export class SVGHelper {
    * @param  {Task}   task A task-node to calculate path string for
    * @return {string}       Formatted SVG path string
    */
-  getLinkPath(taskCoord: ICoord, parentCoord: ICoord) {
-    let levelCenter = parentCoord.y + (taskCoord.y - parentCoord.y) / 2;
+  getParentLinkPath(taskCoords, parentCoord) {
+    let levelCenter = parentCoord.y + (taskCoords.y - parentCoord.y) / 2;
     return this.getSVGPath(
       ["M", parentCoord.x, parentCoord.y + RENDERER_DEFAULTS.nodeRadius],
-      ["C", parentCoord.x, levelCenter, taskCoord.x, levelCenter, taskCoord.x, taskCoord.y - RENDERER_DEFAULTS.nodeRadius]
+      ["C", parentCoord.x, levelCenter, taskCoords.x, levelCenter, taskCoords.x, taskCoords.y - RENDERER_DEFAULTS.nodeRadius]
     );
   }
 
 
+  getRelationLinkPath(taskCoords, textBox, rSiblingCoords) {    
+    return this.getSVGPath(
+      ["M", taskCoords.x + RENDERER_DEFAULTS.nodeRadius, taskCoords.y],
+      ["L", textBox.x - 2, taskCoords.y],
+      ["M", textBox.x + textBox.width + 2, taskCoords.y],
+      ["L", rSiblingCoords.x - RENDERER_DEFAULTS.nodeRadius, taskCoords.y]
+    );
+  }
 
   /**
    * Constructs SVG path from array parts

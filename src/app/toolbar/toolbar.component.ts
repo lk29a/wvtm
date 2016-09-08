@@ -34,7 +34,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       let lib = state.taskModel.modules;
       return lib;
     }).subscribe((data) => {
-      console.log(data);
+      // console.log(data);
     });
   }
 
@@ -43,7 +43,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.tmActions.addTask(type);
   }
 
-  addRelation(type: string) {
+  addRelation(rel: string) {
+    this.tmActions.updateTask("relation", rel);
     // this.wvtm.toolAction(type);
   }
 
@@ -62,7 +63,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   // }
 
   ngOnDestroy() {
-    
+
   }
 
 }

@@ -25,7 +25,7 @@ export interface ITask extends Map<string, any> {
   children: Array<string>; /* list of child tasks ids */
   coords: {
     x: number;
-    y: number;    
+    y: number;
   }
 }
 
@@ -40,8 +40,9 @@ export interface ITaskModel extends Map<string, any> {
   description: string, /* description of model */
   selectedTask: string, /* id of selected task */
   treeRoot: string, /* id of root task */
+  statusData: Map<string, any>,
   modules: List<Map<string, ITaskModel>>,
-  treeLayout: Map<string, ICoord>,
+  // treeLayout: Map<string, ICoord>,
   tasks: Map<string, ITask> /* map of tasks in model */
 };
 
@@ -51,8 +52,9 @@ export const TaskModelRecord = Record({
   description: "",
   selectedTask: undefined,
   treeRoot: undefined,
+  statusData: Map<string, any>(),
   modules: List<Map<string, ITaskModel>>(),
-  treeLayout: Map<string, ICoord>(),
+  // treeLayout: Map<string, ICoord>(),
   tasks: Map<string, ITask>()
 });
 export function deimmutifyTaskModel(state: ITaskModel): Object[] {

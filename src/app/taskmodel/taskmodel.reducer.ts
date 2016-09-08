@@ -5,15 +5,16 @@ import { INITIAL_STATE } from "./taskmodel.initial-state";
 import * as taskModelService from "./taskmodel.service";
 
 
-function task(state: Map<string, ITask>, action): Map<string, ITask> {
+function task(state: ITaskModel, action): Map<string, ITask> {
   switch (action.type) {
 
     case TaskModelActions.UPDATE_TASK:
-      let updatedTask = taskModelService.updateTask(state.get(action.payload.taskId), action.payload.type, action.payload.value);
-      return state.set(action.payload.taskId, updatedTask);
-
+      if (state.selectedTask) {
+        let updatedTask = taskModelService.updateTask(state.tasks.get(state.selectedTask), action.payload.type, action.payload.value);
+        return state.tasks.set(state.selectedTask, updatedTask);
+      }
     default:
-    return state;
+      return state;
   }
 }
 
@@ -26,20 +27,19 @@ function taskModel(state: ITaskModel, action): ITaskModel {
       }
       return state;
 
-   case TaskModelActions.NEW_MODULE:
-
-     taskModelService.newModule(state, action.payload.taskId);
-     return state;
-
-
-   case TaskModelActions.ADD_MODULE:
-     if (state.selectedTask) {
-       return state;
-     }
-     return state;
-
     case TaskModelActions.REMOVE_TASK:
-        return taskModelService.removeTask(state, action.payload.taskId) as ITaskModel;
+      return taskModelService.removeTask(state, action.payload.taskId) as ITaskModel;
+
+    case TaskModelActions.NEW_MODULE:
+      taskModelService.newModule(state, action.payload.taskId);
+      return state;
+
+
+    case TaskModelActions.ADD_MODULE:
+      if (state.selectedTask) {
+        return state;
+      }
+      return state;
 
     default:
       return state;
@@ -57,10 +57,17 @@ export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITa
     case TaskModelActions.REMOVE_TASK:
     case TaskModelActions.ADD_MODULE:
     case TaskModelActions.NEW_MODULE:
-      return taskModel(state, action);
+      state = taskModel(state, action);
+      if(action.type !== TaskModelActions.NEW_MODULE) {
+        state = taskModelService.validateStructure(state);
+      }
+      return state;
 
     case TaskModelActions.UPDATE_TASK:
-      return state.set("tasks", task(state.tasks, action)) as ITaskModel;
+      state = state.set("tasks", task(state, action)) as ITaskModel;
+      return taskModelService.validateStructure(state);
+
+
 
     case TaskModelActions.SELECT_TASK:
       let selected = state.selectedTask;

@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {LoggerService} from "../shared/index";
-
+import {LoggerService} from "../shared";
+import {EditorActions} from "../editor";
 @Component({
   selector: "wvtm-menu",
   // moduleId: module.id,
@@ -8,7 +8,9 @@ import {LoggerService} from "../shared/index";
   styleUrls: ["menu.css"],
 })
 export class MenuComponent {
-  constructor(private logger: LoggerService) {
+
+  constructor(private logger: LoggerService,
+    private editorActions: EditorActions) {
     this.logger.debug("Menu initialised");
   }
 
@@ -29,6 +31,7 @@ export class MenuComponent {
 
   simulate() {
     this.logger.debug("Menu click - Simulate" );
+    this.editorActions.startSimulation();
     // this.wvtmService.menuAction("simulate");
   }
 

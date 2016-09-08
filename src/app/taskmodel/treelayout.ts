@@ -6,6 +6,7 @@
  */
 import {List, Map} from "immutable";
 import {ITask, ICoord} from "./taskmodel.types";
+import {TreeUtils} from "./treeutils";
 import {RENDERER_DEFAULTS} from "../shared";
 
 export class TreeLayout {
@@ -42,11 +43,9 @@ export class TreeLayout {
     tasks = tasks.withMutations((data) => {
       for (let key in this.layoutData) {
         if (this.layoutData.hasOwnProperty(key)) {
-
-          console.log(data.getIn([key, "coords"])["x"], this.layoutData[key].x);
-
+          // console.log(data.getIn([key, "coords"])["x"], this.layoutData[key].x);
           if(this.layoutData[key].x !== data.getIn([key, "coords"])["x"]) {
-            console.log(key, "new coords", data.getIn([key, "coords"]), this.layoutData[key]);
+            // console.log(key, "new coords", data.getIn([key, "coords"]), this.layoutData[key]);
             data.setIn([key, "coords"], {
               x: this.layoutData[key].x,
               y: this.layoutData[key].y
@@ -55,21 +54,6 @@ export class TreeLayout {
         }
       }      
     });
-
-
-    // let coordsMap = Map({});
-    // coordsMap = coordsMap.withMutations((data) => {
-    //   for (let key in this.layoutData) {
-    //     if (this.layoutData.hasOwnProperty(key)) {
-    //       data.set(key, {
-    //         x: this.layoutData[key].x,
-    //         y: this.layoutData[key].y
-    //       } as ICoord)
-    //     }
-    //   }
-    // });
-    // return coordsMap as Map<string, ICoord>;
-    console.log(tasks.toJS());
     return tasks;
   }
 
@@ -329,7 +313,7 @@ export class TreeLayout {
     let childs: List<string> = this.tasks.getIn([parent, "children"]);
     let taskIdx = childs.indexOf(taskId);
     if (childs.size > (taskIdx + 1)) {
-      return this.tasks.getIn([parent, "children", , taskIdx + 1]);
+      return this.tasks.getIn([parent, "children", taskIdx + 1]);
     } else {
       return null;
     }

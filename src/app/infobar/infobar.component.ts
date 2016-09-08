@@ -231,7 +231,8 @@ export class InfobarComponent implements OnInit, OnDestroy {
     if (this.currentTask[type] === value)
       return;
 
-    this.tmActions.updateTask(this.currentTask.id, type, value);
+    // this.tmActions.updateTask(this.currentTask.id, type, value);
+    this.tmActions.updateTask(type, value);
   }
 
   getRelationSym(relation) {

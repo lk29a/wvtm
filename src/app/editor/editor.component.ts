@@ -24,6 +24,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   // @select(["taskModel", "tasks"]) tasks: Observable<any>;
   @select(state => state.taskModel.tasks.toList()) tasks: Observable<List<ITask>>;
+  statusData: any;
+  // @select(state => state.taskModel.statusData.toJS()) status: Observable<any>;
   // tasks: Observable<Map<string, ITask>>;
   // tasks: Observable<any>;
   svgElm: HTMLElement;
@@ -41,8 +43,14 @@ export class EditorComponent implements OnInit, AfterViewInit {
       .debounceTime(300)
       .subscribe((event) => {
         this.resizeCanvas(event);
-      }
-    );
+      });
+
+    this.redux.select(state => state.taskModel.statusData)
+      .subscribe(data => {
+        console.log("data");
+        console.log(data);
+        this.statusData = data;
+      });
   }
 
   ngOnInit() {

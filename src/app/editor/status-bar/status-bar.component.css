@@ -1,0 +1,43 @@
+#status-bar {
+  height: 25px;
+  background-color: rgba(204, 204, 204, 0.5);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.validation .status {
+  display: inline-block;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0 10px 0 20px;
+  position: absolute;
+  font-weight: 900;
+  line-height: 25px;
+}
+.validation .status::before {
+  content: " ";
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+}
+
+.validation .invalid::before {
+  background-color: #F44336;
+}
+
+.validation .valid::before {
+  background-color: #009688;
+}
+
+.validation .invalid::after {
+  content: "Invalid";
+}
+
+.validation .valid::after {
+  content: "Valid";
+}

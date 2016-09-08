@@ -28,12 +28,13 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.2",
     "es6-shim": "0.35.1",
     "immutable": "^3.8.1",
-    "ng2-redux": "^3.3.3",
+    "ng2-redux": "^3.3.9",
     "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
+    "@types/core-js": "^0.9.32",
     "@types/jasmine": "^2.2.30",
     "@types/protractor": "^1.5.16",
     "angular-cli": "1.0.0-beta.11-webpack.2",

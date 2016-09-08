@@ -1,0 +1,6 @@
+<div id="status-bar">
+  <!-- <div class="validation" *ngIf="showValid()"> -->
+  <div class="validation">
+    <div class="status" [ngClass]="{'valid': isValid(), 'invalid': !isValid()}">Model </div>
+  </div>
+</div>
