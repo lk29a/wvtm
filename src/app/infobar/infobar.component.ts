@@ -5,10 +5,10 @@ import {AsyncPipe, Control, FORM_DIRECTIVES} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import {NgRedux, select} from "ng2-redux";
 import { IWVTMState } from "../store";
+import { EDITOR_MODES } from "../shared";
 import {TaskModelActions} from "../taskmodel"
 
 const Immutable = require('immutable');
-
 
 import {
   LoggerService,
@@ -32,6 +32,7 @@ enum InfoTypes {
 })
 export class InfobarComponent implements OnInit, OnDestroy {
   @select(["taskmodel", "selectedTask"]) selectedTask: Observable<string>;
+  // @select(["editorState", "mode"]) editorMode: Observable<EDITOR_MODES>;
 
   private nameField: Control = new Control();
   private descField: Control = new Control();
@@ -69,28 +70,28 @@ export class InfobarComponent implements OnInit, OnDestroy {
     this.infoType = InfoTypes;
 
     this.nameField.valueChanges
-      .debounceTime(500)
+      .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(name => {
         this.updateTask("name", name);
       });
 
     this.descField.valueChanges
-      .debounceTime(500)
+      .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(name => {
         this.updateTask("description", name);
       });
 
     this.typeField.valueChanges
-      .debounceTime(500)
+      .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(name => {
         this.updateTask("type", name);
       });
 
     this.relationField.valueChanges
-      .debounceTime(500)
+      .debounceTime(300)
       .distinctUntilChanged()
       .subscribe(name => {
         this.updateTask("relation", name);
@@ -146,9 +147,20 @@ export class InfobarComponent implements OnInit, OnDestroy {
       this.showTaskInfo(data);
     });
 
+    //editor mode
+    this.rxSubs.editormode = this.redux.select(state => state.editorState.mode)
+      .subscribe(mode => {
+        if(mode === EDITOR_MODES.SIMULATION) {
+          this.infobar.type = InfoTypes.Simulation;
+        }
+      });
 
 
-
+    this.rxSubs.simulation = this.redux.select(state => state.editorState.simulation)
+      .subscribe(simData => {
+        console.log(simData);
+        this.simData = simData;
+      });
   }
 
   showTaskInfo(data) {

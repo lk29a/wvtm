@@ -21,7 +21,7 @@
           <label>Relation: </label>
           <select class="form-control info-control" [disabled]="currentTask.isLast || currentTask.isRoot" [ngModel]="currentTask.relation" [ngFormControl]="relationField">
             <option *ngIf="!currentTask.relation" value="" disabled selected>Select a relation</option>
-            <option *ngFor="let relation of relations" [value]="relation">{{relation}} ({{taskRelations[relation]}})</option>
+            <option *ngFor="let relation of relations" [value]="relation">{{relation}} ({{taskRelations[relation].sym}})</option>
           </select>
         </div>
         <span>
@@ -32,21 +32,12 @@
           <button (click)="deleteTask()">Delete task</button>
         </span>
       </div>
-      <div *ngSwitchCase="infoType.Validation">
-        <div class="validation-info">
-          <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
-          <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
-          <div class="messages">
-            <div class="msg" *ngFor="let item of vInfo.data">{{item.msg}}</div>
-          </div>
-        </div>
-      </div>
       <div *ngSwitchCase="infoType.Simulation">
         <div class="sim-info">
           <div class="enabled-tasks">
             <h4>Enabled tasks</h4>
             <div *ngFor="let task of simData.ets">
-              {{task.name}}
+              {{task}}
             </div>
           </div>
           <div class="sim-task-info">

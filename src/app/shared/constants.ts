@@ -22,17 +22,47 @@ export const TaskType = {
 };
 
 export const TaskRelation = {
-  "UNRESTRICTED": "|||", // Independent Concurrency
-  "CHOICE": "[]", // Choice
-  "CONCURRENTINFO": "|[]|", // Concurrency with information exchange
-  "RANDOM": "|=|", // Order Independence
-  "DEACT": "[>", // Deactivation
-  "ENABLE": ">>", // Enabling
-  "CHOICEINFO": "[]>>", // Enabling with information passing
-  "RESUME": "|>", // Suspend resume
+  "UNRESTRICTED": {
+    sym: "|||",
+    name: "Independent Concurrency"
+  },
+  "CHOICE": {
+    sym: "[]",
+    name: "Choice"
+  },
+  "CONCURRENTINFO": {
+    sym: "|[]|",
+    name: "Concurrency with information exchange"
+  },
+  "RANDOM": {
+    sym: "|=|",
+    name: "Order Independence"
+  },
+  "DEACT": {
+    sym: "[>",
+    name: "Deactivation"
+  },
+  "ENABLE": {
+    sym: ">>",
+    name: "Enabling"
+  },
+  "CHOICEINFO": {
+    sym: "[]>>",
+    name: "Enabling with information passing"
+  },
+  "RESUME": {
+    sym: "|>",
+    name: "Suspend resume"
+  }
 };
 
 export const TaskProperty = {
-  "ITERATION": "T*", // Iteration
-  "OPTIONAL": "[T]", // Optional
+  "ITERATION": {
+    sym: "T*",
+    name: "Iteration"
+  },
+  "OPTIONAL": {
+    sym: "[T]",
+    name: "Optional"
+  }
 };

@@ -5,12 +5,13 @@ import { FormsModule }   from '@angular/forms';
 import { AppComponent }  from './app.component';
 import { TaskModelActions } from "./taskmodel";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { NgReduxModule } from 'ng2-redux';
 import {MenuModule} from "./menu";
 import {ToolbarModule} from "./toolbar";
 import {EditorModule} from "./editor";
 import {InfobarModule} from "./infobar";
 import { LoggerService } from "./shared";
-import { NgRedux } from 'ng2-redux';
+
 
 @NgModule({
   imports: [
@@ -18,13 +19,14 @@ import { NgRedux } from 'ng2-redux';
     CommonModule,
     FormsModule,
     NgbModule,
+    NgReduxModule,
     MenuModule,
     ToolbarModule,
     EditorModule,
     InfobarModule
   ],
   declarations: [ AppComponent ],   // components and directives
-  providers: [NgRedux, LoggerService, TaskModelActions],    // services
+  providers: [LoggerService, TaskModelActions],    // services
   bootstrap: [ AppComponent ]     // root component
 })
 export class AppModule { }

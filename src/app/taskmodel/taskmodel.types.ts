@@ -57,6 +57,7 @@ export const TaskModelRecord = Record({
   // treeLayout: Map<string, ICoord>(),
   tasks: Map<string, ITask>()
 });
+
 export function deimmutifyTaskModel(state: ITaskModel): Object[] {
   return state.toJS();
 }

@@ -15,7 +15,7 @@
     <div class="menu-separator"></div>
     <div class="task-relations menu-group">
       <div class="toolbar-btn" *ngFor="let relation of relations" (click)="addRelation(relation)">
-        <div class="toolbar-icon">{{taskRelations[relation]}}</div>
+        <div class="toolbar-icon" placement="bottom" [ngbTooltip]="taskRelations[relation].name">{{taskRelations[relation].sym}}</div>
       </div>
     </div>
   </div>

@@ -7,18 +7,11 @@ import { EDITOR_MODES } from "../shared";
 export class EditorActions {
 
   static EDITOR_MODE_CHANGE: string = "EDITOR_MODE_CHANGE";
-  static ADD_TO_LIBRARY: string = "ADD_TO_LIBRARY";
+  static SIMULATION_START: string = "SIMULATION_START";
+  static SIMULATE_TASK: string = "SIMULATE_TASK";
+  static SIMULATION_STOP: string = "SIMULATION_STOP";
 
   constructor(private redux: NgRedux<IWVTMState>) {}
-
-  addToLibrary(taskId: string) {
-    this.redux.dispatch({
-      type: EditorActions.ADD_TO_LIBRARY,
-      payload: {
-        taskId: taskId
-      }
-    });
-  }
 
   showValidationInfo() {
     this.redux.dispatch({
@@ -30,10 +23,40 @@ export class EditorActions {
   }
 
   startSimulation() {
+    let {editorState, taskModel} = this.redux.getState();
+    if(editorState.mode === EDITOR_MODES.SIMULATION)
+      return;
+
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
       payload: {
         mode: EDITOR_MODES.SIMULATION
+      }
+    });
+
+    this.redux.dispatch({
+      type: EditorActions.SIMULATION_START,
+      payload: {
+        taskModel: taskModel
+      }
+    });
+
+
+  }
+
+
+  simulateModel(clickAction) {
+    if(clickAction === "start")
+      this.startSimulation();
+    else
+      this.stopSimulation();
+  }
+
+  simExecuteTask(task) {
+    this.redux.dispatch({
+      type: EditorActions.SIMULATE_TASK,
+      payload: {
+        task: task
       }
     });
   }
@@ -44,6 +67,11 @@ export class EditorActions {
       payload: {
         mode: EDITOR_MODES.DRAWING
       }
+    });
+
+    this.redux.dispatch({
+      type: EditorActions.SIMULATION_STOP,
+      payload: {}
     });
   }
 }

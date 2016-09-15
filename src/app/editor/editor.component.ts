@@ -47,8 +47,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
     this.redux.select(state => state.taskModel.statusData)
       .subscribe(data => {
-        console.log("data");
-        console.log(data);
         this.statusData = data;
       });
   }

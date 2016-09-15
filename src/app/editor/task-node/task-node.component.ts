@@ -16,6 +16,7 @@ import {SVGHelper} from "../shared";
 import { IWVTMState } from "../../store";
 import {ITask, ICoord, TaskModelActions} from "../../taskmodel";
 import {TaskRelation} from "../../shared";
+import {EditorActions} from "../editor.actions";
 
 @Component({
   // moduleId: module.id,
@@ -44,8 +45,11 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     y: number
   };
   subTasks: string[];
-  // subscription;
+  clickTimer: any;
+  preventClick: boolean = false;
+
   constructor(private redux: NgRedux<IWVTMState>,
+    private editorActions: EditorActions,
     private taskModelActions: TaskModelActions,
     private el: ElementRef,
     private svgHelper: SVGHelper) {
@@ -83,8 +87,21 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     // console.log(this.el.nativeElement);
   }
 
-  onTaskNodeClick() {
-    this.taskModelActions.selectTask(this.taskNode.id);
+  onClick() {
+    this.clickTimer = setTimeout(() => {
+      if(!this.preventClick)
+        this.taskModelActions.selectTask(this.taskNode.id);
+
+      this.preventClick = false;
+    }, 200);
+  }
+
+  onDblclick() {
+    if(this.clickTimer)
+      clearTimeout(this.clickTimer);
+
+    this.preventClick = true;
+    this.editorActions.simExecuteTask(this.taskNode.id);
   }
 
   getTaskTypeLink() {
@@ -107,7 +124,7 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getRelationSym() {
-    return TaskRelation[this.taskNode.relation];
+    return TaskRelation[this.taskNode.relation].sym;
   }
 
   getRelationXCoord() {

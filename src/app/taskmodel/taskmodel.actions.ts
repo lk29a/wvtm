@@ -12,7 +12,6 @@ export class TaskModelActions {
   static ADD_MODULE: string = "ADD_MODULE";
   static NEW_MODULE: string = "NEW_MODULE";
 
-
   constructor(private redux: NgRedux<IWVTMState>) { }
 
   addTask(type: string) {

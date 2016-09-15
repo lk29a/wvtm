@@ -32,6 +32,7 @@
   float: left;
   cursor: pointer;
   padding: 4px;
+  font-size: 12px
 }
 
 .toolbar-btn:hover {
@@ -45,8 +46,8 @@
   border: none;
   background-position: center;
   background-size: cover;
-  height: 20px;
-  width: 21px;
+  height: 1.25rem;
+  width: 1.25rem;
 }
 
 .toolbar-icon.abstract {

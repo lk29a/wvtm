@@ -10,7 +10,7 @@
       <i class="menu-icon fa fa-check"></i>
     </div>
     <div class="menu-btn" (click)="simulate()">
-      <i class="menu-icon fa fa-play"></i>
+      <i class="menu-icon fa fa-play" [ngClass]="{'fa-stop': isSimulationMode}"></i>
     </div>
     <div class="menu-btn" (click)="zoom('[]')">
       <i class="menu-icon fa fa-object-group"></i>

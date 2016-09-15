@@ -23,7 +23,7 @@ export class StatusBarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log("changed", this.statusData.get("validation"));
+    // console.log("changed", this.statusData.get("validation"));
   }
 
   isValid() {

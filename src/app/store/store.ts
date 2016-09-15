@@ -1,5 +1,4 @@
 import { combineReducers } from "redux";
-// import {ITaskModel, taskModelReducer} from '../taskmodel';
 import * as taskModel from "../taskmodel";
 import * as editor from "../editor";
 

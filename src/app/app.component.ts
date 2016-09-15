@@ -1,10 +1,8 @@
 import {Component} from "@angular/core";
 import {NgRedux } from "ng2-redux";
+// import {ReduxThunk} from "redux-thunk";
 import { IWVTMState, rootReducer, middlewares } from "./store";
 import { LoggerService } from "./shared";
-
-var ReduxThunk = require('redux-thunk').default
-
 
 @Component({
   selector: "app-root",

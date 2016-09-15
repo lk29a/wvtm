@@ -1,27 +1,22 @@
 import {Injectable} from "@angular/core";
-import { List } from "immutable";
-import { ITaskModel, ITask} from "../taskmodel";
+import { List, Map } from "immutable";
+import { ITaskModel, ITask, TreeUtils} from "../taskmodel";
 import { TaskRelation } from "../shared";
 
-@Injectable()
 export class Simulator {
-  ets: List<ITask>;
-  tasksExecuted: List<ITask>;
 
-  start(model: ITaskModel) {
-    this.ets = List<ITask>();
-    this.tasksExecuted = List<ITask>();
+  ets = List<string>();
+  tasksExecuted = List<string>();
+  treeUtils: TreeUtils;
 
-    // first validate structure of the model
-    // let vObj = model.validateStructure();
-    // if (!vObj.valid) {
-    //   throw new Error("Validation failed. Model has errors please fix them first.");
-    // }
 
-    // this.enableTask(model.root);
+  constructor(private nodeList: Map<string, ITask>, private root: string) {
+    this.treeUtils = new TreeUtils(nodeList, root);
+  }
 
+  start() {
+    this.enableTask(this.root);
     return this.ets;
-
   }
 
   /**
@@ -29,57 +24,60 @@ export class Simulator {
   * 1. Directly enable if its leaf else,
   * 2. Check entire subtree rooted at current task then,
   * 3. Check relationship with right sibling, enable right sibling if required
-  * 
+  *
   * @param  {[type]} aTask [description]
   */
-  enableTask(aTask: any) {
-    console.log("enabling: " + aTask.name);
-    let curTask = aTask,
-      lPath = [];
+  enableTask(task: string) {
+    // console.log("enabling: " + aTask.name);
+
+    let curTask = task,
+      leftmostPath = [];
 
     // find left most decendent of this task
-    lPath.push(curTask);
-    while (curTask.children.length) {
-      curTask = curTask.children[0];
-      lPath.push(curTask);
+    while (curTask) {
+      leftmostPath.push(curTask);
+      curTask = this.treeUtils.getFirstChild(curTask);
     }
 
-    while (lPath.length > 0) {
-      curTask = lPath.pop();
-      if (curTask.isLeaf()) {
-        this.ets.push(curTask);
+    while (leftmostPath.length > 0) {
+      curTask = leftmostPath.pop();
+      if (this.treeUtils.isLeaf(curTask)) {
+        this.ets = this.ets.push(curTask);
       }
 
       // if relation is non blocking
       if (this.checkRelation(curTask)) {
-        this.enableTask(curTask.getRightSibling());
+        this.enableTask(this.treeUtils.getRightSibling(curTask));
       }
 
-      curTask = curTask.parent;
+      curTask = this.treeUtils.getParent(curTask);
     }
   }
 
 
   /**
-   * Checks for the relation with its right sibling(if any). 
+   * Checks for the relation with its right sibling(if any).
    * Depending on the relation returns right sibling or null.
-   * 
+   *
    * @param  {[type]} aTask [description]
    */
-  checkRelation(aTask) {
+  checkRelation(task: string) {
     // can add more relations to check here
     if (
-      aTask.relation === TaskRelation.UNRESTRICTED ||
-      aTask.relation === TaskRelation.CHOICE ||
-      aTask.relation === TaskRelation.RANDOM ||
-      aTask.relation === TaskRelation.CONCURRENTINFO ||
-      aTask.relation === TaskRelation.DEACT ||
-      aTask.relation === TaskRelation.RESUME
+      this.getTaskRelation(task) === TaskRelation.UNRESTRICTED ||
+      this.getTaskRelation(task) === TaskRelation.CHOICE ||
+      this.getTaskRelation(task) === TaskRelation.RANDOM ||
+      this.getTaskRelation(task) === TaskRelation.CONCURRENTINFO ||
+      this.getTaskRelation(task) === TaskRelation.DEACT ||
+      this.getTaskRelation(task) === TaskRelation.RESUME
     ) {
       return true;
     }
-
     return false;
+  }
+
+  getTaskRelation(task: string) {
+    return this.nodeList.getIn([task, "relation"]);
   }
 
   /**
@@ -87,7 +85,6 @@ export class Simulator {
    * next/prev task wil be enabled or disabled based on these relations
    * Eg. if left sibling had choice relation then left sibling(it must be enabled) should be disabled.
    *
-   * //@lk IF ALL CHILD TASKS ARE PERFORMED THEN PARENT TASK IS PERFORMED AS WELL??//
    * @param  {[type]} aTask [description]
    * @param  {[type]} silent ??
    * @return {[type]} [description]
@@ -104,7 +101,6 @@ export class Simulator {
 
       // check if parent has choice relation, if yes then disable those tasks
       let parent = aTask.parent;
-      // qilJaQyvGY;o4]3u|sa+T?J+6K-Yts/11D+||)z,sm9+N:fqj_b@!GI|g0$skq+:
 
       if (parent.relation === TaskRelation.CHOICE) {
         this.executeTask(parent);
@@ -146,7 +142,7 @@ export class Simulator {
 
   /**
    * returns true if any task including aTask is enabled in the subtree rooted at aTask
-   * 
+   *
    * @param  {[type]}  aTask [description]
    * @return {Boolean}       [description]
    */
@@ -207,7 +203,7 @@ export class Simulator {
       /**
        * Enabling with information passing
        * Will pass provided data to right sibling
-       * 
+       *
        * @return {[type]} [description]
        */
       "[]>>": function() {

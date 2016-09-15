@@ -1,17 +1,37 @@
-import {Component} from "@angular/core";
-import {LoggerService} from "../shared";
+import {Component, OnInit} from "@angular/core";
+import {Observable} from "rxjs/Rx";
+import { NgRedux, select } from "ng2-redux";
+import {LoggerService, EDITOR_MODES} from "../shared";
+import { IWVTMState } from "../store";
 import {EditorActions} from "../editor";
+
+
 @Component({
   selector: "wvtm-menu",
   // moduleId: module.id,
   templateUrl: "menu.html",
   styleUrls: ["menu.css"],
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
+
+  @select(["editorState", "mode"]) editorMode: Observable<EDITOR_MODES>;
+
+  isSimulationMode = false;
 
   constructor(private logger: LoggerService,
+    private redux: NgRedux<IWVTMState>,
     private editorActions: EditorActions) {
-    this.logger.debug("Menu initialised");
+  }
+
+
+  ngOnInit() {
+    this.redux.select(["editorState", "mode"])
+      .subscribe(mode => {
+        if(mode === EDITOR_MODES.SIMULATION)
+          this.isSimulationMode = true;
+        else
+          this.isSimulationMode = false;
+      });
   }
 
   newProject() {
@@ -30,9 +50,10 @@ export class MenuComponent {
   }
 
   simulate() {
-    this.logger.debug("Menu click - Simulate" );
-    this.editorActions.startSimulation();
-    // this.wvtmService.menuAction("simulate");
+    if(this.isSimulationMode)
+      this.editorActions.simulateModel("stop");
+    else
+      this.editorActions.simulateModel("start");
   }
 
   zoom(action: string) {
