@@ -75,7 +75,7 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
         let taskIdx = childs.indexOf(this.taskNode.id);
         if (childs.size > (taskIdx + 1)) {
           let rsib = state.taskModel.tasks.getIn([parent, "children", taskIdx + 1]);
-          return state.taskModel.tasks.get(rsib)
+          return state.taskModel.tasks.get(rsib);
         }
       }
       return null;
@@ -132,12 +132,13 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes) {
-    // console.log("changed", this.taskNode.id);
+    console.log("changed", this.taskNode.id);
   }
 
   ngOnDestroy() {
     for (let key in this.rxSubs) {
       if (this.rxSubs.hasOwnProperty(key))
+        // console.log(key);
         this.rxSubs[key].unsubscribe();
     }
     // this.rxSubs.unsubscribe();

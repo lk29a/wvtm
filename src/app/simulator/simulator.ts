@@ -16,6 +16,7 @@ export class Simulator {
 
   start() {
     this.enableTask(this.root);
+    console.log(this.ets.toJS());
     return this.ets;
   }
 

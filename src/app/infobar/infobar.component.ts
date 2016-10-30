@@ -3,6 +3,7 @@ declare var require: any;
 import {Component, OnInit, OnDestroy} from "@angular/core";
 import {AsyncPipe, Control, FORM_DIRECTIVES} from "@angular/common";
 import {Observable} from "rxjs/Rx";
+import {List, Map} from "immutable";
 import {NgRedux, select} from "ng2-redux";
 import { IWVTMState } from "../store";
 import { EDITOR_MODES } from "../shared";
@@ -47,7 +48,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
   types;
   infoType;
   vInfo: any = {};
-  simData: any = {};
+  simData: Map<string, List<string>>;
   rxSubs: any = {};
   curTaskObj: any;
 
@@ -158,8 +159,8 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
     this.rxSubs.simulation = this.redux.select(state => state.editorState.simulation)
       .subscribe(simData => {
-        console.log(simData);
-        this.simData = simData;
+        // console.log(simData.toJS());
+        this.simData = simData.toJS();
       });
   }
 
@@ -212,11 +213,11 @@ export class InfobarComponent implements OnInit, OnDestroy {
   showSimulationInfo(data) {
     this.infobar.type = InfoTypes.Simulation;
     this.infobar.title = "Simulation";
-    this.simData.ets = data;
+    // this.simData.ets = data;
   }
 
   updateSimulationInfo(data) {
-    this.simData.ets = data;
+    // this.simData.ets = data;
   }
 
   showValidationInfo(data) {

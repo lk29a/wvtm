@@ -1,9 +1,8 @@
-declare var require: any;
 import {Component, ElementRef, OnInit, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
 import { NgRedux, select } from "ng2-redux";
 import { List } from "immutable";
-import { EditorActions }      from "./editor.actions";
+import { EditorActions } from "./editor.actions";
 import {LoggerService } from "../shared";
 import { IWVTMState } from "../store";
 import {ITask} from "../taskmodel";
@@ -52,6 +51,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.redux.select(state => state.taskModel.tasks.toList())
+      // .forEach(tasks => tasks)
+      .subscribe(data => console.log(data));
+
   }
 
   resizeCanvas(event) {
@@ -69,6 +72,4 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.svgElm.setAttribute("height", dim.height);
     this.svgElm.setAttribute("width", dim.width);
   }
-
-
 };

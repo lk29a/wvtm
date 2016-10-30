@@ -80,11 +80,9 @@ export function removeTask(taskModel: ITaskModel, taskId: string): ITaskModel {
       })
   });
 
-  let coords = calculateLayout(taskModel.treeRoot, tasks);
+  tasks = calculateLayout(taskModel.treeRoot, tasks);
 
-  return taskModel.withMutations(model => {
-    model.set("tasks", tasks).set("treeLayout", coords);
-  }) as ITaskModel;
+  return taskModel.set("tasks", tasks) as ITaskModel;
 }
 
 export function updateTask(task: ITask, type, value): ITask {
