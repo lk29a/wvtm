@@ -51,10 +51,16 @@
           <rect x="0" y="0" width="40" height="40" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" class="node-area"></rect>
         </g>
       </defs>
-      <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;">
-        <svg:g task-node *ngFor="let task of tasks | async" [taskNode]="task"></svg:g>
+      <g id="model-group" fill="rgba(0,0,0,0)" stroke="#212121" style="stroke-width: 1;" [attr.mask]="simMask">
+        <svg:g task-node *ngFor="let task of tasks.toList()" [taskNode]="task"></svg:g>
       </g>
+      <mask id="simmask">
+        <rect x="0" y="0" [attr.height]="canvasDim.height" [attr.width]="canvasDim.width" fill="#333" stroke="#000"></rect>
+        <svg:rect *ngFor="let simtask of simEts" [attr.x]="getTaskCoordsX(simtask)" [attr.y]="getTaskCoordsY(simtask)" height="45" width="45" fill="#fff" stroke="#000"></svg:rect>
+      </mask>
     </svg>
   </div>
+  <div *ngFor="let simtask of simEts">{{simtask}}</div>
+
   <status-bar [statusData]="statusData"></status-bar>
 </div>

@@ -2,7 +2,6 @@ import {Map, List} from "immutable";
 import {IEditorState, EditorStateRecord} from "../editor.types";
 import {EDITOR_MODES} from "../../shared"
 
-
 export function createNew(): IEditorState {
   return new EditorStateRecord({}) as IEditorState;
 }
