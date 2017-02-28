@@ -1,6 +1,6 @@
 import { WvtmPage } from './app.po';
 
-describe('wvtm App', function() {
+describe('wvtm App', () => {
   let page: WvtmPage;
 
   beforeEach(() => {

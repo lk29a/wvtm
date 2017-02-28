@@ -1,7 +1,7 @@
 declare var require: any
 import { IWVTMState, rootReducer, deimmutify, reimmutify } from './store';
 import { EDITOR_MODES } from "../shared";
-const createLogger = require("redux-logger");
+import * as createLogger from 'redux-logger';
 
 export {
   IWVTMState,

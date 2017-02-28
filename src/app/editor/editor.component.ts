@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, AfterViewInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
-import { NgRedux, select } from "ng2-redux";
+import { NgRedux, select } from '@angular-redux/store';
 import { List, Map } from "immutable";
 import { EditorActions } from "./editor.actions";
 import {LoggerService, EDITOR_MODES } from "../shared";

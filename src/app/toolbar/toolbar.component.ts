@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {NgRedux, select} from "ng2-redux";
+import {NgRedux, select} from '@angular-redux/store';
 import {List, Map } from "immutable";
 import {
   LoggerService,

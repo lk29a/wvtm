@@ -19,7 +19,6 @@ import {TaskRelation} from "../../shared";
 import {EditorActions} from "../editor.actions";
 
 @Component({
-  // moduleId: module.id,
   selector: "g[task-node]",
   templateUrl: "task-node.component.html",
   styleUrls: ["task-node.component.css"],

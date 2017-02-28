@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Observable} from "rxjs/Rx";
-import { NgRedux, select } from "ng2-redux";
+import { NgRedux, select } from '@angular-redux/store';
 import {LoggerService, EDITOR_MODES} from "../shared";
 import { IWVTMState } from "../store";
 import {EditorActions} from "../editor";

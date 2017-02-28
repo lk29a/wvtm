@@ -5,7 +5,8 @@ import { FormsModule }   from '@angular/forms';
 import { AppComponent }  from './app.component';
 import { TaskModelActions } from "./taskmodel";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import { NgReduxModule } from 'ng2-redux';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { IWVTMState, rootReducer, middlewares } from "./store";
 import {MenuModule} from "./menu";
 import {ToolbarModule} from "./toolbar";
 import {EditorModule} from "./editor";
@@ -18,7 +19,7 @@ import { LoggerService } from "./shared";
     BrowserModule,
     CommonModule,
     FormsModule,
-    NgbModule,
+    NgbModule.forRoot(),
     NgReduxModule,
     MenuModule,
     ToolbarModule,
@@ -29,4 +30,9 @@ import { LoggerService } from "./shared";
   providers: [LoggerService, TaskModelActions],    // services
   bootstrap: [ AppComponent ]     // root component
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private ngRedux: NgRedux<IWVTMState>) {
+    ngRedux.configureStore(rootReducer, {}, middlewares )
+  }
+}
+
