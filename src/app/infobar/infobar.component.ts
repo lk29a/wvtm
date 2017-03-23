@@ -1,7 +1,7 @@
 declare var require: any;
 
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {AsyncPipe, Control, FORM_DIRECTIVES} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import {List, Map} from "immutable";
 import {NgRedux, select} from '@angular-redux/store';
@@ -28,17 +28,16 @@ enum InfoTypes {
   selector: "wvtm-infobar",
   // moduleId: module.id,
   templateUrl: "infobar.html",
-  directives: [FORM_DIRECTIVES],
   styleUrls: ["infobar.css"],
 })
 export class InfobarComponent implements OnInit, OnDestroy {
   @select(["taskmodel", "selectedTask"]) selectedTask: Observable<string>;
   // @select(["editorState", "mode"]) editorMode: Observable<EDITOR_MODES>;
 
-  private nameField: Control = new Control();
-  private descField: Control = new Control();
-  private typeField: Control = new Control();
-  private relationField: Control = new Control();
+  // private nameField: Control = new Control();
+  // private descField: Control = new Control();
+  // private typeField: Control = new Control();
+  // private relationField: Control = new Control();
 
   currentTask: any = {};
   infobar: any;
@@ -70,33 +69,33 @@ export class InfobarComponent implements OnInit, OnDestroy {
     };
     this.infoType = InfoTypes;
 
-    this.nameField.valueChanges
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .subscribe(name => {
-        this.updateTask("name", name);
-      });
+    // this.nameField.valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .subscribe(name => {
+    //     this.updateTask("name", name);
+    //   });
 
-    this.descField.valueChanges
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .subscribe(name => {
-        this.updateTask("description", name);
-      });
+    // this.descField.valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .subscribe(name => {
+    //     this.updateTask("description", name);
+    //   });
 
-    this.typeField.valueChanges
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .subscribe(name => {
-        this.updateTask("type", name);
-      });
+    // this.typeField.valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .subscribe(name => {
+    //     this.updateTask("type", name);
+    //   });
 
-    this.relationField.valueChanges
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .subscribe(name => {
-        this.updateTask("relation", name);
-      });
+    // this.relationField.valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .subscribe(name => {
+    //     this.updateTask("relation", name);
+    //   });
 
 
 

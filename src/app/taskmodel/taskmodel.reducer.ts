@@ -1,9 +1,9 @@
 import { Map } from "immutable";
 import {TaskModelActions} from "./taskmodel.actions";
 import { ITaskModel, ITask } from "./taskmodel.types";
-import { INITIAL_STATE } from "./taskmodel.initial-state";
 import * as taskModelService from "./taskmodel.service";
 
+const INITIAL_STATE: ITaskModel = taskModelService.createNew();
 
 function task(state: ITaskModel, action): Map<string, ITask> {
   switch (action.type) {

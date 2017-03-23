@@ -4,7 +4,6 @@ export * from "./taskmodel.actions";
 export * from "./taskmodel.service";
 export * from "./treeutils";
 
-
 export {
   ITask,
   ITaskModel,

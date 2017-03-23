@@ -8,10 +8,9 @@ import {
   ChangeDetectionStrategy,
   ElementRef
 } from "@angular/core";
-import {AsyncPipe} from "@angular/common";
 import {Observable} from "rxjs/Rx";
 import {List} from "immutable";
-import { NgRedux, select } from "ng2-redux";
+import { NgRedux, select } from "@angular-redux/store";
 import {SVGHelper} from "../shared";
 import { IWVTMState } from "../../store";
 import {ITask, ICoord, TaskModelActions} from "../../taskmodel";
@@ -22,7 +21,6 @@ import {EditorActions} from "../editor.actions";
   selector: "g[task-node]",
   templateUrl: "task-node.component.html",
   styleUrls: ["task-node.component.css"],
-  pipes: [AsyncPipe],
   providers: [SVGHelper],
   // directives: [TaskTreeComponent],
   changeDetection: ChangeDetectionStrategy.OnPush

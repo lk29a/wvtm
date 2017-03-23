@@ -14,7 +14,6 @@ interface Dim {
 
 @Component({
   selector: "wvtm-editor",
-  // moduleId: module.id,
   templateUrl: "editor.html",
   styleUrls: ["editor.css"],
   // directives: [TaskNodeComponent],

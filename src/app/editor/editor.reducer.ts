@@ -1,9 +1,11 @@
 import { Map, List } from "immutable";
 import { EditorActions } from "./editor.actions";
 import { IEditorState } from "./editor.types";
-import { INITIAL_STATE } from "./editor.initial-state";
+import {createNew} from "./shared/editor.service";
 import { Simulator } from "../simulator";
 import { EDITOR_MODES } from "../shared";
+
+const INITIAL_STATE: IEditorState = createNew()
 
 let simulator: Simulator = null;
 

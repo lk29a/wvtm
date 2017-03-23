@@ -13,6 +13,10 @@ export class EditorActions {
 
   constructor(private redux: NgRedux<IWVTMState>) {}
 
+  startNew() {
+    console.log('start new project');
+  }
+
   showValidationInfo() {
     this.redux.dispatch({
       type: EditorActions.EDITOR_MODE_CHANGE,
