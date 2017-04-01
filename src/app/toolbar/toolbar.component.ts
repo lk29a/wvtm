@@ -1,19 +1,18 @@
-import {Component, OnInit, OnDestroy} from "@angular/core";
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NgRedux, select} from '@angular-redux/store';
-import {List, Map } from "immutable";
 import {
   LoggerService,
   TaskType,
   TaskRelation
-} from "../shared";
-import { IWVTMState } from "../store";
-import {TaskModelActions} from "../taskmodel"
+} from '../shared';
+import {IWVTMState} from '../store';
+import {TaskModelActions} from '../taskmodel';
 
 @Component({
-  selector: "wvtm-toolbar",
+  selector: 'wvtm-toolbar',
   // moduleId: module.id,
-  templateUrl: "toolbar.html",
-  styleUrls: ["toolbar.css"]
+  templateUrl: 'toolbar.html',
+  styleUrls: ['toolbar.css']
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
   taskTypes = Object.keys(TaskType);
@@ -22,17 +21,16 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   rxSubs: any = {};
 
   constructor(private tmActions: TaskModelActions,
-    private logger: LoggerService,
-    private redux: NgRedux<IWVTMState>) {
+              private logger: LoggerService,
+              private redux: NgRedux<IWVTMState>) {
 
-    this.logger.debug("Toolbar initialized");
+    this.logger.debug('Toolbar initialized');
     this.taskRelations = TaskRelation;
   }
 
   ngOnInit() {
     this.rxSubs.library = this.redux.select((state) => {
-      let lib = state.taskModel.modules;
-      return lib;
+      return state.taskModel.modules;
     }).subscribe((data) => {
       // console.log(data);
     });
@@ -44,7 +42,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   addRelation(rel: string) {
-    this.tmActions.updateTask("relation", rel);
+    this.tmActions.updateTask('relation', rel);
     // this.wvtm.toolAction(type);
   }
 
@@ -63,7 +61,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   // }
 
   ngOnDestroy() {
-
+    for (const key in this.rxSubs) {
+      if (this.rxSubs.hasOwnProperty(key)) {
+        // console.log(key);
+        this.rxSubs[key].unsubscribe();
+      }
+    }
   }
 
 }

@@ -1,16 +1,16 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { IWVTMState } from "../store";
+import { IWVTMState } from '../store';
 
 @Injectable()
 export class TaskModelActions {
 
-  static ADD_TASK: string = "ADD_TASK";
-  static REMOVE_TASK: string = "REMOVE_TASK";
-  static UPDATE_TASK: string = "UPDATE_TASK";
-  static SELECT_TASK: string = "SELECT_TASK";
-  static ADD_MODULE: string = "ADD_MODULE";
-  static NEW_MODULE: string = "NEW_MODULE";
+  static ADD_TASK = 'ADD_TASK';
+  static REMOVE_TASK = 'REMOVE_TASK';
+  static UPDATE_TASK = 'UPDATE_TASK';
+  static SELECT_TASK = 'SELECT_TASK';
+  static ADD_MODULE = 'ADD_MODULE';
+  static NEW_MODULE = 'NEW_MODULE';
 
   constructor(private redux: NgRedux<IWVTMState>) { }
 

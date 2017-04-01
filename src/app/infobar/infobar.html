@@ -5,21 +5,21 @@
       <div *ngSwitchCase="infoType.Task">
         <div class="form-group">
           <label>Name: </label>
-          <input class="form-control info-control" [ngModel]="currentTask.name" >
+          <input class="form-control info-control" [ngModel]="currentTask.name" [formControl]="nameField">
         </div>
         <div class="form-group">
           <label>Description: </label>
-          <textarea class="form-control info-control" [ngModel]="currentTask.description" ></textarea>
+          <textarea class="form-control info-control" [ngModel]="currentTask.description" [formControl]="descField"></textarea>
         </div>
         <div class="form-group">
           <label>Type: </label>
-          <select class="form-control info-control" [disabled]="currentTask.isRoot" [ngModel]="currentTask.type">
+          <select class="form-control info-control" [disabled]="currentTask.isRoot" [ngModel]="currentTask.type" [formControl]="typeField">
             <option *ngFor="let type of types" [value]="taskTypes[type]">{{type}}</option>
           </select>
         </div>
         <div class="form-group">
           <label>Relation: </label>
-          <select class="form-control info-control" [disabled]="currentTask.isLast || currentTask.isRoot" [ngModel]="currentTask.relation">
+          <select class="form-control info-control" [disabled]="currentTask.isLast || currentTask.isRoot" [ngModel]="currentTask.relation" [formControl]="relationField">
             <option *ngIf="!currentTask.relation" value="" disabled selected>Select a relation</option>
             <option *ngFor="let relation of relations" [value]="relation">{{relation}} ({{taskRelations[relation].sym}})</option>
           </select>

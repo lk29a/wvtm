@@ -5,9 +5,9 @@
         <div class="toolbar-icon" [ngClass]="type.toLowerCase()"></div>
       </div>
       <div class="toolbar-btn" action="library">
-        <template #libraryContent>
+        <ng-template #libraryContent>
           No modules addes to library yet.
-        </template>
+        </ng-template>
         <div class="toolbar-icon library" [ngbPopover]="libraryContent" placement="bottom" triggers="click"></div>
         <!-- <div class="toolbar-icon library"></div> -->
       </div>

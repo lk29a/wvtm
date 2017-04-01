@@ -1,21 +1,20 @@
 declare var require: any;
 
-import {Component, OnInit, OnDestroy} from "@angular/core";
-import {AsyncPipe} from "@angular/common";
-import {Observable} from "rxjs/Rx";
-import {List, Map} from "immutable";
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs/Rx';
+import {List, Map} from 'immutable';
 import {NgRedux, select} from '@angular-redux/store';
-import { IWVTMState } from "../store";
-import { EDITOR_MODES } from "../shared";
-import {TaskModelActions} from "../taskmodel"
+import {IWVTMState} from '../store';
+import {EDITOR_MODES} from '../shared';
+import {TaskModelActions} from '../taskmodel';
 import * as Immutable from 'immutable';
-// const Immutable = require('immutable');
 
 import {
   LoggerService,
   TaskType,
   TaskRelation
-} from "../shared/index";
+} from '../shared/index';
 
 enum InfoTypes {
   None = 0,
@@ -25,19 +24,19 @@ enum InfoTypes {
 }
 
 @Component({
-  selector: "wvtm-infobar",
+  selector: 'wvtm-infobar',
   // moduleId: module.id,
-  templateUrl: "infobar.html",
-  styleUrls: ["infobar.css"],
+  templateUrl: 'infobar.html',
+  styleUrls: ['infobar.css'],
 })
 export class InfobarComponent implements OnInit, OnDestroy {
-  @select(["taskmodel", "selectedTask"]) selectedTask: Observable<string>;
+  @select(['taskmodel', 'selectedTask']) selectedTask: Observable<string>;
   // @select(["editorState", "mode"]) editorMode: Observable<EDITOR_MODES>;
 
-  // private nameField: Control = new Control();
-  // private descField: Control = new Control();
-  // private typeField: Control = new Control();
-  // private relationField: Control = new Control();
+  private nameField: FormControl = new FormControl();
+  private descField: FormControl = new FormControl();
+  private typeField: FormControl = new FormControl();
+  private relationField: FormControl = new FormControl();
 
   currentTask: any = {};
   infobar: any;
@@ -52,10 +51,10 @@ export class InfobarComponent implements OnInit, OnDestroy {
   curTaskObj: any;
 
   constructor(private logger: LoggerService,
-    private tmActions: TaskModelActions,
-    private redux: NgRedux<IWVTMState>) {
+              private tmActions: TaskModelActions,
+              private redux: NgRedux<IWVTMState>) {
 
-    this.logger.debug("Infobar initialized");
+    this.logger.debug('Infobar initialized');
 
     this.taskTypes = TaskType;
     this.types = Object.keys(this.taskTypes);
@@ -63,79 +62,48 @@ export class InfobarComponent implements OnInit, OnDestroy {
     this.relations = Object.keys(this.taskRelations);
     this.infobar = {
       type: InfoTypes,
-      title: "Information",
+      title: 'Information',
       error: false,
-      errMsg: ""
+      errMsg: ''
     };
     this.infoType = InfoTypes;
 
-    // this.nameField.valueChanges
-    //   .debounceTime(300)
-    //   .distinctUntilChanged()
-    //   .subscribe(name => {
-    //     this.updateTask("name", name);
-    //   });
+    this.nameField.valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask('name', name);
+      });
 
-    // this.descField.valueChanges
-    //   .debounceTime(300)
-    //   .distinctUntilChanged()
-    //   .subscribe(name => {
-    //     this.updateTask("description", name);
-    //   });
+    this.descField.valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask('description', name);
+      });
 
-    // this.typeField.valueChanges
-    //   .debounceTime(300)
-    //   .distinctUntilChanged()
-    //   .subscribe(name => {
-    //     this.updateTask("type", name);
-    //   });
+    this.typeField.valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask('type', name);
+      });
 
-    // this.relationField.valueChanges
-    //   .debounceTime(300)
-    //   .distinctUntilChanged()
-    //   .subscribe(name => {
-    //     this.updateTask("relation", name);
-    //   });
-
-
-
-    // this.wvtm.userAction$.subscribe(
-    //       case "simulation":
-    //         if (userAction.action === "start")
-    //           this.showSimulationInfo(userAction.data);
-    //         else if (userAction.action === "error") {
-    //           this.infobar.error = true;
-    //           this.infobar.errMsg = userAction.data;
-    //         } else if (userAction.action === "stop")
-    //           reset = true;
-    //         break;
-
-    //       case "validation":
-    //         if (userAction.action === "start")
-    //           this.showValidationInfo(userAction.data);
-    //         else if (userAction.action === "stop")
-    //           reset = true;
-    //         break;
-
-    //       default:
-    //         reset = true;
-    //         break;
-    //     }
-
-    //     if (reset) {
-    //       this.resetInfoBar();
-    //     }
-    //   }
-    // );
+    this.relationField.valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .subscribe(name => {
+        this.updateTask('relation', name);
+      });
   }
 
   ngOnInit() {
-    //selected task
+    // selected task
     this.rxSubs.selectedTask = this.redux.select((state) => {
       let obj = null;
-      let t = state.taskModel.tasks.get(state.taskModel.selectedTask);
+      const t = state.taskModel.tasks.get(state.taskModel.selectedTask);
       if (t && !Immutable.is(this.curTaskObj, t)) {
-        let parent = state.taskModel.tasks.get(t.parent);
+        const parent = state.taskModel.tasks.get(t.parent);
         this.curTaskObj = t;
         obj = {
           task: t,
@@ -147,10 +115,10 @@ export class InfobarComponent implements OnInit, OnDestroy {
       this.showTaskInfo(data);
     });
 
-    //editor mode
+    // editor mode
     this.rxSubs.editormode = this.redux.select(state => state.editorState.mode)
       .subscribe(mode => {
-        if(mode === EDITOR_MODES.SIMULATION) {
+        if (mode === EDITOR_MODES.SIMULATION) {
           this.infobar.type = InfoTypes.Simulation;
         }
       });
@@ -166,13 +134,14 @@ export class InfobarComponent implements OnInit, OnDestroy {
   showTaskInfo(data) {
     if (data) {
       this.infobar.type = InfoTypes.Task;
-      let {task, parent} = data;
+      const {task, parent} = data;
 
       let isLast = false;
       if (parent) {
-        let idx = parent.children.indexOf(task.id);
-        if (idx === (parent.children.size - 1))
+        const idx = parent.children.indexOf(task.id);
+        if (idx === (parent.children.size - 1)) {
           isLast = true;
+        }
       }
 
       this.currentTask = {
@@ -182,10 +151,10 @@ export class InfobarComponent implements OnInit, OnDestroy {
         name: task.name,
         description: task.description,
         children: task.children,
-        isRoot: task.parent ? false : true,
+        isRoot: !task.parent,
         isLast: isLast,
       };
-      this.infobar.title = "Task: " + this.currentTask.name;
+      this.infobar.title = 'Task: ' + this.currentTask.name;
     }
   }
 
@@ -195,15 +164,15 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
   simulationAction(action: string, data: any) {
     switch (action) {
-      case "start":
+      case 'start':
         this.showSimulationInfo(data);
         break;
 
-      case "update":
+      case 'update':
         this.updateSimulationInfo(data);
         break;
 
-      case "stop":
+      case 'stop':
         this.resetInfoBar();
         break;
     }
@@ -211,7 +180,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
   showSimulationInfo(data) {
     this.infobar.type = InfoTypes.Simulation;
-    this.infobar.title = "Simulation";
+    this.infobar.title = 'Simulation';
     // this.simData.ets = data;
   }
 
@@ -221,18 +190,19 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
   showValidationInfo(data) {
     this.infobar.type = InfoTypes.Validation;
-    this.infobar.title = "Validation Information";
+    this.infobar.title = 'Validation Information';
     this.vInfo = data;
   }
 
   deleteTask() {
     let okToDelete = true;
     if (this.currentTask.children.size > 0) {
-      let msg = "Warning: This will also remove the all subtasks\n Are you sure?";
+      const msg = 'Warning: This will also remove the all sub-tasks\n Are you sure?';
       okToDelete = window.confirm(msg);
     }
-    if (okToDelete)
+    if (okToDelete) {
       this.tmActions.removeTask(this.currentTask.id);
+    }
   }
 
   addToLibrary() {
@@ -240,8 +210,9 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   updateTask(type, value) {
-    if (this.currentTask[type] === value)
+    if (this.currentTask[type] === value) {
       return;
+    }
 
     // this.tmActions.updateTask(this.currentTask.id, type, value);
     this.tmActions.updateTask(type, value);
@@ -252,9 +223,10 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    for (let key in this.rxSubs) {
-      if (this.rxSubs.hasOwnProperty(key))
+    for (const key in this.rxSubs) {
+      if (this.rxSubs.hasOwnProperty(key)) {
         this.rxSubs[key].unsubscribe();
+      }
     }
   }
 }
