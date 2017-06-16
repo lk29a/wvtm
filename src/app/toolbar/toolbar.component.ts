@@ -36,7 +36,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     });
   }
 
-
   addTask(type: string) {
     this.tmActions.addTask(type);
   }

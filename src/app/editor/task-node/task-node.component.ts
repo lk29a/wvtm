@@ -21,9 +21,8 @@ import {EditorActions} from '../editor.actions';
   selector: 'g[task-node]',
   templateUrl: 'task-node.component.html',
   styleUrls: ['task-node.component.css'],
-  providers: [SVGHelper]
-  // directives: [TaskTreeComponent],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [SVGHelper],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -43,7 +42,7 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   };
   subTasks: string[];
   clickTimer: any;
-  preventClick: boolean = false;
+  preventClick = false;
 
   constructor(private redux: NgRedux<IWVTMState>,
               private editorActions: EditorActions,
@@ -54,7 +53,7 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     // // subscribe to selected task
-    this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.taskModel.selectedTask)
+    this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.editorState.selectedTask)
       .map(taskId => this.taskNode.id === taskId);
 
     // subscribe to parent task layout coords
@@ -72,9 +71,9 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.rxSubs.rSiblingCoords = this.redux.select(state => {
       const parent = state.taskModel.tasks.getIn([this.taskNode.id, 'parent']);
       if (parent) {
-        const childs: List<string> = state.taskModel.tasks.getIn([parent, 'children']);
-        const taskIdx = childs.indexOf(this.taskNode.id);
-        if (childs.size > (taskIdx + 1)) {
+        const children: List<string> = state.taskModel.tasks.getIn([parent, 'children']);
+        const taskIdx = children.indexOf(this.taskNode.id);
+        if (children.size > (taskIdx + 1)) {
           const rsib = state.taskModel.tasks.getIn([parent, 'children', taskIdx + 1]);
           return state.taskModel.tasks.get(rsib);
         }
@@ -95,7 +94,8 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   onClick() {
     this.clickTimer = setTimeout(() => {
       if (!this.preventClick) {
-        this.taskModelActions.selectTask(this.taskNode.id);
+        // this.taskModelActions.selectTask(this.taskNode.id);
+        this.editorActions.selectTask(this.taskNode.id);
       }
 
       this.preventClick = false;

@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import { List, Map } from "immutable";
-import { ITaskModel, ITask, TreeUtils} from "../taskmodel";
-import { TaskRelation } from "../shared";
+import {Injectable} from '@angular/core';
+import { List, Map } from 'immutable';
+import { ITaskModel, ITask, TreeUtils} from '../taskmodel';
+import { TaskRelation } from '../shared';
 
 export class Simulator {
 
@@ -31,8 +31,8 @@ export class Simulator {
   enableTask(task: string) {
     // console.log("enabling: " + aTask.name);
 
-    let curTask = task,
-      leftmostPath = [];
+    let curTask = task;
+    const leftmostPath = [];
 
     // find left most decendent of this task
     while (curTask) {
@@ -60,25 +60,22 @@ export class Simulator {
    * Checks for the relation with its right sibling(if any).
    * Depending on the relation returns right sibling or null.
    *
-   * @param  {[type]} aTask [description]
+   * @param task
    */
   checkRelation(task: string) {
+    const relation = this.getTaskRelation(task);
+
     // can add more relations to check here
-    if (
-      this.getTaskRelation(task) === TaskRelation.UNRESTRICTED ||
-      this.getTaskRelation(task) === TaskRelation.CHOICE ||
-      this.getTaskRelation(task) === TaskRelation.RANDOM ||
-      this.getTaskRelation(task) === TaskRelation.CONCURRENTINFO ||
-      this.getTaskRelation(task) === TaskRelation.DEACT ||
-      this.getTaskRelation(task) === TaskRelation.RESUME
-    ) {
-      return true;
-    }
-    return false;
+    return TaskRelation[relation] === TaskRelation.UNRESTRICTED ||
+      TaskRelation[relation] === TaskRelation.CHOICE ||
+      TaskRelation[relation] === TaskRelation.RANDOM ||
+      TaskRelation[relation] === TaskRelation.CONCURRENTINFO ||
+      TaskRelation[relation] === TaskRelation.DEACT ||
+      TaskRelation[relation] === TaskRelation.RESUME;
   }
 
   getTaskRelation(task: string) {
-    return this.nodeList.getIn([task, "relation"]);
+    return this.nodeList.getIn([task, 'relation']);
   }
 
   /**
@@ -92,22 +89,22 @@ export class Simulator {
    */
   executeTask(aTask, silent?) {
     silent = silent || false;
-    let idx = this.ets.indexOf(aTask);
+    debugger;
+
+    const idx = this.ets.indexOf(aTask);
     if (idx < 0) {
-      console.log("Task not enabled");
+      console.log('Task not enabled');
       return;
     } else {
       // remove task from enabled set
-      this.ets.splice(idx, 1);
+      this.ets = this.ets.delete(idx);
 
       // check if parent has choice relation, if yes then disable those tasks
-      let parent = aTask.parent;
-
-      if (parent.relation === TaskRelation.CHOICE) {
+      const parent = this.treeUtils.getParent(aTask);
+      const parentRelation = this.getTaskRelation(parent);
+      if (TaskRelation[parentRelation] === TaskRelation.CHOICE) {
         this.executeTask(parent);
       }
-
-
       // if (!silent) {
       // check if left task also needs to be performed in case of choice, unrestricted, etc
       // var lSibling = aTask.getLeftSibling();
@@ -115,16 +112,16 @@ export class Simulator {
       //   executeTask(lSibling);
       // }
 
-      let rSibling = aTask.getRightSibling();
+      const rSibling = aTask.getRightSibling();
       if (rSibling) {
         // some *relation* with right sibling
-        let action = this.simulateRelation(aTask, rSibling);
+        const action = this.simulateRelation(aTask, rSibling);
         switch (action) {
-          case "enable":
+          case 'enable':
             this.enableTask(rSibling);
             break;
 
-          case "perform":
+          case 'perform':
             this.executeTask(rSibling);
             break;
         }
@@ -150,7 +147,7 @@ export class Simulator {
   isTaskActive(aTask) {
     let enabled = false;
 
-    let _this = this;
+    const _this = this;
     // a task is enabled is any of its children is enabled
     enabled = (function isTaskEnabled(parent) {
       if (_this.ets.indexOf(parent) > -1) {
@@ -172,47 +169,48 @@ export class Simulator {
 
   /**
    * [performRelation description]
-   * @param  {[type]} realtion [description]
+   * @param task
+   * @param rSibling
+   *
    * @return {[type]}          [description]
    */
   simulateRelation(task, rSibling) {
-    let relations = {
+    const relations = {
       // Independent Concurrency
-      "|||": function() {
-        return "noop";
+      '|||': function() {
+        return 'noop';
       },
       // Choice
-      "[]": function() {
-        return "execute";
+      '[]': function() {
+        return 'execute';
       },
       // Concurrency with information exchange
-      "|[]|": function() {
+      '|[]|': function() {
         return true;
       },
       // Order Independence
-      "|=|": function() {
+      '|=|': function() {
         return true;
       },
       // Deactivating
-      "[>": function() {
+      '[>': function() {
         return true;
       },
       // Enabling
-      ">>": function() {
-        return "enable";
+      '>>': function() {
+        return 'enable';
       },
       /**
        * Enabling with information passing
        * Will pass provided data to right sibling
        *
-       * @return {[type]} [description]
        */
-      "[]>>": function() {
+      '[]>>': function() {
 
-        return "enable";
+        return 'enable';
       },
       // Suspend - resume
-      "|>": function() {
+      '|>': function() {
         return true;
       },
     };

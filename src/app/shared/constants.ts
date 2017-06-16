@@ -3,8 +3,8 @@ export const RENDERER_DEFAULTS = {
   levelDistance: 120,
   nodeRadius: 20,
   baseAttrs: {
-    fill: "transparent",
-    stroke: "#212121",
+    fill: 'transparent',
+    stroke: '#212121',
     strokeWidth: 1,
   }
 };
@@ -15,54 +15,54 @@ export enum EDITOR_MODES {
 }
 
 export const TaskType = {
-  "ABSTRACT": "Abstract",
-  "USER": "User",
-  "INTERACTION": "Interaction",
-  "SYSTEM": "System",
+  'ABSTRACT': 'Abstract',
+  'USER': 'User',
+  'INTERACTION': 'Interaction',
+  'SYSTEM': 'System',
 };
 
 export const TaskRelation = {
-  "UNRESTRICTED": {
-    sym: "|||",
-    name: "Independent Concurrency"
+  'UNRESTRICTED': {
+    sym: '|||',
+    name: 'Independent Concurrency'
   },
-  "CHOICE": {
-    sym: "[]",
-    name: "Choice"
+  'CHOICE': {
+    sym: '[]',
+    name: 'Choice'
   },
-  "CONCURRENTINFO": {
-    sym: "|[]|",
-    name: "Concurrency with information exchange"
+  'CONCURRENTINFO': {
+    sym: '|[]|',
+    name: 'Concurrency with information exchange'
   },
-  "RANDOM": {
-    sym: "|=|",
-    name: "Order Independence"
+  'RANDOM': {
+    sym: '|=|',
+    name: 'Order Independence'
   },
-  "DEACT": {
-    sym: "[>",
-    name: "Deactivation"
+  'DEACT': {
+    sym: '[>',
+    name: 'Deactivation'
   },
-  "ENABLE": {
-    sym: ">>",
-    name: "Enabling"
+  'ENABLE': {
+    sym: '>>',
+    name: 'Enabling'
   },
-  "CHOICEINFO": {
-    sym: "[]>>",
-    name: "Enabling with information passing"
+  'CHOICEINFO': {
+    sym: '[]>>',
+    name: 'Enabling with information passing'
   },
-  "RESUME": {
-    sym: "|>",
-    name: "Suspend resume"
+  'RESUME': {
+    sym: '|>',
+    name: 'Suspend resume'
   }
 };
 
 export const TaskProperty = {
-  "ITERATION": {
-    sym: "T*",
-    name: "Iteration"
+  'ITERATION': {
+    sym: 'T*',
+    name: 'Iteration'
   },
-  "OPTIONAL": {
-    sym: "[T]",
-    name: "Optional"
+  'OPTIONAL': {
+    sym: '[T]',
+    name: 'Optional'
   }
 };

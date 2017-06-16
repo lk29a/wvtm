@@ -1,5 +1,5 @@
-import { List, Map, Record, Seq } from "immutable";
-import {TaskType} from "../shared";
+import { List, Map, Record, Seq } from 'immutable';
+import {TaskType} from '../shared';
 
 export const TaskRecord = Record({
   id: undefined,
@@ -26,7 +26,7 @@ export interface ITask extends Map<string, any> {
   coords: {
     x: number;
     y: number;
-  }
+  };
 }
 
 export interface ICoord extends Map<string, any> {
@@ -35,21 +35,21 @@ export interface ICoord extends Map<string, any> {
 }
 
 export interface ITaskModel extends Map<string, any> {
-  name: string, /* name of model */
-  id: string
-  description: string, /* description of model */
-  selectedTask: string, /* id of selected task */
-  treeRoot: string, /* id of root task */
-  statusData: Map<string, any>,
-  modules: List<Map<string, ITaskModel>>,
+  name: string; /* name of model */
+  id: string;
+  description: string; /* description of model */
+  selectedTask: string; /* id of selected task */
+  treeRoot: string; /* id of root task */
+  statusData: Map<string, any>;
+  modules: List<Map<string, ITaskModel>>;
   // treeLayout: Map<string, ICoord>,
-  tasks: Map<string, ITask> /* map of tasks in model */
-};
+  tasks: Map<string, ITask>; /* map of tasks in model */
+}
 
 export const TaskModelRecord = Record({
-  id: "",
-  name: "",
-  description: "",
+  id: '',
+  name: '',
+  description: '',
   selectedTask: undefined,
   treeRoot: undefined,
   statusData: Map<string, any>(),

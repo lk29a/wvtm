@@ -9,6 +9,7 @@ export class TaskModelActions {
   static REMOVE_TASK = 'REMOVE_TASK';
   static UPDATE_TASK = 'UPDATE_TASK';
   static SELECT_TASK = 'SELECT_TASK';
+  static DESELECT_TASK = 'DESELECT_TASK';
   static ADD_MODULE = 'ADD_MODULE';
   static NEW_MODULE = 'NEW_MODULE';
 

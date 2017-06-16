@@ -1,15 +1,13 @@
 /* tslint:disable:no-unused-variable */
 
-import { By }           from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { addProviders, async, inject } from '@angular/core/testing';
+import { async, inject } from '@angular/core/testing';
 import { TaskNodeComponent } from './task-node.component';
 
-// describe('Component: TaskTree', () => {
+// describe('Component: TaskNode', () => {
 //   it('should create an instance', () => {
-//     let taskStore = new TaskStore();
-//     let component = new TaskTreeComponent(TaskStore);
-
+//     let component = new TaskNodeComponent();
+//
 //     expect(component).toBeTruthy();
 //   });
 // });

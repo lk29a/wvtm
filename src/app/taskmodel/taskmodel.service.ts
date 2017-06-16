@@ -92,13 +92,15 @@ export function updateTask(task: ITask, type, value): ITask {
   // @lk make it proper
   switch (type) {
     case 'relation':
-      if (isLast)
+      if (isLast) {
         return task;
+      }
       break;
 
     case 'type':
-      if (isRoot)
+      if (isRoot) {
         return task;
+      }
       break;
   }
 

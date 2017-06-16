@@ -69,11 +69,12 @@ export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITa
       state = state.set('tasks', task(state, action)) as ITaskModel;
       return taskModelService.validateStructure(state);
 
-
-
     case TaskModelActions.SELECT_TASK:
       const selected = state.selectedTask;
       return state.set('selectedTask', selected === action.payload.taskId ? '' : action.payload.taskId) as ITaskModel;
+
+    case TaskModelActions.DESELECT_TASK:
+      return state.set('selectedTask', '') as ITaskModel;
 
     default:
       return state;

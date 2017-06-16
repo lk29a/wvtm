@@ -1,12 +1,16 @@
 /* tslint:disable:no-unused-variable */
 
-import { addProviders, async, inject } from '@angular/core/testing';
+import { TestBed, inject, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
-describe('App: WVTM', () => {
-  beforeEach(() => {
-    addProviders([AppComponent]);
-  });
+describe('AppComponent', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AppComponent
+      ],
+    }).compileComponents();
+  }));
 
   it('should create the app',
     inject([AppComponent], (app: AppComponent) => {

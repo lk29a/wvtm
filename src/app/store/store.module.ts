@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NgReduxModule, NgRedux, DevToolsExtension } from '@angular-redux/store';
-
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import {IWVTMState} from './root.types';
 import { rootReducer } from './root.reducer';
@@ -21,7 +22,7 @@ export class StoreModule {
   constructor(public store: NgRedux<IWVTMState>, devTools: DevToolsExtension) {
     store.configureStore(
       rootReducer,
-      {},
+      applyMiddleware(thunk),
       [ createLogger({
         level: 'info',
         collapsed: true,

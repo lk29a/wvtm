@@ -1,5 +1,5 @@
-import { List, Map, Record, fromJS } from "immutable";
-import { EDITOR_MODES } from "../shared";
+import { List, Map, Record} from 'immutable';
+import { EDITOR_MODES } from '../shared';
 
 export const EditorStateRecord = Record({
   mode: EDITOR_MODES.DRAWING,
@@ -7,6 +7,8 @@ export const EditorStateRecord = Record({
     width: 1000,
     height: 1000
   },
+  selectedTask: undefined,
+  statusData: Map<string, any>(),
   simulation: Map<string, List<string>>({
     ets: List<string>(),
     tasksExecuted: List<string>()
@@ -14,13 +16,15 @@ export const EditorStateRecord = Record({
 });
 
 export interface IEditorState extends Map<string, any> {
-  mode: EDITOR_MODES, /* mode of editor */
+  mode: EDITOR_MODES; /* mode of editor */
   canvasSize: {
     width: number,
     height: number
-  },
-  simulation: Map<string, List<string>>
-};
+  };
+  selectedTask: string;
+  statusData: Map<string, any>;
+  simulation: Map<string, List<string>>;
+}
 
 export function deimmutifyEditorState(state: IEditorState): Object[] {
   return state.toJS();
