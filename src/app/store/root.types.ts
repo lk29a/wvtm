@@ -5,4 +5,5 @@ import * as editor from "../editor";
 export interface IWVTMState {
   taskModel?: taskModel.ITaskModel;
   editorState?: editor.IEditorState;
+  lastAction?: any
 }

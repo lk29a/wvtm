@@ -106,7 +106,6 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     if (this.clickTimer) {
       clearTimeout(this.clickTimer);
     }
-
     this.preventClick = true;
     this.editorActions.simExecuteTask(this.taskNode.id);
   }
@@ -141,7 +140,7 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes) {
-    console.log('changed', this.taskNode.id);
+    // console.log('changed', this.taskNode.id);
   }
 
   ngOnDestroy() {

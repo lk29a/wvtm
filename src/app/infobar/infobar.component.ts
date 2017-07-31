@@ -1,3 +1,5 @@
+import {EditorActions} from "../editor/editor.actions";
+
 declare var require: any;
 
 import {Component, OnInit, OnDestroy} from '@angular/core';
@@ -15,6 +17,9 @@ import {
   TaskType,
   TaskRelation
 } from '../shared/index';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {ITask} from "../taskmodel/taskmodel.types";
+import {TreeUtils} from "../taskmodel/treeutils";
 
 enum InfoTypes {
   None = 0,
@@ -49,10 +54,15 @@ export class InfobarComponent implements OnInit, OnDestroy {
   simData: Map<string, List<string>>;
   rxSubs: any = {};
   curTaskObj: any;
+  tasks: Map<string, ITask>;
+  treeUtils: TreeUtils;
+  rootTask: string;
+  closeResult: string;
 
   constructor(private logger: LoggerService,
               private tmActions: TaskModelActions,
-              private redux: NgRedux<IWVTMState>) {
+              private redux: NgRedux<IWVTMState>,
+              private modalService: NgbModal) {
 
     this.logger.debug('Infobar initialized');
 
@@ -61,7 +71,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
     this.taskRelations = TaskRelation;
     this.relations = Object.keys(this.taskRelations);
     this.infobar = {
-      type: InfoTypes,
+      type: InfoTypes.None,
       title: 'Information',
       error: false,
       errMsg: ''
@@ -97,7 +107,33 @@ export class InfobarComponent implements OnInit, OnDestroy {
       });
   }
 
+
+  open(content) {
+    this.modalService.open(content, {size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
   ngOnInit() {
+    this.rxSubs.alltasks = this.redux.select(state => state.taskModel)
+      .subscribe(taskModel => {
+        this.tasks = taskModel.tasks;
+        this.rootTask = taskModel.treeRoot;
+        this.treeUtils = new TreeUtils(this.tasks, this.rootTask);
+      });
+
     // selected task
     this.rxSubs.selectedTask = this.redux.select((state) => {
       let obj = null;
@@ -121,14 +157,47 @@ export class InfobarComponent implements OnInit, OnDestroy {
         if (mode === EDITOR_MODES.SIMULATION) {
           this.infobar.type = InfoTypes.Simulation;
         }
+        if (mode === EDITOR_MODES.DRAWING) {
+          this.infobar.type = InfoTypes.None;
+        }
       });
-
 
     this.rxSubs.simulation = this.redux.select(state => state.editorState.simulation)
       .subscribe(simData => {
-        // console.log(simData.toJS());
         this.simData = simData.toJS();
+        // this.processSimData(simData);
       });
+
+    this.rxSubs.validation = this.redux.select(state => state.taskModel.statusData)
+      .subscribe(validationData => {
+        const lastAction = this.redux.getState().lastAction;
+        if (lastAction.type === EditorActions.VALIDATION_INFO) {
+          this.showValidationInfo(validationData.get('validation'));
+        }
+      })
+  }
+
+  processSimData(data) {
+    let d = {};
+    const ets = data.get('ets');
+    console.log(ets);
+    ets.forEach((v) => {
+      let path = "";
+      let parentLvl1 = this.treeUtils.getParent(v);
+      path = this.getTaskName(parentLvl1);
+      let parentLvl2 = this.treeUtils.getParent(parentLvl1);
+      if (parentLvl2) {
+        path = this.getTaskName(parentLvl2) + ' >> ' + path;
+      }
+      d[path] = d[path] || [];
+      d[path].push(this.getTaskName(v));
+      console.log(d);
+    });
+
+    // for (let i = 0; i < simData.ets.length; i++) {
+    //   // let p1 = this.tasks.getIn([simData.ets.])
+    // }
+
   }
 
   showTaskInfo(data) {
@@ -159,7 +228,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
   }
 
   resetInfoBar() {
-    this.infobar.type = null;
+    this.infobar.type = InfoTypes.None;
   }
 
   simulationAction(action: string, data: any) {
@@ -220,6 +289,10 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
   getRelationSym(relation) {
     return this.taskRelations[relation];
+  }
+
+  getTaskName(taskId: string) {
+    return this.tasks.get(taskId).name;
   }
 
   ngOnDestroy() {

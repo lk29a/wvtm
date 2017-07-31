@@ -6,11 +6,15 @@ import * as editor from "../editor";
 export interface IWVTMState {
   taskModel?: taskModel.ITaskModel;
   editorState?: editor.IEditorState;
+  lastAction?: string;
 }
 
 export const rootReducer = combineReducers<IWVTMState>({
   taskModel: taskModel.taskModelReducer,
-  editorState: editor.editorStateReducer
+  editorState: editor.editorStateReducer,
+  lastAction: function lastAction(state = null, action) {
+    return action;
+  }
   // simulation: simulationReducer,
   // userAction: userActionReducer
 });

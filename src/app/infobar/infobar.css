@@ -14,7 +14,7 @@
 }
 
 .info-body {
-  padding: 5px;
+  /*padding: 5px;*/
   overflow: auto;
   height: calc(100% - 30px);
 }
@@ -47,9 +47,24 @@
 	border-bottom: 1px solid #ccc;
 }
 
+.sim-info  {
+  padding: 5px;
+}
 .sim-info .enabled-tasks {
-	max-height: 50%;
+  max-height: 50%;
 }
 
 
+.group-marker {
+  text-align: center;
+  font-weight: bold;
+}
+
+.group-marker::before {
+  content: '----- ';
+}
+
+.group-marker::after {
+  content: ' -----';
+}
 

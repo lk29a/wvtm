@@ -36,14 +36,27 @@ export class MenuComponent implements OnInit {
     // this.wvtmService.menuAction("new");
   }
 
+  openProject() {
+
+  }
+
   saveProject() {
     this.logger.debug('Menu click - Save Project');
     // this.wvtmService.menuAction("save");
   }
 
+  undo() {
+
+  }
+
+  redo() {
+
+  }
+
   validate() {
+    console.log('lklklklk');
     this.logger.debug('Menu click - Validate');
-    // this.wvtmService.menuAction("validate");
+    this.editorActions.showValidationInfo();
   }
 
   simulate() {

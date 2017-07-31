@@ -57,7 +57,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.redux.select(state => state.taskModel.tasks)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
+        // console.log(JSON.stringify(data.toJS()));
         this.tasks = data;
       });
 
@@ -104,14 +105,19 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   resizeCanvas(event) {
-    this.canvasDim.height = this.el.nativeElement.firstChild.clientHeight;
-    this.canvasDim.width = this.el.nativeElement.firstChild.clientWidth;
+    // this.canvasDim.height = this.el.nativeElement.firstChild.clientHeight;
+    // this.canvasDim.width = this.el.nativeElement.firstChild.clientWidth;
   }
 
   ngAfterViewInit() {
-    const dim = {
+    let dim = {
       height: this.el.nativeElement.firstChild.clientHeight,
       width: this.el.nativeElement.firstChild.clientWidth,
+    };
+
+    dim = {
+      height: 1000,
+      width: 2000
     };
     // set initial dimensions
     this.svgElm = this.el.nativeElement.querySelector('svg');

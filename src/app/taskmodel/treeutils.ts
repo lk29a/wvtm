@@ -2,13 +2,17 @@ import {List, Map} from 'immutable';
 import {ITask} from './taskmodel.types';
 import {Observable} from 'rxjs/Observable';
 import {Queue} from '../shared';
+
 /**
  * Functions and algorithms for flat-tree using immutablejs
  */
 export class TreeUtils {
 
   constructor(private nodes: Map<string, ITask>, private root: string) {
+  }
 
+  getRealNode(nodeId: string) {
+    return this.nodes.get(nodeId);
   }
 
   traverseDF(callback) {
@@ -64,20 +68,36 @@ export class TreeUtils {
     return this.nodes.getIn([node, 'children']);
   }
 
-  getFirstChild(node: string): string {
-    return this.nodes.getIn([node, 'children']).first();
+  getFirstChild(node: string, getNode?: boolean): any {
+    let nodeId = this.nodes.getIn([node, 'children']).first();
+    if (getNode) {
+      return this.nodes.get(nodeId);
+    }
+    return nodeId;
   }
 
-  getLastChild(node: string): string {
-    return this.nodes.getIn([node, 'children']).last();
+  getLastChild(node: string, getNode?: boolean): any {
+    const nodeId = this.nodes.getIn([node, 'children']).last();
+    if (getNode) {
+      return this.nodes.get(nodeId);
+    }
+    return nodeId;
   }
 
-  getFirstSibling(node: string): string {
-    return this.getFirstChild(this.getParent(node));
+  getFirstSibling(node: string, getNode?: boolean): any {
+    let nodeId = this.getFirstChild(this.getParent(node));
+    if (getNode) {
+      return this.nodes.get(nodeId);
+    }
+    return nodeId;
   }
 
-  getParent(node: string): string {
-    return this.nodes.getIn([node, 'parent'], null);
+  getParent(node: string, getNode?: boolean): any {
+    const nodeId = this.nodes.getIn([node, 'parent'], null);
+    if (getNode) {
+      return this.nodes.get(nodeId);
+    }
+    return nodeId;
   }
 
   isParentOf(node1: string, node2: string): boolean {
@@ -89,34 +109,34 @@ export class TreeUtils {
     return this.nodes.getIn([parent, 'children']).indexOf(node);
   }
 
-  getLeftSibling(node: string): string {
+  getLeftSibling(node: string, getNode?: boolean): any {
     const parent = this.getParent(node);
     if (parent) {
       const nodeIdx = this.nodes.getIn([parent, 'children']).indexOf(node);
       if (nodeIdx > 0) {
-        return this.nodes.getIn([parent, 'children', nodeIdx - 1]);
+        const nodeId = this.nodes.getIn([parent, 'children', nodeIdx - 1]);
+        if (getNode) {
+          return this.nodes.get(nodeId);
+        }
+        return nodeId;
       }
     }
-
     return null;
-    // let nodeIdx = this.nodes.getIn([parent, "children"]).indexOf(node);
-    // if (nodeIdx > 0) {
-    //   return this.nodes.getIn([parent, "children"], nodeIdx - 1);
-    // } else {
-    //   return null;
-    // }
   }
 
-  getRightSibling(node: string): string {
+  getRightSibling(node: string, getNode?: boolean): any {
     const parent = this.getParent(node);
     if (parent) {
       const children: List<string> = this.nodes.getIn([parent, 'children']);
       const nodeIdx = children.indexOf(node);
       if (children.size > (nodeIdx + 1)) {
-        return this.nodes.getIn([parent, 'children', nodeIdx + 1]);
+        const nodeId = this.nodes.getIn([parent, 'children', nodeIdx + 1]);
+        if (getNode) {
+          return this.nodes.get(nodeId);
+        }
+        return nodeId;
       }
     }
     return null;
   }
-
 }

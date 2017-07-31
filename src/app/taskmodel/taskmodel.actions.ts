@@ -12,6 +12,7 @@ export class TaskModelActions {
   static DESELECT_TASK = 'DESELECT_TASK';
   static ADD_MODULE = 'ADD_MODULE';
   static NEW_MODULE = 'NEW_MODULE';
+  static VALIDATE_MODEL = 'VALIDATE_MODEL';
 
   constructor(private redux: NgRedux<IWVTMState>) { }
 

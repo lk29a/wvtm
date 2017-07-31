@@ -3,7 +3,8 @@ import {TaskModelActions} from './taskmodel.actions';
 import { ITaskModel, ITask } from './taskmodel.types';
 import * as taskModelService from './taskmodel.service';
 
-const INITIAL_STATE: ITaskModel = taskModelService.createNew();
+// const INITIAL_STATE: ITaskModel = taskModelService.createNew();
+const INITIAL_STATE: ITaskModel = taskModelService.createTestModel();
 
 function task(state: ITaskModel, action): Map<string, ITask> {
   switch (action.type) {
@@ -75,6 +76,9 @@ export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITa
 
     case TaskModelActions.DESELECT_TASK:
       return state.set('selectedTask', '') as ITaskModel;
+
+    case TaskModelActions.VALIDATE_MODEL:
+      return taskModelService.validateStructure(state);
 
     default:
       return state;

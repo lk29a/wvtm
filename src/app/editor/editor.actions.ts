@@ -12,6 +12,7 @@ export class EditorActions {
   static SIMULATION_STOP = 'SIMULATION_STOP';
   static SELECT_TASK = 'SELECT_TASK';
   static DESELECT_TASK = 'DESELECT_TASK';
+  static VALIDATION_INFO = 'VALIDATE_MODEL';
 
   constructor(private redux: NgRedux<IWVTMState>) {}
 
@@ -30,10 +31,8 @@ export class EditorActions {
 
   showValidationInfo() {
     this.redux.dispatch({
-      type: EditorActions.EDITOR_MODE_CHANGE,
-      payload: {
-        mode: EDITOR_MODES.SIMULATION
-      }
+      type: EditorActions.VALIDATION_INFO,
+      payload: {}
     });
   }
 

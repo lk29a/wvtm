@@ -16,6 +16,7 @@ export class StoreModule {
     return {
       taskModel: taskModel.deimmutifyTaskModel(state.taskModel),
       editorState: editor.deimmutifyEditorState(state.editorState),
+      lastAction: state.lastAction
     };
   }
 

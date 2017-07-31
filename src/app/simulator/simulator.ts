@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import { List, Map } from 'immutable';
-import { ITaskModel, ITask, TreeUtils} from '../taskmodel';
-import { TaskRelation } from '../shared';
+import {List, Map} from 'immutable';
+import {ITaskModel, ITask, TreeUtils} from '../taskmodel';
+import {TaskRelation} from '../shared';
+import {TaskType} from "../shared/constants";
 
 export class Simulator {
 
@@ -9,25 +10,27 @@ export class Simulator {
   tasksExecuted = List<string>();
   treeUtils: TreeUtils;
 
+  etsNew = Map<string, List<ITask>>();
 
   constructor(private nodeList: Map<string, ITask>, private root: string) {
     this.treeUtils = new TreeUtils(nodeList, root);
   }
 
   start() {
-    this.enableTask(this.root);
-    console.log(this.ets.toJS());
+    const child = this.treeUtils.getFirstChild(this.root);
+    this.enableTask(child);
+    console.log(this.etsNew.toJS());
     return this.ets;
   }
 
   /**
-  * Enabling a task requires:
-  * 1. Directly enable if its leaf else,
-  * 2. Check entire subtree rooted at current task then,
-  * 3. Check relationship with right sibling, enable right sibling if required
-  *
-  * @param  {[type]} aTask [description]
-  */
+   * Enabling a task requires:
+   * 1. Directly enable if its leaf else,
+   * 2. Check entire subtree rooted at current task then,
+   * 3. Check relationship with right sibling, enable right sibling if required
+   *
+   * @param  {[type]} aTask [description]
+   */
   enableTask(task: string) {
     // console.log("enabling: " + aTask.name);
 
@@ -44,6 +47,7 @@ export class Simulator {
       curTask = leftmostPath.pop();
       if (this.treeUtils.isLeaf(curTask)) {
         this.ets = this.ets.push(curTask);
+        this.addEnabledTask(curTask);
       }
 
       // if relation is non blocking
@@ -53,6 +57,55 @@ export class Simulator {
 
       curTask = this.treeUtils.getParent(curTask);
     }
+  }
+
+  disableTask(task: string) {
+    const idx = this.ets.indexOf(task);
+    if (idx > -1) {
+      this.ets = this.ets.delete(idx);
+    }
+  }
+
+  addEnabledTask(taskId: string) {
+    let path = this.get2LevelPathString(taskId);
+    let taskNode = this.treeUtils.getRealNode(taskId);
+    let tasks: List<ITask>;
+
+    if(this.etsNew.has(path)) {
+      tasks = this.etsNew.get(path);
+    } else {
+      tasks = List<ITask>();
+    }
+    tasks = tasks.push(taskNode);
+    this.etsNew = this.etsNew.set(path, tasks);
+  }
+
+  removeEnabledTask(taskId: string) {
+    let path = this.get2LevelPathString(taskId);
+    let taskNode = this.treeUtils.getRealNode(taskId);
+    if(!this.etsNew.has(path)) {
+      return;
+    }
+    let tasks = this.etsNew.get(path);
+    if (tasks.contains(taskNode)) {
+      tasks = tasks.delete(tasks.indexOf(taskNode))
+    }
+    if(tasks.isEmpty()) {
+      this.etsNew = this.etsNew.delete(path);
+    } else {
+      this.etsNew = this.etsNew.set(path, tasks);
+    }
+  }
+
+  get2LevelPathString(taskId: string): string {
+    let path = '';
+    let parentLvl1 = this.treeUtils.getParent(taskId, true);
+    path = parentLvl1.name;
+    let parentLvl2 = this.treeUtils.getParent(parentLvl1.id, true);
+    if (parentLvl2) {
+      path = parentLvl2.name + ' >> ' + path;
+    }
+    return path;
   }
 
 
@@ -78,6 +131,14 @@ export class Simulator {
     return this.nodeList.getIn([task, 'relation']);
   }
 
+  getTaskType(task: string) {
+    return this.nodeList.getIn([task, 'type']);
+  }
+
+  getTaskAttr(task, attr) {
+    return this.nodeList.getIn([task, attr]);
+  }
+
   /**
    * We need to check both right and left sibling for relations.
    * next/prev task wil be enabled or disabled based on these relations
@@ -89,52 +150,58 @@ export class Simulator {
    */
   executeTask(aTask, silent?) {
     silent = silent || false;
-    debugger;
 
     const idx = this.ets.indexOf(aTask);
     if (idx < 0) {
-      console.log('Task not enabled');
+      console.warn('Task not enabled', aTask);
       return;
-    } else {
-      // remove task from enabled set
-      this.ets = this.ets.delete(idx);
-
-      // check if parent has choice relation, if yes then disable those tasks
-      const parent = this.treeUtils.getParent(aTask);
-      const parentRelation = this.getTaskRelation(parent);
-      if (TaskRelation[parentRelation] === TaskRelation.CHOICE) {
-        this.executeTask(parent);
-      }
-      // if (!silent) {
-      // check if left task also needs to be performed in case of choice, unrestricted, etc
-      // var lSibling = aTask.getLeftSibling();
-      // if (lSibling && checkRelation(lSibling)) {
-      //   executeTask(lSibling);
-      // }
-
-      const rSibling = aTask.getRightSibling();
-      if (rSibling) {
-        // some *relation* with right sibling
-        const action = this.simulateRelation(aTask, rSibling);
-        switch (action) {
-          case 'enable':
-            this.enableTask(rSibling);
-            break;
-
-          case 'perform':
-            this.executeTask(rSibling);
-            break;
-        }
-      }
-
-      // check if parent is still active else execute parent task
-      if (!this.isTaskActive(aTask.parent)) {
-        this.ets.push(aTask.parent);
-        this.executeTask(aTask.parent);
-      }
-      // }
     }
-    console.log(this.ets);
+
+    // remove task from enabled set
+    this.ets = this.ets.delete(idx);
+    this.removeEnabledTask(aTask);
+
+    // check if parent has choice relation, if yes then disable those tasks
+    const parent = this.treeUtils.getParent(aTask);
+    const parentRelation = this.getTaskRelation(parent);
+    if (TaskRelation[parentRelation] === TaskRelation.CHOICE) {
+      this.executeTask(parent);
+    }
+    // if (!silent) {
+    // check if left task also needs to be performed in case of choice, unrestricted, etc
+    // var lSibling = aTask.getLeftSibling();
+    // if (lSibling && checkRelation(lSibling)) {
+    //   executeTask(lSibling);
+    // }
+
+    const rSibling = this.treeUtils.getRightSibling(aTask);
+    const lSibling = this.treeUtils.getLeftSibling(aTask);
+    if (lSibling) {
+
+    }
+
+
+    if (rSibling) {
+      // some *relation* with right sibling
+      const action = this.simulateRelation(aTask, rSibling);
+      switch (action) {
+        case 'enable':
+          this.enableTask(rSibling);
+          break;
+
+        case 'perform':
+          this.executeTask(rSibling);
+          break;
+      }
+    }
+
+    // check if parent is still active else execute parent task
+    if (!this.isTaskActive(parent)) {
+      this.ets = this.ets.push(parent);
+      this.addEnabledTask(parent);
+      this.executeTask(parent);
+    }
+    // console.log(this.etsNew.toJS());
     return this.ets;
   }
 
@@ -145,17 +212,18 @@ export class Simulator {
    * @return {Boolean}       [description]
    */
   isTaskActive(aTask) {
-    let enabled = false;
-
+    let enabled: boolean;
     const _this = this;
     // a task is enabled is any of its children is enabled
     enabled = (function isTaskEnabled(parent) {
-      if (_this.ets.indexOf(parent) > -1) {
+      if (_this.isTaskInETS(parent)) {
+      // if (_this.ets.indexOf(parent) > -1) {
         return true;
       } else {
         let tmp = false;
-        for (let i = 0; i < parent.children.length; i++) {
-          tmp = isTaskEnabled(parent.children[i]);
+        let children = _this.treeUtils.getChildren(parent);
+        for (let i = 0; i < children.size; i++) {
+          tmp = isTaskEnabled(children.get(i));
           if (tmp === true) {
             return tmp;
           }
@@ -163,8 +231,20 @@ export class Simulator {
         return tmp;
       }
     })(aTask);
-
     return enabled;
+  }
+
+  isTaskInETS(taskId: string): boolean {
+    let node = this.treeUtils.getRealNode(taskId);
+    let contains = false;
+    this.etsNew.forEach((val, key) => {
+      if(val.contains(node)) {
+        contains = true;
+        return false;
+      }
+    })
+
+    return contains;
   }
 
   /**
@@ -177,27 +257,27 @@ export class Simulator {
   simulateRelation(task, rSibling) {
     const relations = {
       // Independent Concurrency
-      '|||': function() {
+      '|||': function () {
         return 'noop';
       },
       // Choice
-      '[]': function() {
+      '[]': function () {
         return 'execute';
       },
       // Concurrency with information exchange
-      '|[]|': function() {
+      '|[]|': function () {
         return true;
       },
       // Order Independence
-      '|=|': function() {
+      '|=|': function () {
         return true;
       },
       // Deactivating
-      '[>': function() {
+      '[>': function () {
         return true;
       },
       // Enabling
-      '>>': function() {
+      'ENABLE': function () {
         return 'enable';
       },
       /**
@@ -205,17 +285,17 @@ export class Simulator {
        * Will pass provided data to right sibling
        *
        */
-      '[]>>': function() {
+      'ENABLEINFO': function () {
 
         return 'enable';
       },
       // Suspend - resume
-      '|>': function() {
+      '|>': function () {
         return true;
       },
     };
 
-    return relations[task.relation]();
+    return relations[this.getTaskRelation(task)]();
   }
 
 }

@@ -1,8 +1,11 @@
 import {Map, List} from 'immutable';
+import * as Immutable from 'immutable';
 import {ITask, ITaskModel, ICoord, TaskRecord, TaskModelRecord} from './taskmodel.types';
 import {TreeLayout} from './treelayout';
 import {TreeUtils} from './treeutils';
 import {TaskType} from '../shared';
+import {atmDemo} from './atmdemo'
+import {applySourceSpanToExpressionIfNeeded} from "@angular/compiler/src/output/output_ast";
 
 let taskCounter = 0;
 let moduleCounter = 1;
@@ -171,36 +174,28 @@ export function validateStructure(taskModel: ITaskModel): ITaskModel {
   return taskModel.setIn(['statusData', 'validation'], validationObj) as ITaskModel;
 }
 
-function createTestModel() {
+export function createTestModel(): ITaskModel {
 
-  // setTimeout(() => {
-  //   this.taskModelActions.addTask("Abstract", "TASK_0");
-  // }, 2000)
-  // setTimeout(() => {
-  //   this.taskStore.addTask("Abstract", "TASK_0");
-  // }, 3000)
-  // setTimeout(() => {
-  //   this.taskStore.addTask("Abstract", "TASK_0");
-  // }, 4000)
-  // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Enable access", relation: ">>" });
-  // this.taskStore.addTask({ parentTaskId: "TASK_0", taskType: "Abstract", name: "Access", relation: "[>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_0", taskType: "INTERACTION", name: "Close access" });
-  // this.taskModel.addTask({parentTaskId:'TASK_0', taskType:'Abstract', name:'e'});
+  let iTaskModel = createNew();
+  let tasks = Map<string, ITask>();
+  for (let key in atmDemo) {
+    let task = new TaskRecord({
+      id: atmDemo[key].id,
+      type: atmDemo[key].type,
+      name: atmDemo[key].name,
+      description: atmDemo[key].description,
+      relation: atmDemo[key].relation,
+      parent: atmDemo[key].parent,
+      children: List<string>(atmDemo[key].children),
+      coords: atmDemo[key].coords
+    }) as ITask;
+    tasks = tasks.set(key, task);
+  }
 
-  // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert card", relation: ">>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "System", name: "Require password", relation: ">>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_1", taskType: "INTERACTION", name: "Insert Password" });
+  tasks = calculateLayout(iTaskModel.treeRoot, tasks);
+  return iTaskModel.withMutations(model => {
+    model.set('tasks', tasks);
+  }) as ITaskModel;
 
 
-  // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Withdraw cash", relation: "[]" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Deposit cash", relation: "[]" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "Abstract", name: "Get information" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_2", taskType: "System", name: "Test" });
-
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select withdraw", relation: ">>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Show possible amounts", relation: "[]>>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "User", name: "Decide amount", relation: "[]>>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Select account", relation: "[]>>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "System", name: "Provide cash", relation: "[]>>" });
-  // this.taskModel.addTask({ parentTaskId: "TASK_7", taskType: "INTERACTION", name: "Check cash" });
 }

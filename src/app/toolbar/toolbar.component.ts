@@ -19,6 +19,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   relations = Object.keys(TaskRelation);
   taskRelations = null;
   rxSubs: any = {};
+  types = null;
 
   constructor(private tmActions: TaskModelActions,
               private logger: LoggerService,
@@ -26,6 +27,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
     this.logger.debug('Toolbar initialized');
     this.taskRelations = TaskRelation;
+    this.types = TaskType
   }
 
   ngOnInit() {

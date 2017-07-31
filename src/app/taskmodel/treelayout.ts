@@ -26,7 +26,7 @@ export class TreeLayout {
   }
 
   // calculate(rootNode: string, nodes: Map<string, ITask>, centerX = 500): Map<string, ICoord> {
-  calculate(rootNode: string, tasks: Map<string, ITask>, centerX = 500): Map<string, ITask> {
+  calculate(rootNode: string, tasks: Map<string, ITask>, centerX = 650): Map<string, ITask> {
     this.treeUtils = new TreeUtils(tasks, rootNode);
     this.nodes = tasks;
     this.layoutData = tasks.map((val) => {
@@ -131,6 +131,8 @@ export class TreeLayout {
     } else {
       shift = Math.abs(this.bounds.x1);
     }
+
+    console.log(shift);
     const _this = this;
     (function traverse(node) {
       _this.layoutData[node].x += shift;

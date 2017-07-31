@@ -46,13 +46,13 @@ export const TaskRelation = {
     sym: '>>',
     name: 'Enabling'
   },
-  'CHOICEINFO': {
+  'ENABLEINFO': {
     sym: '[]>>',
     name: 'Enabling with information passing'
   },
   'RESUME': {
     sym: '|>',
-    name: 'Suspend resume'
+    name: 'Suspend/Resume'
   }
 };
 

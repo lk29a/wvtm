@@ -7,7 +7,11 @@ import { IWVTMState } from './root.types';
 
 export const rootReducer = combineReducers<IWVTMState>({
   taskModel: taskModel.taskModelReducer,
-  editorState: editor.editorStateReducer
+  editorState: editor.editorStateReducer,
+  lastAction: function lastAction(state = null, action) {
+    return action;
+  }
+
   // simulation: simulationReducer,
   // userAction: userActionReducer
 });
