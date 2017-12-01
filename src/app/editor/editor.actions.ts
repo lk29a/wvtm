@@ -16,10 +16,6 @@ export class EditorActions {
 
   constructor(private redux: NgRedux<IWVTMState>) {}
 
-  startNew() {
-    console.log('start new project');
-  }
-
   selectTask(taskId: string) {
     this.redux.dispatch({
       type: EditorActions.SELECT_TASK,

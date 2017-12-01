@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import {List, Map} from 'immutable';
 import {ITaskModel, ITask, TreeUtils} from '../taskmodel';
 import {TaskRelation} from '../shared';
@@ -6,11 +5,10 @@ import {TaskType} from "../shared/constants";
 
 export class Simulator {
 
-  ets = List<string>();
+  // ets = List<string>();
+  ets = Map<string, List<ITask>>();
   tasksExecuted = List<string>();
   treeUtils: TreeUtils;
-
-  etsNew = Map<string, List<ITask>>();
 
   constructor(private nodeList: Map<string, ITask>, private root: string) {
     this.treeUtils = new TreeUtils(nodeList, root);
@@ -19,7 +17,6 @@ export class Simulator {
   start() {
     const child = this.treeUtils.getFirstChild(this.root);
     this.enableTask(child);
-    console.log(this.etsNew.toJS());
     return this.ets;
   }
 
@@ -46,7 +43,7 @@ export class Simulator {
     while (leftmostPath.length > 0) {
       curTask = leftmostPath.pop();
       if (this.treeUtils.isLeaf(curTask)) {
-        this.ets = this.ets.push(curTask);
+        // this.ets = this.ets.push(curTask);
         this.addEnabledTask(curTask);
       }
 
@@ -60,10 +57,10 @@ export class Simulator {
   }
 
   disableTask(task: string) {
-    const idx = this.ets.indexOf(task);
-    if (idx > -1) {
-      this.ets = this.ets.delete(idx);
-    }
+    // const idx = this.ets.indexOf(task);
+    // if (idx > -1) {
+    //   this.ets = this.ets.delete(idx);
+    // }
   }
 
   addEnabledTask(taskId: string) {
@@ -71,29 +68,29 @@ export class Simulator {
     let taskNode = this.treeUtils.getRealNode(taskId);
     let tasks: List<ITask>;
 
-    if(this.etsNew.has(path)) {
-      tasks = this.etsNew.get(path);
+    if (this.ets.has(path)) {
+      tasks = this.ets.get(path);
     } else {
       tasks = List<ITask>();
     }
     tasks = tasks.push(taskNode);
-    this.etsNew = this.etsNew.set(path, tasks);
+    this.ets = this.ets.set(path, tasks);
   }
 
   removeEnabledTask(taskId: string) {
     let path = this.get2LevelPathString(taskId);
     let taskNode = this.treeUtils.getRealNode(taskId);
-    if(!this.etsNew.has(path)) {
+    if (!this.ets.has(path)) {
       return;
     }
-    let tasks = this.etsNew.get(path);
+    let tasks = this.ets.get(path);
     if (tasks.contains(taskNode)) {
       tasks = tasks.delete(tasks.indexOf(taskNode))
     }
-    if(tasks.isEmpty()) {
-      this.etsNew = this.etsNew.delete(path);
+    if (tasks.isEmpty()) {
+      this.ets = this.ets.delete(path);
     } else {
-      this.etsNew = this.etsNew.set(path, tasks);
+      this.ets = this.ets.set(path, tasks);
     }
   }
 
@@ -103,7 +100,7 @@ export class Simulator {
     path = parentLvl1.name;
     let parentLvl2 = this.treeUtils.getParent(parentLvl1.id, true);
     if (parentLvl2) {
-      path = parentLvl2.name + ' >> ' + path;
+      path = `${parentLvl2.name} <i class="fa fa-angle-double-right"></i> ${path}`;
     }
     return path;
   }
@@ -151,14 +148,15 @@ export class Simulator {
   executeTask(aTask, silent?) {
     silent = silent || false;
 
-    const idx = this.ets.indexOf(aTask);
-    if (idx < 0) {
+    // const idx = this.ets.indexOf(aTask);
+    // if (idx < 0) {
+    if (!this.isTaskInETS(aTask)) {
       console.warn('Task not enabled', aTask);
       return;
     }
 
     // remove task from enabled set
-    this.ets = this.ets.delete(idx);
+    // this.ets = this.ets.delete(idx);
     this.removeEnabledTask(aTask);
 
     // check if parent has choice relation, if yes then disable those tasks
@@ -177,7 +175,10 @@ export class Simulator {
     const rSibling = this.treeUtils.getRightSibling(aTask);
     const lSibling = this.treeUtils.getLeftSibling(aTask);
     if (lSibling) {
-
+      let lsRel = this.getTaskRelation(lSibling);
+      if (TaskRelation[lsRel] === TaskRelation.DEACT) {
+        this.ets = this.ets.clear();
+      }
     }
 
 
@@ -197,11 +198,12 @@ export class Simulator {
 
     // check if parent is still active else execute parent task
     if (!this.isTaskActive(parent)) {
-      this.ets = this.ets.push(parent);
-      this.addEnabledTask(parent);
-      this.executeTask(parent);
+      // this.ets = this.ets.push(parent);
+      if(!(parent == this.root)) {
+        this.addEnabledTask(parent);
+        this.executeTask(parent);
+      }
     }
-    // console.log(this.etsNew.toJS());
     return this.ets;
   }
 
@@ -217,7 +219,7 @@ export class Simulator {
     // a task is enabled is any of its children is enabled
     enabled = (function isTaskEnabled(parent) {
       if (_this.isTaskInETS(parent)) {
-      // if (_this.ets.indexOf(parent) > -1) {
+        // if (_this.ets.indexOf(parent) > -1) {
         return true;
       } else {
         let tmp = false;
@@ -237,12 +239,13 @@ export class Simulator {
   isTaskInETS(taskId: string): boolean {
     let node = this.treeUtils.getRealNode(taskId);
     let contains = false;
-    this.etsNew.forEach((val, key) => {
-      if(val.contains(node)) {
+    this.ets.forEach((val, key) => {
+
+      if (val.contains(node)) {
         contains = true;
         return false;
       }
-    })
+    });
 
     return contains;
   }
@@ -257,23 +260,23 @@ export class Simulator {
   simulateRelation(task, rSibling) {
     const relations = {
       // Independent Concurrency
-      '|||': function () {
+      'UNRESTRICTED': function () {
         return 'noop';
       },
       // Choice
-      '[]': function () {
+      'CHOICE': function () {
         return 'execute';
       },
       // Concurrency with information exchange
-      '|[]|': function () {
+      'CONCURRENTINFO': function () {
         return true;
       },
       // Order Independence
-      '|=|': function () {
+      'RANDOM': function () {
         return true;
       },
       // Deactivating
-      '[>': function () {
+      'DEACT': function () {
         return true;
       },
       // Enabling
@@ -290,7 +293,7 @@ export class Simulator {
         return 'enable';
       },
       // Suspend - resume
-      '|>': function () {
+      'RESUME': function () {
         return true;
       },
     };

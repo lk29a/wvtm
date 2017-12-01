@@ -1,6 +1,6 @@
 import {Map, List} from 'immutable';
 import * as Immutable from 'immutable';
-import {ITask, ITaskModel, ICoord, TaskRecord, TaskModelRecord} from './taskmodel.types';
+import {ITask, ITaskModel, ICoord, TaskRecord, TaskModelRecord, ModuleRecord, IModule} from './taskmodel.types';
 import {TreeLayout} from './treelayout';
 import {TreeUtils} from './treeutils';
 import {TaskType} from '../shared';
@@ -119,14 +119,18 @@ export function newModule(taskModel: ITaskModel, taskId: string) {
     return taskList.includes(key) || key === taskId;
   }).toMap();
 
-  const newMod = new TaskModelRecord({
-    'name': 'Module ' + moduleCounter++,
+  let modId = moduleCounter++;
+  const newMod = new ModuleRecord({
+    'id': 'mod_' + modId,
+    'name': 'Module ' + modId,
     'description': '',
-    'tasks': modTasks
-  }) as ITaskModel;
+    'tasks': modTasks,
+    'root': taskId
+  }) as IModule;
 
   modules = modules.push(newMod);
 
+  console.log(modules.toJS());
   return taskModel.set('modules', modules);
 }
 

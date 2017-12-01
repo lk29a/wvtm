@@ -12,6 +12,8 @@ import {ToolbarModule} from './toolbar';
 import {EditorModule} from './editor';
 import {InfobarModule} from './infobar';
 import { LoggerService } from './shared';
+import {IterablePipe} from "./shared/IterablePipe";
+import {TaskNodeComponent} from "./editor/task-node/task-node.component";
 
 
 @NgModule({
@@ -27,7 +29,7 @@ import { LoggerService } from './shared';
     EditorModule,
     InfobarModule
   ],
-  declarations: [ AppComponent ],   // components and directives
+  declarations: [ AppComponent],   // components and directives
   providers: [LoggerService, TaskModelActions],    // services
   bootstrap: [ AppComponent ]     // root component
 })

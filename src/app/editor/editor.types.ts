@@ -1,5 +1,6 @@
 import { List, Map, Record} from 'immutable';
 import { EDITOR_MODES } from '../shared';
+import {ITask} from "../taskmodel/taskmodel.types";
 
 export const EditorStateRecord = Record({
   mode: EDITOR_MODES.DRAWING,
@@ -9,8 +10,8 @@ export const EditorStateRecord = Record({
   },
   selectedTask: undefined,
   statusData: Map<string, any>(),
-  simulation: Map<string, List<string>>({
-    ets: List<string>(),
+  simulation: Map<string, any>({
+    ets: Map<string, List<ITask>>(),
     tasksExecuted: List<string>()
   })
 });
@@ -23,7 +24,7 @@ export interface IEditorState extends Map<string, any> {
   };
   selectedTask: string;
   statusData: Map<string, any>;
-  simulation: Map<string, List<string>>;
+  simulation: Map<string, any>;
 }
 
 export function deimmutifyEditorState(state: IEditorState): Object[] {

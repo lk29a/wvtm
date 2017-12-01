@@ -13,8 +13,17 @@ export class TaskModelActions {
   static ADD_MODULE = 'ADD_MODULE';
   static NEW_MODULE = 'NEW_MODULE';
   static VALIDATE_MODEL = 'VALIDATE_MODEL';
+  static START_NEW = 'START_NEW';
 
   constructor(private redux: NgRedux<IWVTMState>) { }
+
+  startNew() {
+    this.redux.dispatch({
+      type: TaskModelActions.START_NEW,
+      payload: {}
+    });
+  }
+
 
   addTask(type: string) {
     this.redux.dispatch({

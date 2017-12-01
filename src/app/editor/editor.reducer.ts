@@ -4,21 +4,25 @@ import { IEditorState } from './editor.types';
 import {createNew} from './shared/editor.service';
 import { Simulator } from '../simulator';
 import { EDITOR_MODES } from '../shared';
+import {ITask} from "../taskmodel/taskmodel.types";
 
 const INITIAL_STATE: IEditorState = createNew();
 
 let simulator: Simulator = null;
 
-function simulation(state: Map<string, List<string>>, action): Map<string, List<string>> {
+function simulation(state: Map<string, any>, action): Map<string, List<ITask>> {
 
   switch (action.type) {
     case EditorActions.SIMULATION_START:
-
       simulator = new Simulator(action.payload.taskModel.tasks, action.payload.taskModel.treeRoot);
       return state.set('ets', simulator.start());
 
     case EditorActions.SIMULATE_TASK:
-      return state.set('ets', simulator.executeTask(action.payload.task));
+      let ets = state.set('ets', simulator.executeTask(action.payload.task));
+      if(ets.isEmpty()) {
+        return state.set('ets', state.get('ets').clear());
+      }
+      return ets;
 
     case EditorActions.SIMULATION_STOP:
       return state.set('ets', state.get('ets').clear());

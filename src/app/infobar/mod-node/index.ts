@@ -1,1 +1,1 @@
-export * from './task-node.component';
+export * from './mod-node.component';

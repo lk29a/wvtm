@@ -4,6 +4,7 @@ import {NgRedux, select} from '@angular-redux/store';
 import {LoggerService, EDITOR_MODES} from '../shared';
 import {IWVTMState} from '../store';
 import {EditorActions} from '../editor';
+import {TaskModelActions} from "../taskmodel/taskmodel.actions";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class MenuComponent implements OnInit {
 
   constructor(private logger: LoggerService,
               private redux: NgRedux<IWVTMState>,
+              private taskModelActions: TaskModelActions,
               private editorActions: EditorActions) {
   }
 
@@ -33,6 +35,7 @@ export class MenuComponent implements OnInit {
 
   newProject() {
     this.logger.debug('Menu click - New Project');
+    this.taskModelActions.startNew();
     // this.wvtmService.menuAction("new");
   }
 

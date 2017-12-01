@@ -34,7 +34,7 @@ function taskModel(state: ITaskModel, action): ITaskModel {
       return taskModelService.removeTask(state, action.payload.taskId) as ITaskModel;
 
     case TaskModelActions.NEW_MODULE:
-      taskModelService.newModule(state, action.payload.taskId);
+      console.log(taskModelService.newModule(state, action.payload.taskId));
       return state;
 
 
@@ -79,6 +79,9 @@ export function taskModelReducer(state: ITaskModel = INITIAL_STATE, action): ITa
 
     case TaskModelActions.VALIDATE_MODEL:
       return taskModelService.validateStructure(state);
+
+    case TaskModelActions.START_NEW:
+      return taskModelService.createNew();
 
     default:
       return state;

@@ -63,4 +63,19 @@
   <div *ngFor="let simtask of simEts">{{simtask}}</div>
 
   <status-bar [statusData]="statusData"></status-bar>
+
+
+
+  <ng-template #relcontent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Submit</button>
+    </div>
+  </ng-template>
+
+
 </div>

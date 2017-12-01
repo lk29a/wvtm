@@ -11,23 +11,23 @@ import {
 import {Observable} from 'rxjs/Rx';
 import {List} from 'immutable';
 import {NgRedux, select} from '@angular-redux/store';
-import {SVGHelper} from '../shared';
+import {SVGHelper} from '../../editor/shared';
 import {IWVTMState} from '../../store';
 import {ITask, ICoord, TaskModelActions} from '../../taskmodel';
 import {TaskRelation} from '../../shared';
-import {EditorActions} from '../editor.actions';
+import {EditorActions} from '../../editor/editor.actions';
 
 @Component({
-  selector: 'g[task-node]',
-  templateUrl: 'task-node.component.html',
-  styleUrls: ['task-node.component.css'],
+  selector: 'g[mod-node]',
+  templateUrl: 'mod-node.component.html',
+  styleUrls: ['mod-node.component.css'],
   providers: [SVGHelper],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
+export class ModNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   // @Input() taskId: string;
-  @Input() taskNode: ITask;
+  @Input() modNode: ITask;
 
   private rxSubs: any = {};
   // taskNode: ITask;
@@ -54,11 +54,11 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     // // subscribe to selected task
     this.rxSubs.selected = this.isSelecetd = this.redux.select(state => state.editorState.selectedTask)
-      .map(taskId => this.taskNode.id === taskId);
+      .map(taskId => this.modNode.id === taskId);
 
     // subscribe to parent task layout coords
     this.rxSubs.parentCoords = this.redux.select(state => {
-      const parent = state.taskModel.tasks.getIn([this.taskNode.id, 'parent']);
+      const parent = state.taskModel.tasks.getIn([this.modNode.id, 'parent']);
       return state.taskModel.tasks.get(parent);
     })
       .subscribe(data => {
@@ -69,10 +69,10 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
 
     // subscribe to right sibling task layout coords
     this.rxSubs.rSiblingCoords = this.redux.select(state => {
-      const parent = state.taskModel.tasks.getIn([this.taskNode.id, 'parent']);
+      const parent = state.taskModel.tasks.getIn([this.modNode.id, 'parent']);
       if (parent) {
         const children: List<string> = state.taskModel.tasks.getIn([parent, 'children']);
-        const taskIdx = children.indexOf(this.taskNode.id);
+        const taskIdx = children.indexOf(this.modNode.id);
         if (children.size > (taskIdx + 1)) {
           const rsib = state.taskModel.tasks.getIn([parent, 'children', taskIdx + 1]);
           return state.taskModel.tasks.get(rsib);
@@ -91,33 +91,13 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
     // console.log(this.el.nativeElement);
   }
 
-  onClick() {
-    this.clickTimer = setTimeout(() => {
-      if (!this.preventClick) {
-        // this.taskModelActions.selectTask(this.taskNode.id);
-        this.editorActions.selectTask(this.taskNode.id);
-      }
-
-      this.preventClick = false;
-    }, 200);
-  }
-
-  onDblclick() {
-    if (this.clickTimer) {
-      clearTimeout(this.clickTimer);
-    }
-    this.preventClick = true;
-    this.editorActions.simExecuteTask(this.taskNode.id);
-  }
-
   getTaskTypeLink() {
-    return `#def-${this.taskNode.type.toLowerCase()}`;
+    return `#def-${this.modNode.type.toLowerCase()}`;
   }
 
   getParentLinkPath(): string {
-    // console.log("parent link", this.taskNode.id, this.parentCoords);
-    if (this.taskNode.parent) {
-      return this.svgHelper.getParentLinkPath(this.taskNode.coords, this.parentCoords);
+    if (this.modNode.parent) {
+      return this.svgHelper.getParentLinkPath(this.modNode.coords, this.parentCoords);
     } else {
       return '';
     }
@@ -125,18 +105,18 @@ export class TaskNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   getRelationLinkPath(): string {
     const relTextElm = this.el.nativeElement.querySelector('.rel-text');
-    if (this.taskNode.relation) {
-      return this.svgHelper.getRelationLinkPath(this.taskNode.coords, relTextElm.getBBox(), this.rSiblingCoords);
+    if (this.modNode.relation) {
+      return this.svgHelper.getRelationLinkPath(this.modNode.coords, relTextElm.getBBox(), this.rSiblingCoords);
     }
     return '';
   }
 
   getRelationSym() {
-    return TaskRelation[this.taskNode.relation].sym;
+    return TaskRelation[this.modNode.relation].sym;
   }
 
   getRelationXCoord() {
-    return this.taskNode.coords.x + (this.rSiblingCoords.x - this.taskNode.coords.x) / 2;
+    return this.modNode.coords.x + (this.rSiblingCoords.x - this.modNode.coords.x) / 2;
   }
 
   ngOnChanges(changes) {

@@ -20,6 +20,7 @@ import {
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {ITask} from "../taskmodel/taskmodel.types";
 import {TreeUtils} from "../taskmodel/treeutils";
+import {getModuleTasks} from "./infoUtils";
 
 enum InfoTypes {
   None = 0,
@@ -43,6 +44,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
   private typeField: FormControl = new FormControl();
   private relationField: FormControl = new FormControl();
 
+  moduleTasks: Map<string, ITask>;
   currentTask: any = {};
   infobar: any;
   taskTypes;
@@ -107,25 +109,6 @@ export class InfobarComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  open(content) {
-    this.modalService.open(content, {size: 'lg'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
   ngOnInit() {
     this.rxSubs.alltasks = this.redux.select(state => state.taskModel)
       .subscribe(taskModel => {
@@ -164,8 +147,7 @@ export class InfobarComponent implements OnInit, OnDestroy {
 
     this.rxSubs.simulation = this.redux.select(state => state.editorState.simulation)
       .subscribe(simData => {
-        this.simData = simData.toJS();
-        // this.processSimData(simData);
+        this.simData = simData.get('ets').toJS();
       });
 
     this.rxSubs.validation = this.redux.select(state => state.taskModel.statusData)
@@ -175,29 +157,6 @@ export class InfobarComponent implements OnInit, OnDestroy {
           this.showValidationInfo(validationData.get('validation'));
         }
       })
-  }
-
-  processSimData(data) {
-    let d = {};
-    const ets = data.get('ets');
-    console.log(ets);
-    ets.forEach((v) => {
-      let path = "";
-      let parentLvl1 = this.treeUtils.getParent(v);
-      path = this.getTaskName(parentLvl1);
-      let parentLvl2 = this.treeUtils.getParent(parentLvl1);
-      if (parentLvl2) {
-        path = this.getTaskName(parentLvl2) + ' >> ' + path;
-      }
-      d[path] = d[path] || [];
-      d[path].push(this.getTaskName(v));
-      console.log(d);
-    });
-
-    // for (let i = 0; i < simData.ets.length; i++) {
-    //   // let p1 = this.tasks.getIn([simData.ets.])
-    // }
-
   }
 
   showTaskInfo(data) {
@@ -274,9 +233,30 @@ export class InfobarComponent implements OnInit, OnDestroy {
     }
   }
 
-  addToLibrary() {
-    this.tmActions.newModule(this.currentTask.id);
+  addToLibrary(content) {
+    this.moduleTasks = getModuleTasks(this.tasks, this.currentTask.id);
+    this.open(content);
+
+    // this.tmActions.newModule(this.currentTask.id);
   }
+  open(content) {
+    this.modalService.open(content, {size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 
   updateTask(type, value) {
     if (this.currentTask[type] === value) {

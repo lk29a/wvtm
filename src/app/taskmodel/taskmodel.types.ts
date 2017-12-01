@@ -41,8 +41,16 @@ export interface ITaskModel extends Map<string, any> {
   selectedTask: string; /* id of selected task */
   treeRoot: string; /* id of root task */
   statusData: Map<string, any>;
-  modules: List<Map<string, ITaskModel>>;
+  modules: List<IModule>;
   // treeLayout: Map<string, ICoord>,
+  tasks: Map<string, ITask>; /* map of tasks in model */
+}
+
+export interface IModule extends Map<string, any> {
+  id: string;
+  name: string;
+  description: string;
+  root: string;
   tasks: Map<string, ITask>; /* map of tasks in model */
 }
 
@@ -55,6 +63,15 @@ export const TaskModelRecord = Record({
   statusData: Map<string, any>(),
   modules: List<Map<string, ITaskModel>>(),
   // treeLayout: Map<string, ICoord>(),
+  tasks: Map<string, ITask>()
+});
+
+
+export const ModuleRecord = Record({
+  id: '',
+  name: '',
+  description: '',
+  root: undefined,
   tasks: Map<string, ITask>()
 });
 

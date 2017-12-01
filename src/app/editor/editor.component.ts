@@ -88,7 +88,16 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   updateSimulation(simData) {
-    this.simEts = simData.get('ets');
+    this.simEts = List<string>();
+    let data = simData.get('ets').toJS();
+
+    for(let p in data) {
+      if(data.hasOwnProperty(p)) {
+        for (let taskNode of data[p]) {
+            this.simEts = this.simEts.push(taskNode.id);
+        }
+      }
+    }
   }
 
   stopSimulation() {

@@ -132,7 +132,6 @@ export class TreeLayout {
       shift = Math.abs(this.bounds.x1);
     }
 
-    console.log(shift);
     const _this = this;
     (function traverse(node) {
       _this.layoutData[node].x += shift;
