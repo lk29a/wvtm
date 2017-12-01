@@ -1,0 +1,34 @@
+<div id="main-menu">
+  <div id="menu-items">
+    <div class="menu-btn" (click)="newProject()">
+      <i class="menu-icon fa fa-file-image-o"></i>
+    </div>
+    <div class="menu-btn" (click)="openProject()">
+      <i class="menu-icon fa fa-folder-open-o"></i>
+    </div>
+    <div class="menu-btn" (click)="saveProject()">
+      <i class="menu-icon fa fa-floppy-o"></i>
+    </div>
+    <div class="menu-btn" (click)="undo()">
+      <i class="menu-icon fa fa-undo"></i>
+    </div>
+    <div class="menu-btn" (click)="redo()">
+      <i class="menu-icon fa fa-repeat"></i>
+    </div>
+    <div class="menu-btn" (click)="validate()">
+      <i class="menu-icon fa fa-check"></i>
+    </div>
+    <div class="menu-btn" (click)="simulate()">
+      <i class="menu-icon fa fa-play" [ngClass]="{'fa-stop': isSimulationMode}"></i>
+    </div>
+    <div class="menu-btn" (click)="zoom('[]')">
+      <i class="menu-icon fa fa-object-group"></i>
+    </div>
+    <div class="menu-btn" (click)="zoom('-')">
+      <i class="menu-icon fa fa-search-minus"></i>
+    </div>
+    <div class="menu-btn" (click)="zoom('+')">
+      <i class="menu-icon fa fa-search-plus"></i>
+    </div>
+  </div>
+</div>

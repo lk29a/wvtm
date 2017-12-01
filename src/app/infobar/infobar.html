@@ -1,0 +1,140 @@
+<div id="info-bar">
+  <div class="info-head"><span class="title">{{infobar.title}}</span></div>
+  <div class="info-body">
+    <div [ngSwitch]="infobar.type">
+      <div *ngSwitchCase="infobar.type === infoType.Simulation || infobar.type === infoType.Task ? infobar.type : 99">
+        <div [ngSwitch]="infobar.type">
+          <div *ngSwitchCase="infoType.Task">
+            <ngb-accordion [closeOthers]="true" activeIds="static-1">
+              <ngb-panel id="static-1" title="Details">
+                <ng-template ngbPanelContent>
+                  <div class="form-group">
+                    <label>Name: </label>
+                    <input class="form-control info-control" [ngModel]="currentTask.name" [formControl]="nameField">
+                  </div>
+                  <div class="form-group">
+                    <label>Description: </label>
+                    <textarea class="form-control info-control" [ngModel]="currentTask.description" [formControl]="descField"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Type: </label>
+                    <select class="form-control info-control" [disabled]="currentTask.isRoot" [ngModel]="currentTask.type" [formControl]="typeField">
+                      <option *ngFor="let type of types" [value]="taskTypes[type]">{{type}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Relation: </label>
+                    <select class="form-control info-control" [disabled]="currentTask.isLast || currentTask.isRoot" [ngModel]="currentTask.relation"
+                            [formControl]="relationField">
+                      <option *ngIf="!currentTask.relation" value="" disabled selected>Select a relation</option>
+                      <option *ngFor="let relation of relations" [value]="relation">{{relation}} ({{taskRelations[relation].sym}})</option>
+                    </select>
+                  </div>
+                  <span>
+                    <button (click)="addToLibrary(content)">Add to library</button>
+                  </span>
+                  <span *ngIf="!currentTask.isRoot">
+                    <button (click)="deleteTask()">Delete task</button>
+                  </span>
+                </ng-template>
+              </ngb-panel>
+              <ngb-panel id="static-2" title="Conditions">
+                <ng-template ngbPanelContent>
+                  <div>
+                    <div class="group-marker">Global</div>
+                    <label for="">Pre-condition
+                      <input type="text" class="form-control">
+                    </label>
+                    <label for="">Post-condition
+                      <input type="text" class="form-control">
+                    </label>
+                  </div>
+                  <div>
+                    <div class="group-marker">Relation</div>
+                    <label for="">Pre-condition
+                      <input type="text" class="form-control">
+                    </label>
+                    <label for="">Post-condition
+                      <input type="text" class="form-control">
+                    </label>
+                  </div>
+
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </div>
+          <div *ngSwitchCase="infoType.Simulation">
+            <div class="sim-info">
+              <div class="enabled-tasks">
+                <h4 class="text-center">Enabled tasks</h4>
+
+                <div></div>
+                <div *ngFor="let k of simData | iterable">
+                  <div><strong [innerHtml]="k"></strong></div>
+                  <ul>
+                    <li *ngFor="let task of simData[k]" >{{task.name}}</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="sim-task-info">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchCase="infoType.Validation">
+        <div class="validation-info">
+          <h5 class="main" [ngClass]="vInfo.valid ? 'passed' : 'failed'">Validation {{vInfo.valid ? 'Passed' : 'Failed'}}</h5>
+          <div class="count">Errors: {{vInfo.errorCount}}, Warnings: {{vInfo.warnCount}}</div>
+          <div class="messages">
+            <div class="msg" *ngFor="let item of vInfo.data">{{item.msg}}</div>
+          </div>
+        </div>
+      </div>
+      <div *ngSwitchDefault>
+        <div *ngIf="infobar.error">
+          {{infobar.errMsg}}
+        </div>
+        <div *ngIf="!infobar.error"></div>
+        <h4>Select a Task to see details.</h4>
+      </div>
+    </div>
+
+
+    <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h4 class="modal-title">Add module to library</h4>
+        <!--<button type="button" class="close" aria-label="Close" (click)="d('Cross click')">-->
+        <!--<span aria-hidden="true">&times;</span>-->
+        <!--</button>-->
+      </div>
+      <div class="modal-body">
+        <div class="pull-left">
+          <svg xmlns:svg="" id="svg-canvas2" height="300" width="500">
+            <g fill="rgba(0,0,0,0)" id="mod-model-group" stroke="#212121" style="stroke-width: 1;" transform="scale(0.5)">
+              <svg:g mod-node *ngFor="let task of moduleTasks.toList()" [modNode]="task"></svg:g>
+            </g>
+          </svg>
+        </div>
+        <div class="pull-right">
+          <div>
+            <label for="aa"> Name
+              <input type="text" id="aa" class="form-control">
+            </label>
+          </div>
+          <div>
+            <div>Description</div>
+            <textarea name="description" id="bb" cols="30" rows="10"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Submit</button>
+      </div>
+    </ng-template>
+
+    <!--<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>-->
+
+
+  </div>
+</div>

@@ -4,7 +4,7 @@
 		{
 			"path": ".",
       "name": "Web based Visual Task Modelling",
-      "folder_exclude_patterns": [".vscode", "node_modules", "typings", "build"]
+      "folder_exclude_patterns": [".vscode", "node_modules", "typings", "build", "dist", "tmp"]
 		},
 	],
   "build_systems":

@@ -1,0 +1,76 @@
+#toolbar {
+  height: 40px;
+  background-color: #F0F0F0;
+  border-top: 1px solid #E0E0E0;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.menu-group {
+  display: inline-block;
+  height: 40px;
+  margin-right: 17px;
+}
+
+.menu-separator {
+  display: inline-block;
+  height: 40px;
+  width: 1px;
+  margin: 0 10px;
+  border-right: 1px solid #ccc;
+}
+
+.toolbar-items {
+  padding: 0 15px;
+  /* position: relative; */
+  height: inherit;
+}
+
+.toolbar-btn {
+  border: 1px solid transparent;
+  margin-top: 4px;
+  margin-left: 17px;
+  float: left;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 12px
+}
+
+.toolbar-btn:hover {
+  border: 1px solid #E0E0E0;
+  border-radius: 2px;
+  background-color: #F5F5F5;
+}
+
+.toolbar-icon {
+  /* background-color: transparent; */
+  border: none;
+  background-position: center;
+  background-size: cover;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.toolbar-icon.abstract {
+  background-image: url("/assets/abstract.png");
+}
+
+.toolbar-icon.user {
+  background-image: url("/assets/user.png");
+}
+
+.toolbar-icon.interaction {
+  background-image: url("/assets/interaction.png");
+}
+
+.toolbar-icon.system {
+  background-image: url("/assets/system.png");
+}
+
+.toolbar-icon.library {
+  background-image: url("/assets/library.png");
+}
+
+.task-relations {
+  text-align: center;
+  font-weight: bold;
+}

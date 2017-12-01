@@ -1,0 +1,70 @@
+#info-bar {
+	border: 1px solid #CCCCCC;
+	position: relative;
+	height: 100%;
+}
+
+.info-head {
+	height: 30px;
+	background-color: #EEEEEE;
+	border-bottom: 1px solid #CACACA;
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+}
+
+.info-body {
+  /*padding: 5px;*/
+  overflow: auto;
+  height: calc(100% - 30px);
+}
+
+.info-control {
+  border-radius: 2px;
+}
+
+.validation-info .main {
+	text-align: center;
+}
+.validation-info .main.passed {
+	color: green;
+}
+.validation-info .main.failed {
+	color: red;
+}
+
+.validation-info .count {
+	text-align: center;
+	font-family: monospace;
+}
+
+.validation-info .messages {
+	font-family: monospace;
+	margin-top: 10px;
+}
+
+.validation-info .messages .msg {
+	border-bottom: 1px solid #ccc;
+}
+
+.sim-info  {
+  padding: 5px;
+}
+.sim-info .enabled-tasks {
+  max-height: 50%;
+}
+
+
+.group-marker {
+  text-align: center;
+  font-weight: bold;
+}
+
+.group-marker::before {
+  content: '----- ';
+}
+
+.group-marker::after {
+  content: ' -----';
+}
+

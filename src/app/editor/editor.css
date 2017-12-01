@@ -1,11 +1,21 @@
-html, body {
-	height: 100%;
+#editor-container {
+  position: relative;
+  height: 100%;
 }
 
-#wrapper {
+#editor-canvas {
+  position: relative;
   height: 100%;
-  font-size: 13px;
-  background-color: #f9f9f9;	
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  background-image: url(/assets/canvas-bg.png);
+  overflow: auto;
+}
+
+.model-group {
+  fill: rgba(0, 0, 0, 0);
+  stroke: #212121;
+  stroke-width: 1;
 }
 
 svg {
@@ -15,6 +25,7 @@ svg {
   user-select: none;
 }
 
+.task-name,
 svg text {
   text-anchor: middle;
   stroke: none;
@@ -43,10 +54,9 @@ svg .task-name {
   font-weight: bold;
 }
 
-svg .task-node:hover {
-  filter:  url(#hovered);
+svg .task-node .node-area {
+  fill: red;
 }
-
 
 svg .task-node.selected {
   fill: #5C6BC0;

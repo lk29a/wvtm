@@ -1,0 +1,9 @@
+<!--<svg:path *ngIf="modNode.parent" [attr.d]="getParentLinkPath()"></svg:path>-->
+<svg:g class="task-icon" title="my task" >
+  <svg:use xmlns:xlink="http://www.w3.org/1999/xlink" [attr.xlink:href]="getTaskTypeLink()" [attr.x]="modNode.coords.x - 20" [attr.y]="modNode.coords.y - 20" class="task-node"></svg:use>
+  <svg:text [attr.x]="modNode.coords.x" [attr.y]="modNode.coords.y + 30" dy="3" class="task-name">{{modNode.name}}</svg:text>
+</svg:g>
+<svg:g *ngIf="modNode.relation">
+	<svg:text [attr.x]="getRelationXCoord()" [attr.y]="modNode.coords.y + 3" class="rel-text">{{getRelationSym()}}</svg:text>
+	<svg:path [attr.d]="getRelationLinkPath()" class="rel-link"></svg:path>
+</svg:g>
